@@ -17,7 +17,6 @@ class LoginForm extends Component {
 
     formSubmittedHandler = async (e) => {
         e.preventDefault();
-        console.log(this.state.username, this.state.password);
         try {
             const res = await axios.put('/api/user/login', qs.stringify({ username: this.state.username, password: this.state.password }));
             localStorage.setItem("x-access-token", res.data);
