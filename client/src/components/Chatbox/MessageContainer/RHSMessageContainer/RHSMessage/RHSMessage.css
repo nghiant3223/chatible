@@ -1,0 +1,83 @@
+.rhs-message-item {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    cursor: default;
+}
+
+.rhs-message-item>div {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.rhs-message-item__content {
+    order: 2;
+    color: white;
+    font-size: 0.8rem;
+    background: crimson;
+    padding: 5px 8px 6px;
+    max-width: 500px;
+    word-wrap: break-word;
+}
+
+.rhs-message-item__content > img {
+    max-width: 100%;
+    border-radius: inherit;
+}
+
+.rhs-message-item__content--icon {
+    padding: 1px 0;
+    text-align: right;
+}
+
+.rhs-message-item__content--icon > i {
+    margin-top: 2px;
+}
+
+.rhs-message-item__content--thumbup {
+    padding: 3px 0;
+    text-align: right;
+}
+
+.rhs-message-item--error .rhs-message-item__content,
+.rhs-message-item--error .rhs-message-item__time {
+    opacity: 0.65;
+}
+
+.rhs-message-item--error::after {
+    content: "\0026A0 There is network connection error!";
+    position: absolute;
+    bottom: -12.5px;
+    font-size: 0.6rem;
+    color: rgb(255, 0, 0);
+}
+
+.rhs-message-item__time {
+    order: 1;
+    top: 0;
+    left: -5px;
+    background-color: rgb(97, 93, 93);
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+    display: none;
+    font-size: 0.65rem;   
+
+    align-self: center;
+    position: relative;
+}
+
+.rhs-message-item__time::after {
+    content: "";
+    width: 5px;
+    height: 5px;
+    background: inherit;
+    position: absolute;
+    top: 38%;
+    transform: rotate(45deg);
+    right: -2.5px;
+}
+
+.rhs-message-item__content:hover + .rhs-message-item__time {
+    display: block;
+}

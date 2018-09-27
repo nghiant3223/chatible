@@ -1,0 +1,20 @@
+.rhs-message-container {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+div.rhs-message-container:last-child {
+    margin-bottom: 0;
+}
+
+.rhs-message-container div .rhs-message-item__content {
+    border-radius: 18.2px 4px 4px 18.2px;
+}
+
+.rhs-message-container div:first-child .rhs-message-item__content {
+    border-top-right-radius: 18.2px;
+}
+
+.rhs-message-container div:last-child .rhs-message-item__content {
+    border-bottom-right-radius: 18.2px;
+}

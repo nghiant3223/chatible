@@ -1,0 +1,47 @@
+header {
+    background-color: #920d04;
+    height: 45px;
+    padding-left: 50px;
+    padding-right: 50px;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+}
+
+.header__left {
+    font-family: 'Pacifico';
+    font-size: 1.75rem;
+    line-height: 45px;
+    cursor: pointer;
+}
+
+.header__right {
+    display: flex;
+    align-items: center;
+}
+
+.header__right>div {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.header__current-avatar {
+    height: 30px;
+    width: 30px;
+}
+
+.header__current-avatar>img {
+    height: 100%;
+    border-radius: 50%;
+}
+
+.header__current-fullname {
+    font-weight: bold;
+    font-size: 0.75rem;
+}
+
+.header__navigation-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}

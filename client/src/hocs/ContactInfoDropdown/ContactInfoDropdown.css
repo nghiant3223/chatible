@@ -1,0 +1,42 @@
+.contact-info__dropdown {
+    border-bottom: 1px solid #eee;
+    padding-top: 0;
+}
+
+.contact-info__dropdown:first-child {
+    border-top: 1px solid #eee;
+}
+
+.contact-info__dropdown:last-child {
+    border-bottom: 0;
+}
+
+.contact-info__dropdown__title {
+    display: flex;
+    align-items: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.contact-info__dropdown__title:hover {
+    background-color: #f1f1f1;
+}
+
+.contact-info__dropdown__title>a {
+    flex-grow: 1;
+    color: #777;
+}
+
+.contact-info__dropdown__title__indicator {
+    height: 20px;
+    width: 20px;
+    background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yU/r/CzBkBCFcKp1.png");
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-position: 0 -659px;
+    transition: transform .2s ease-out;
+}

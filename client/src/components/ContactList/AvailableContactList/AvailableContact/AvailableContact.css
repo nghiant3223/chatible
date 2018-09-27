@@ -1,0 +1,28 @@
+.contact-list__all__contact {
+    display: grid;
+    grid-template-columns: 35px 1fr;
+    align-items: center;
+    grid-column-gap: 10px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: background 0.15s;
+}
+
+.contact-list__all__contact:hover {
+    background-color: #f1f1f1;
+}
+
+.contact-list__all__contact div:first-child {
+    width: 35px;
+    height: 35px;
+}
+
+.contact-list__all__contact div:first-child>img {
+    height: 100%;
+    width: auto;
+    border-radius:50%;
+}
+
+.contact-list__all__contact {
+    padding: 7.5px 12.5px;
+}

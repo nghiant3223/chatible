@@ -1,0 +1,38 @@
+.contact-info__header {
+    display: grid;
+    grid-template-columns: auto 1fr 60px;
+    grid-column-gap: 10px;
+    padding: 10px 15px;
+}
+
+.contact-info__header__left img {
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+}
+
+.contact-info__header__mid__title {
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.contact-info__header__mid__status {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    color: #777;
+}
+
+.contact-info__header__right {
+    display: flex;
+}
+
+.contact-info__header__right>div {
+    margin-left: 2.5px;
+    margin-right: 2.5px;
+}
+
+.contact-info__header__right svg {
+    display: inline-block;
+    width: 30px;
+    cursor: pointer;
+}

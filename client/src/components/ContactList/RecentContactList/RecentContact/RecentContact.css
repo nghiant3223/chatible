@@ -1,0 +1,56 @@
+.recent-contact {
+    display: grid;
+    grid-template-columns: 50px 1fr 30px;
+    grid-column-gap: 10px;
+    align-items: center;
+    padding: 7.5px 12.5px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.recent-contact--active {
+    background: #e1e1e1;
+}
+
+.recent-contact:hover {
+    background: #f1f1f1;
+}
+
+.recent-contact__left {
+    height: 50px;
+}
+
+.recent-contact__left img {
+    height: 100%;
+    width: auto;
+    border-radius: 50%;
+}
+
+.recent-contact__mid__title {
+    margin-bottom: 5px;
+}
+
+.recent-contact__mid__content {
+    font-size: 0.8em;
+    margin-top: 5px;
+    color: #777;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 175px;
+}
+
+.recent-contact__right {
+    font-size: 0.75em;
+    color: #777;
+}
+
+.recent-contact--active .recent-contact__mid__content {
+    font-weight: bold;
+    color: black;
+}
+
+.recent-contact--active .recent-contact__right {
+    font-weight: bold;
+    color: black;
+}

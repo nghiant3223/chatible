@@ -1,0 +1,16 @@
+.contact-list {
+    /* Uncomment this to see scrollbar: overflow-y: scroll; */
+}
+
+.contact-list>div {
+    margin: 5px auto;
+}
+
+.contact-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.contact-list:hover::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 30px;
+}

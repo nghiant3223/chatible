@@ -1,0 +1,26 @@
+.chatbox__actions__sticker__panel {
+    height: 350px;
+    width: 300px;
+    position: absolute;
+    bottom: 40px;
+    left: -25px;
+    box-shadow: 0 0 5px #888;
+    z-index: 1000;
+    background: white;
+    border-radius: 5px;
+}
+
+.chatbox__actions__sticker__panel::after {
+    position: absolute;
+    content: "";
+    bottom: -7px;
+    left: 30px;
+    width: 15px;
+    height: 15px;
+    background: inherit;
+    transform: rotate(45deg);
+    border: inherit;
+    border: 1px solid #aaa;
+    border-top: none;
+    border-left: none;
+}

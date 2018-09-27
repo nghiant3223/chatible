@@ -1,0 +1,9 @@
+1. Client get room ID 
+    @param:sender, receiver(forDualChat) // for dual chat only
+    + If room not exist, return null to indicate that no messages is available
+    + Else, return roomID for later data fetching;
+2. He sends a message
+    @param: roomID, from, to(room?)
+    + If room exists, append messages to room
+    + Otherwise, create new room then append message to room and insert room into user rooms (property)
+3. 

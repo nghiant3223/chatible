@@ -1,0 +1,46 @@
+.contact-info {
+    border-left: 1px solid #eee;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: relative;  
+    z-index: 50;
+}
+
+.contact-info>div {
+    align-items: center;
+}
+
+.contact-info::-webkit-scrollbar {
+    width: 5px;
+}
+
+.contact-info:hover::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 30px;
+}
+
+ul[class^="contact-info__main"] {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul[class^="contact-info__main"] li {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    cursor: pointer;
+    font-size: 0.85em;
+}
+
+ul[class^="contact-info__main"] li:hover {
+    background-color: #f1f1f1;
+}
+
+ul[class^="contact-info__main"] li:last-child {
+    margin-bottom: 15px;
+}

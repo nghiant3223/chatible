@@ -1,0 +1,70 @@
+.lhs-message-item {
+    width: 100%;
+    display: flex;
+    cursor: default;
+}
+
+.lhs-message-item > div {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.lhs-message-item__content {
+    order: 1;
+    color: #4b4f56;
+    font-size: 0.8rem;
+    background: #e9ebee;
+    padding: 5px 8px 6px;
+    max-width: 165px;
+    word-wrap: break-word;
+}
+
+.lhs-message-item__content > img {
+    max-width: 100%;
+    border-radius: inherit;
+}
+
+.lhs-message-item .lhs-message-item__content--icon {
+    padding: 0;
+    text-align: left;
+    margin-bottom: -3px;
+}
+
+.lhs-message-item__content--icon > i {
+    margin-top: 2px;
+}
+
+.lhs-message-item__content--thumbup {
+    padding: 3px 0;
+    text-align: right;
+}
+
+.lhs-message-item__time {
+    order: 2;
+    top: 0;
+    right: -5px;
+    background-color: rgb(97, 93, 93);
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+    display: none;
+    font-size: 0.65rem;   
+
+    align-self: center;
+    position: relative;
+}
+
+.lhs-message-item__time::after {
+    content: "";
+    width: 5px;
+    height: 5px;
+    background: inherit;
+    position: absolute;
+    top: 38%;
+    transform: rotate(45deg);
+    left: -2.5px;
+}
+
+.lhs-message-item__content:hover + .lhs-message-item__time {
+    display: block;
+}

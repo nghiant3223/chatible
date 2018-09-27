@@ -1,0 +1,8 @@
+.chatbox__message-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.chatbox__message-container:hover::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 30px;
+}
