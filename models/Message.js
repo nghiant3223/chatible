@@ -6,7 +6,7 @@ let messageSchema = new Schema({
     content: String,
     time: {
         type: Date,
-        default: new Date()
+        default: () => new Date().toISOString()
     },
     peopleSeen: {
         type: [String],

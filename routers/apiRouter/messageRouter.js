@@ -6,7 +6,7 @@ const { verifyToken, checkUserInRoom } = require('../../middleware/index');
 
 router.get('/:roomId', verifyToken, checkUserInRoom, messageController.getMessages);
 
-router.post('/:roomId', verifyToken, messageController.saveMessage);
+router.post('/:roomId', verifyToken, checkUserInRoom, messageController.saveMessage);
 
 router.delete('/:roomId', verifyToken, checkUserInRoom, messageController.deleteMessages);
 

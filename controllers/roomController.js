@@ -3,9 +3,9 @@ const { Message } = require('../models/Message');
 const { Room } = require('../models/Room');
 
 const getRoom = async (req, res) => {
-    const { username } = req.params;
+    const { username } = req;
 
-    let user = await User.findOne({username}, { rooms: 1 });
+    let user = await User.findOne({ username }, { rooms: 1 });
     res.status(200).send(user.rooms);
 }
 

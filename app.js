@@ -4,7 +4,7 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const apiRouter = require('./routers/apiRouter/index');
 const path = require('path');
-const { mongoDbURL } = require('./configs/key');
+const { mongoDbURL } = require('./configs/keys');
 
 const app = express();
 

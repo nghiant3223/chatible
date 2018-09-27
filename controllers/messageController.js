@@ -5,23 +5,24 @@ const { Room } = require('../models/Room');
 
 const saveMessage = async (req, res) => {
     const { roomId } = req.params;
-    const { from, content } = req.body;
+    const { content } = req.body;
+    const { username } = req;
 
     try {
         let room = await Room.findById(roomId);
         if (!room) return res.status(404).send('Room not found.');
         else await room.update({
             $push: {
-                messages: { $each: [{ from, content }], $sort: {time: -1} }
+                messages: { $each: [{ from: username, content }], $sort: {time: -1} }
             }
         });
 
         // Delete room and append it at then end of rooms array
-        User.updateOne({ username: from }, { $pull: { rooms: room._id } }, function () {
-            User.updateOne({ username: from }, { $addToSet: { rooms: room._id } }, function () {
+        User.updateOne({ username }, { $pull: { rooms: room._id } }, function () {
+            User.updateOne({ username }, { $addToSet: { rooms: room._id } }, function () {
                 let roomMembers = room.users;
                 roomMembers.forEach(member => {
-                    if (member !== from) {
+                    if (member !== username) {
                         // Delete room and append it at then end of rooms array
                         User.updateOne({ username: member }, { $pull: { rooms: room._id } }, function () {
                             User.updateOne({ username: member }, { $addToSet: { rooms: room._id } }, function () {
@@ -62,10 +63,9 @@ const deleteMessages = async (req, res) => {
 
 const seeMessage = async (req, res) => {
     const { roomId } = req.params;
-    const { username } = req.body;
+    const { username } = req;
     let room = await Room.findById(roomId);
     let messages = [...room.messages];
-    console.log(messages);
 
     // `messages` is required to be sorted in ascending order of time
     for (let i = 0; i < messages.length; i++) {

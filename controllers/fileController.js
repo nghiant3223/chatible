@@ -2,7 +2,7 @@ const { Room } = require('../models/Room');
 
 const saveRoomFile = async (req, res) => {
     const { roomId } = req.params;
-    const { originalName, hashedName } = req;
+    const { originalName, hashedName, username } = req;
     try {
         await Room.updateOne({ _id: roomId }, { $addToSet: { files: { originalName, hashedName, uploader: username } } });
         return res.status(200).send('Save file successfully.');
@@ -16,7 +16,6 @@ const getRoomFiles = async (req, res) => {
     const { roomId } = req.params;
     const { count } = req.query;
     let room = await Room.findById(roomId);
-    console.log(room);
     if (room) {
         if (room.files.length < count) return res.status(200).send(room.files);
         else return res.status(200).send(room.files.slice(room.files.length - count));

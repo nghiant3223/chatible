@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
         const ext = extReg.exec(file.originalname)[2];
 
         const { roomId } = req.params;
-        const { uploader } = req.query;
+        const uploader = req.username;
         const hashedFilename = crypto.createHash('md5').update(uploader + roomId + (new Date().getTime())).digest('hex');
         req.originalName = file.originalname;
         req.hashedName = hashedFilename + '.' + ext;

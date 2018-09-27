@@ -6,7 +6,7 @@ const fileSchema = new Schema({
     hashedName: String,
     time: {
         type: Date,
-        default: new Date()
+        default: () => new Date().toISOString()
     },
     uploader: String
 });
