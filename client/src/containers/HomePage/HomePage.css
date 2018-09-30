@@ -4,3 +4,10 @@ main {
     height: calc(100vh - 45px);
     position: relative;
 }
+
+.main-loading {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -18,7 +18,7 @@ const roomSchema = new Schema({
         type: String,
         enum: ['DUAL', 'GROUP']
     }, 
-    color: {
+    colorTheme: {
         type: String,
         default: 'cyan'
     }

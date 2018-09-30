@@ -6,7 +6,7 @@ class RecentContacts extends Component {
     render() {
         return (
             <div className="contact-list__recent">
-                {this.props.contactList.map(contact => <RecentContact {...contact} />)}
+                {this.props.contactList.map(room => <RecentContact {...room}/>)}
             </div>
         );
     }

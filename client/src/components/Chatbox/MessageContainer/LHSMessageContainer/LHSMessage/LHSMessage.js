@@ -5,11 +5,11 @@ import './LHSMessage.css';
 class LHSMessage extends Component {
     render() {
         return (
-            <div class="lhs-message-item">
-                <div class="lhs-message-item__content">
+            <div className="lhs-message-item">
+                <div className="lhs-message-item__content">
                     {this.props.content}
                 </div>
-                <div class="lhs-message-item__time">
+                <div className="lhs-message-item__time">
                     <span>12:25</span>
                 </div>
             </div>

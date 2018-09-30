@@ -11,8 +11,14 @@ const userSchema = new Schema({
         type: String,
         default: '< default avatar url >'
     },
-    lastLogin: Date,
-    lastLogout: Date,
+    lastLogin: {
+        type: Date,
+        default: 0
+    },
+    lastLogout: {
+        type: Date,
+        default: 0
+    },
     rooms: [String]
 });
 

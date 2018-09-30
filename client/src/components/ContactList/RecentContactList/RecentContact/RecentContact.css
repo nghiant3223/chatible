@@ -5,11 +5,11 @@
     align-items: center;
     padding: 7.5px 12.5px;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: background 0.1s;
 }
 
 .recent-contact--active {
-    background: #e1e1e1;
+    background: #f1f1f1;
 }
 
 .recent-contact:hover {
@@ -31,7 +31,7 @@
 }
 
 .recent-contact__mid__content {
-    font-size: 0.8em;
+    font-size: 0.75em;
     margin-top: 5px;
     color: #777;
     text-overflow: ellipsis;
@@ -45,12 +45,9 @@
     color: #777;
 }
 
-.recent-contact--active .recent-contact__mid__content {
-    font-weight: bold;
-    color: black;
-}
-
-.recent-contact--active .recent-contact__right {
+.recent-contact--unread .recent-contact__mid__content,
+.recent-contact--unread .recent-contact__right,
+.recent-contact--unread .recent-contact__mid__title {
     font-weight: bold;
     color: black;
 }

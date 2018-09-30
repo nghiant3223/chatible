@@ -7,10 +7,10 @@ import avatar from '../../../../assets/images/user.svg';
 
 const LHSMessageContainer = (props) => (
     <div className="lhs-message-container">
-        <div class="lhs-message-avatar">
+        <div className="lhs-message-avatar">
             <img src={avatar} alt="Avatar" />
         </div>
-        <div class="lhs-message-container__messages">
+        <div className="lhs-message-container__messages">
             {props.messages.map(message => <LHSMessage {...message} />)}
         </div>
     </div>

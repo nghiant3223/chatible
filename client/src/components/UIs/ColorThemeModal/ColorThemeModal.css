@@ -1,0 +1,32 @@
+.color-theme-modal__options {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+}
+
+.color-theme-modal__option {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.3);
+}
+
+.color-theme-modal__option--selected {
+    border: 3px solid #555;
+}
+
+.color-theme-modal__actions {
+    text-align: right;
+}
+
+.color-theme-modal__actions button {
+    border: 0;
+    background: 0;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    font-family: Muli, Helvetica, sans-serif, Arial;
+    outline: none;
+}

@@ -14,12 +14,20 @@ const loginUser = async (req, res) => {
     if (!user) return res.status(404).send('User not found.');
 
     if (user.password !== password) return res.status(409).send('Incorrect password.');
+    
+    User.findOneAndUpdate({ username }, { $set: { lastLogin: Date.now() } }, function () { });
 
     const token = jwt.sign({
         data: username
     }, jwtSecret, { expiresIn: '24h' });
 
     res.status(200).send(token);
+}
+
+const logoutUser = async (req, res) => {
+    const { username } = req;
+    User.findOneAndUpdate({ username }, { $set: { lastLogout: Date.now() } }, function () { });
+    res.status(200).send('Logout user successfully.');
 }
 
 const createUser = async (req, res) => {
@@ -44,4 +52,11 @@ const getMe = async (req, res) => {
     else return res.status(404).send('User not found.');
 }
 
-module.exports = { loginUser, createUser, getAllUsers, getMe };
+const getUserByUsername = async (req, res) => {
+    const { username } = req.params;
+    const user = await User.findOne({ username }, { _id: 0, password: 0, __v: 0});
+    if (user) return res.status(200).send(user);
+    else return res.status(404).send('User not found.');
+}
+
+module.exports = { loginUser, createUser, getAllUsers, getMe, getUserByUsername, logoutUser };

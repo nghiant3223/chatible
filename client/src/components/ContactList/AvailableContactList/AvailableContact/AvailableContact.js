@@ -1,13 +1,12 @@
 import React from 'react';
 
 import './AvailableContact.css';
-import avatar from '../../../../assets/images/user.svg';
 
-const availableContact =  ({fullname}) => {
+const availableContact =  ({counterpart}) => {
     return (
         <div className="contact-list__all__contact">
-            <div><img src={avatar} alt="Avatar" /></div>
-            <div>{fullname}</div>
+            <div><img src='/images/profile_image.png' alt="Avatar" /></div>
+            <div>{counterpart.fullname}</div>
         </div>
     );
 }

@@ -4,9 +4,12 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const apiRouter = require('./routers/apiRouter/index');
 const path = require('path');
+const http = require('http');
+const socketIO = require('./socket');
 const { mongoDbURL } = require('./configs/keys');
 
 const app = express();
+const server = http.createServer(app);
 
 global.rootDirName = path.resolve(__dirname);
 
@@ -15,6 +18,7 @@ mongoose.connect(mongoDbURL , { useNewUrlParser: true }, (err) => {
     else console.log('Connect to mongodb');
 });
 
+app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false })); 
 app.use(logger('dev'));
@@ -25,6 +29,8 @@ app.get('/', (req, res) => {
     res.send('Hello world!');
 });
 
-app.listen(5000, () => {
+socketIO(server);
+
+server.listen(5000, () => {
     console.log('Listening on port 5000');
 });

@@ -1,25 +1,50 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 
 import './RecentContact.css';
-import avatar from '../../../../assets/images/user.svg';
 
-class RecentContact extends Component {
-    render() {
-        return (
-            <div className="recent-contact">
-                <div className="recent-contact__left">
-                    <img src={avatar} alt="Avatar" />
-                </div>
-
-                <div className="recent-contact__mid">
-                    <div className="recent-contact__mid__title">{this.props.fullname}</div>
-                    <div className="recent-contact__mid__content">This is a content</div>
-                </div>
-                
-                <div className="recent-contact__right">12:41</div>
+const recentContact = (props) => {
+    let className = "recent-contact";
+    if (props.seen) className = "recent-contact recent-contact--unread";
+    if (props.recentContacts.activeContact && props.recentContacts.activeContact.roomId === props.roomId) className = "recent-contact recent-contact--active";
+    return (
+        <div className={className} onClick={() => props.setActiveContact(props.roomId)} >
+            <div className="recent-contact__left">
+                <img src="/images/profile_image.png" alt="Avatar" />
             </div>
-        );
-    }
+
+            {renderLastMessage(props)}
+        </div>
+    );
 }
 
-export default RecentContact;
+const mapStateToProps = ({ recentContacts }) => ({ recentContacts });
+
+const mapDispatchToProps = dispatch => ({
+    setActiveContact: roomId => dispatch({ type: 'MAKE_CONTACT_ACTIVE', payload: roomId })
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(recentContact);
+
+function renderLastMessage(props) {
+    if (props.lastMessage !== undefined) {
+        const messageDateTime = new Date(props.lastMessage.time);
+        return (
+            <Fragment>
+                <div className="recent-contact__mid">
+                    <div className="recent-contact__mid__title">{(props.counterpart && props.counterpart.fullname) || props.roomId}</div>
+                    <div className="recent-contact__mid__content">{props.lastMessage.content}</div>
+                </div>
+                <div className="recent-contact__right">{messageDateTime.getHours() + ':' + messageDateTime.getMinutes()}</div>
+            </Fragment>
+        );
+    } else return (
+        <Fragment>
+            <div className="recent-contact__mid">
+                <div className="recent-contact__mid__title">{(props.counterpart && props.counterpart.fullname) || props.roomId}</div>
+                <div className="recent-contact__mid__content">Chatible: Let wave each otherrrrrrrr</div>
+            </div>
+            <div className="recent-contact__right"></div>
+        </Fragment>
+    );
+}

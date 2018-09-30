@@ -14,7 +14,7 @@ const availableContactList = ({searchValue, contactList}) => {
     } else {
         return (
             <div className="contact-list__all">
-                {contactList.map(contact => contact.fullname.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1 ? <AvailableContact {...contact} /> : null)}
+                {contactList.map(contact => contact.counterpart.fullname.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1 ? <AvailableContact fullname={contact.counterpart.fullname} /> : null)}
             </div>
         );
     }

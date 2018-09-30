@@ -21,7 +21,7 @@ class SignupForm extends Component {
     formSubmittedHandler = async (e) => {
         e.preventDefault();
 
-        await axios.post('/api/user/signup', qs.stringify({ username: this.state.username, password: this.state.password, fullname: this.state.fullname }));
+        await axios.post('/api/signup', qs.stringify({ username: this.state.username, password: this.state.password, fullname: this.state.fullname }));
         this.props.history.push('/login');
     }
 
@@ -31,7 +31,7 @@ class SignupForm extends Component {
                 SignupForm
 
                 <form onSubmit={this.formSubmittedHandler}>
-                    <input placeholder="Fullname" onChange={this.fullnameChangedHandler} />
+                    <input placeholder="Fullname" onChange={this.fullnameChangedHandler} autoFocus/>
                     <br />
                     <input placeholder="Username" onChange={this.usernameChangedHandler} />
                     <br />

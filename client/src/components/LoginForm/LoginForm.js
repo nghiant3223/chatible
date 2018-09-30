@@ -18,7 +18,7 @@ class LoginForm extends Component {
     formSubmittedHandler = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.put('/api/user/login', qs.stringify({ username: this.state.username, password: this.state.password }));
+            const res = await axios.post('/api/login', ({ username: this.state.username, password: this.state.password }));
             localStorage.setItem("x-access-token", res.data);
             this.props.history.replace('/');
         } catch (e) {
@@ -33,7 +33,7 @@ class LoginForm extends Component {
                 LoginForm
 
                 <form onSubmit={this.formSubmittedHandler}>
-                    <input placeholder="Username" onChange={this.usernameChangedHandler} />
+                    <input placeholder="Username" onChange={this.usernameChangedHandler} autoFocus/>
                     <br />
                     <input placeholder="Password" onChange={this.passwordChangedHandler} />
                     <br />

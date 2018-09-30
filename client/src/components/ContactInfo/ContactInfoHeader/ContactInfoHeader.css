@@ -1,6 +1,6 @@
 .contact-info__header {
     display: grid;
-    grid-template-columns: auto 1fr 60px;
+    grid-template-columns: auto 1fr auto;
     grid-column-gap: 10px;
     padding: 10px 15px;
 }
@@ -14,6 +14,9 @@
 .contact-info__header__mid__title {
     font-size: 0.9em;
     margin-bottom: 5px;
+    width: 130px;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .contact-info__header__mid__status {
@@ -35,4 +38,22 @@
     display: inline-block;
     width: 30px;
     cursor: pointer;
+}
+
+.color-theme-modal {
+
+}
+
+.color-theme-modal>div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.color-theme-modal > div:first-child {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.color-theme-modal>div:last-child{
+    margin-bottom: 0;
 }

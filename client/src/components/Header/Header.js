@@ -1,14 +1,17 @@
 import React from 'react';
 import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
 import axios from 'axios';
 
+import socketGetter from '../../socket';
+
 import './Header.css';
-import avatar from '../../assets/images/user.svg';
 
 const header = (props) => {
     const logoutButtonClickedHandler = () => {
-        axios.put('/api/user/logout', {}, { headers: { 'x-access-token': localStorage.getItem("x-access-token") } });
+        axios.post('/api/logout', {}, { headers: { 'x-access-token': localStorage.getItem("x-access-token") } });
         localStorage.removeItem("x-access-token");
+        socketGetter.getInstance().emit('thisUserGoesOffline', { username: props.thisUser.username });
         props.history.replace('/login');
     }
 
@@ -16,15 +19,18 @@ const header = (props) => {
         <header>
             <div className="header__left">Chatible</div>
             <div className="header__right">
-                <div className="header__current-avatar"><img src={avatar} alt="Avatar" /></div>
-                <div className="header__current-fullname">Trọng Nghĩa</div>
+                <div className="header__current-avatar"><img src="/images/profile_image.png" alt="Avatar" /></div>
+                <div className="header__current-fullname">{props.thisUser.fullname}</div>
                 <div className="header__navigation-button">
-                    <i className="material-icons" onClick={logoutButtonClickedHandler}>
-                        last_page
-                    </i>
+                    <b onClick={logoutButtonClickedHandler}>
+                        Logout
+                    </b>
                 </div>
             </div>
         </header>
     );
 }
-export default withRouter(header);
+
+const mapStateToProps = ({ thisUser }) => ({ thisUser });
+
+export default connect(mapStateToProps)(withRouter(header));

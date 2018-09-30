@@ -8,12 +8,15 @@ const fileRouter = require('./fileRouter');
 
 const userController = require('../../controllers/userController');
 
+const { verifyToken } = require('../../middleware/index');
+
 router.use('/room', roomRouter);
 router.use('/message', messageRouter);
 router.use('/user', userRouter);
 router.use('/file', fileRouter)
 
-router.route('/login').post(userController.loginUser);
-router.route('/signup').post(userController.createUser);
+router.post('/login', userController.loginUser);
+router.post('/signup', userController.createUser);
+router.post('/logout', verifyToken, userController.logoutUser);
 
 module.exports = router;

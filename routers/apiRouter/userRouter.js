@@ -6,6 +6,7 @@ const { verifyToken } = require('../../middleware/index');
 
 router.get('/', userController.getAllUsers);
 router.get('/me', verifyToken, userController.getMe);
+router.get('/:username', userController.getUserByUsername);
 
 
 module.exports = router;
