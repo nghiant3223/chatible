@@ -1,10 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Dropdown from '../../../hocs/ContactInfoDropdown/ContactInfoDropdown';
 
 import './OptionList.css';
 
-const OptionList = (props) => (
+const optionList = (props) => (
     <Dropdown title="Options">
         <ul className="contact-info__main__options">
             <li onClick={props.changeColorThemeClickedHandler}>
@@ -30,5 +31,6 @@ const OptionList = (props) => (
     </Dropdown>
 );
 
+const mapStateToProps = ({ recentContacts }) => ({ colorTheme: recentContacts.activeContact.colorTheme });
 
-export default OptionList;
+export default connect(mapStateToProps)(optionList);

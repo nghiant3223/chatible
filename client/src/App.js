@@ -1,15 +1,25 @@
 import React, { Component } from 'react';
 import { Switch, BrowserRouter, Route } from 'react-router-dom';
 import Modal from 'react-modal';
+import { connect } from 'react-redux';
 
 import HomePage from './containers/HomePage/HomePage';
 import LandingPage from './containers/LandingPage/LandingPage';
+
+import socketGetter from './socket';
 
 import './App.css';
 
 Modal.setAppElement('#root');
 
 class App extends Component {
+	constructor() {
+		super();
+		window.onunload = () => {
+			socketGetter.getInstance().emit('thisUserGoesOffline', { username: this.props.thisUser.username });
+		}
+	}
+
 	render() {
 		return (
 			<BrowserRouter>
@@ -24,4 +34,6 @@ class App extends Component {
 	}
 }
 
-export default App;
+const mapStateToProps = ({ thisUser }) => ({ thisUser });
+
+export default connect(mapStateToProps)(App);

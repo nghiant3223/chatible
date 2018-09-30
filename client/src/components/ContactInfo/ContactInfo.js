@@ -51,7 +51,7 @@ class ContactInfo extends Component {
 
                 <ContactInfoHeader />
                 <div className="contact-info__main">
-                    <OptionList colorTheme={this.props.colorTheme} changeColorThemeClickedHandler={this.changeColorThemeClickedHandler}/>
+                    <OptionList changeColorThemeClickedHandler={this.changeColorThemeClickedHandler}/>
                     <SharedFileList />
                     <SharedImageList />
                 </div>
@@ -64,4 +64,6 @@ const mapDispatchToProps = dispatch => ({
     changeContactColor: (roomId, colorTheme) => dispatch({ type: 'CHANGE_CONTACT_COLOR', payload: { roomId, colorTheme } })
 });
 
-export default connect(null, mapDispatchToProps)(ContactInfo);
+const mapStateToProps = ({ recentContacts }) => ({ roomId: recentContacts.activeContact.roomId });
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactInfo);
