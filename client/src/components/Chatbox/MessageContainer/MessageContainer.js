@@ -4,17 +4,17 @@ import RHSMessageContainer from './RHSMessageContainer/RHSMessageContainer';
 import LHSMessageContainer from './LHSMessageContainer/LHSMessageContainer';
 import Typing from '../../UIs/Typing/Typing';
 
+import { seperateMessages } from '../../../utils';
+
 import './MessageContainer.css';
 
 class MessageContainer extends Component {
     render() {
         return (
             <div className="chatbox__message-container">
-                <RHSMessageContainer messages={[{ content: 'hahaah' }, { 'content': '????' }, { content: 'fofofbar' }]} />
-                <LHSMessageContainer messages={[{ content: 'hahaah' }, { 'content': '????' }, { content: 'fofofbar' }]} />
+                {seperateMessages(this.props.messages, 'r')}
                 
-                {this.props.LHSTyping && <Typing side='l' avatarBackgroundColor={this.props.avatarBackgroundColor} />}
-                {this.props.RHSTyping && <Typing side='r' avatarBackgroundColor={this.props.avatarBackgroundColor} />}
+                {this.props.LHSTyping && <Typing />}
 
             </div>
         );

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import MessageContainer from './MessageContainer/MessageContainer';
 import EmojiPanel from './EmojiPanel/EmojiPanel';
@@ -13,12 +14,47 @@ class Chatbox extends Component {
         emojiPanelVisible: false,
         stickerPanelVisible: false,
         LHSTyping: false,
-        RHSTyping: false,
-        textInput: ''
+        textInput: '',
+        isLoading: true,
+        messages: [{
+            from: 'r',
+            content: '1',
+            time: 0
+        }, {
+                from: 'r',
+                content: '2',
+                time:1
+            }, {
+                from: 'l',
+                content: '3',
+                time:2000
+            }, {
+                from: 'l',
+                content: '3',
+                time: 6000
+            }, {
+                from: 'l',
+                content: '3',
+                time: 7000
+            },
+        {
+            from: 'r',
+            content: '3',
+            time: 20000
+        }, {
+            from: 'r',
+            content: '3',
+            time: 21000
+            }, {
+            from: 'r',
+            content: '3',
+            time: 27000
+        }]
     }
 
-    componentDidMount = () => {
-        console.log(this.props.activeContact)
+    componentDidMount = async () => {
+        const messagesRes = await axios.get('/api/message/' + this.props.activeContact.roomId);
+        this.setState({ isLoading: false, messages: messagesRes.data });
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -80,7 +116,15 @@ class Chatbox extends Component {
 
         // TODO: handle socket emit here
 
-        this.setState({ textInput: '', RHSTyping: false });
+        this.setState(prevState => ({
+            textInput: '',
+            RHSTyping: false,
+            messages: prevState.messages.concat({
+                from: 'r',
+                content: prevState.textInput,
+                time: (new Date()).getTime()
+            })
+        }));
     }
 
     render() {
@@ -89,7 +133,7 @@ class Chatbox extends Component {
             <ChatboxContext.Provider value={this.props.activeContact}>
                 <div className="chatbox">
                     
-                    <MessageContainer LHSTyping={this.state.LHSTyping} RHSTyping={this.state.RHSTyping} />
+                    <MessageContainer LHSTyping={this.state.LHSTyping} messages={this.state.messages} isLoading={this.state.isLoading}/>
 
                     <div className="chatbox__inputs">
                         <form className="chatbox__inputs__text" onSubmit={this.textInputSubmittedHandler} >

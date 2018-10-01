@@ -3,6 +3,7 @@
     display: flex;
     justify-content: flex-end;
     cursor: default;
+    align-items: center;
 }
 
 .rhs-message-item>div {
@@ -15,7 +16,7 @@
     color: white;
     font-size: 0.8rem;
     background: crimson;
-    padding: 5px 8px 6px;
+    padding: 5px 10px;
     max-width: 500px;
     word-wrap: break-word;
 }
@@ -61,7 +62,7 @@
     padding: 5px;
     border-radius: 3px;
     display: none;
-    font-size: 0.65rem;   
+    font-size: 0.7rem;   
 
     align-self: center;
     position: relative;

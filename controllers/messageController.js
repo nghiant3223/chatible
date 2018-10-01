@@ -44,7 +44,7 @@ const getMessages = async (req, res) => {
     const { count } = req.query;
     let room = await Room.findById(roomId);
     if (room) {
-        if (room.messages.length < count) return res.status(200).send(room.messages);
+        if (count === undefined || room.messages.length < count) return res.status(200).send(room.messages);
         else return res.status(200).send(room.messages.slice(room.messages.length - count));
     }
     else return res.status(404).send('Room not found.');

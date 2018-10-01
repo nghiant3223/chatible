@@ -27,8 +27,11 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(recentContact);
 
 function renderLastMessage(props) {
+    console.log('foo', props); 
+
     if (props.lastMessage !== undefined) {
         const messageDateTime = new Date(props.lastMessage.time);
+        console.log(',',    messageDateTime, props.lastMessage.time);
         return (
             <Fragment>
                 <div className="recent-contact__mid">

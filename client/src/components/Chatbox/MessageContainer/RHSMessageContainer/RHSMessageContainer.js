@@ -6,7 +6,7 @@ import './RHSMessageContainer.css';
 
 const RHSMessageContainer = (props) => (
     <div className="rhs-message-container">
-        {props.messages.map(message => <RHSMessage {...message}/>)}
+        {props.messages.map((message, i) => <RHSMessage {...message} key={props.id + "." + i} />)}
     </div>
 );
 
