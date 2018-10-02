@@ -13,7 +13,7 @@ const saveMessage = async (req, res) => {
         if (!room) return res.status(404).send('Room not found.');
         else await room.update({
             $push: {
-                messages: { $each: [{ from: username, content }], $sort: {time: -1} }
+                messages: { $each: [{ from: username, content }] }
             }
         });
 

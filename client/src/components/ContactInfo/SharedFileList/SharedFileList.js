@@ -4,13 +4,16 @@ import Dropdown from '../../../hocs/ContactInfoDropdown/ContactInfoDropdown';
 
 import './SharedFileList.css';
 
-const SharedFileList = (props) => (
+const SharedFileList = ({ files }) => (
     <Dropdown title="Shared files">
         <ul className="contact-info__main__files">
-            <li>
-                <i></i>
-                <a>1612212.zip</a>
-            </li>
+
+            {files.map(file => (
+                <li key={file._id}>
+                    <i></i>
+                    <a href={"uploads/" + file.hashedName} download>{file.originalName}</a>
+                </li>
+            ))}
         </ul>
     </Dropdown>
 );

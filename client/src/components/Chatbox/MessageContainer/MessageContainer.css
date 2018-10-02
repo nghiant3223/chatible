@@ -6,3 +6,15 @@
     background-color: #888;
     border-radius: 30px;
 }
+
+.loader {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fetching-more {
+    display: flex;
+    justify-content: center;
+}

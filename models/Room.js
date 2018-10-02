@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const { messageSchema } = require('./Message');
-const { fileSchema } = require('./File.js');
+const { fileSchema } = require('./File');
+const { imageSchema } = require('./Image');
 
 const roomSchema = new Schema({
     users: [String],
@@ -12,6 +13,10 @@ const roomSchema = new Schema({
     },
     files: {
         type: [fileSchema],
+        default: []
+    },
+    images: {
+        type: [imageSchema],
         default: []
     },
     type: {

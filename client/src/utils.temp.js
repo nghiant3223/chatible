@@ -75,7 +75,6 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
             }
         
             if (tempRight.length !== 0) {
-                console.log('reach')
                 if (key > 0 && messages[key].time - messages[key - 1].time > TIMEGAP && i > 1) {
                     retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
                 }
@@ -131,7 +130,6 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
 
             tempRight.push({ ...messages[i] });
         } else {
-            console.log('....i', i);
             if (messages[i - 1].from === RHSName) {
                 if (key > 0 && messages[key].time - messages[key - 1].time > TIMEGAP) {
                     retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
@@ -140,7 +138,6 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
                 let subKey = 0;
                 for (let j = 1; j < tempRight.length; j++) {
                     if (tempRight[j].time - tempRight[j - 1].time > TIMEGAP) {
-                        console.log('...j', j);
                         retArr.push(<RHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
                         retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey} id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
                         tempArr = [];
@@ -187,7 +184,6 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
     }
 
     if (tempRight.length !== 0) {
-        console.log('key', key);
         if (i > 1 && messages[i].time - messages[i - 1].time > TIMEGAP) {
             retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
         }

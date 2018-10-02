@@ -15,51 +15,38 @@ class Chatbox extends Component {
         stickerPanelVisible: false,
         LHSTyping: false,
         textInput: '',
-        isLoading: true,
-        messages: [{
-            from: 'r',
-            content: '1',
-            time: 0
-        }, {
-                from: 'r',
-                content: '2',
-                time:1
-            }, {
-                from: 'l',
-                content: '3',
-                time:2000
-            }, {
-                from: 'l',
-                content: '3',
-                time: 6000
-            }, {
-                from: 'l',
-                content: '3',
-                time: 7000
-            },
-        {
-            from: 'r',
-            content: '3',
-            time: 20000
-        }, {
-            from: 'r',
-            content: '3',
-            time: 21000
-            }, {
-            from: 'r',
-            content: '3',
-            time: 27000
-        }]
+        isLoading: false,
+        messages: [],
+        isFetchingMore: false
     }
 
     componentDidMount = async () => {
-        const messagesRes = await axios.get('/api/message/' + this.props.activeContact.roomId);
-        this.setState({ isLoading: false, messages: messagesRes.data });
+        try {
+            const messagesRes = await axios.get('/api/message/' + this.props.activeContact.roomId + '?count=17', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+            const messages = messagesRes.data;
+            for (let i = 0; i < messages.length; i++) {
+                messages[i].time = (new Date(messages[i].time)).getTime();
+            }
+            this.setState({ messages });
+        } catch (e) {
+            console.log(e);
+        }
     }
 
-    componentDidUpdate = (prevProps, prevState) => {
+    componentDidUpdate = async (prevProps, prevState) => {
         if (prevProps.activeContact !== this.props.activeContact) {
-            // TODO: fetch message overhere.
+            this.setState({ isLoading: true });
+            try {
+                const messagesRes = await axios.get('/api/message/' + this.props.activeContact.roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+                const messages = messagesRes.data;
+                for (let i = 0; i < messages.length; i++) {
+                    messages[i].time = (new Date(messages[i].time)).getTime();
+                }
+                this.setState({ isLoading: false, messages });
+            } catch (e) {
+                console.log(e);
+                this.setState({ isLoading: false });
+            }
         }
     }
     
@@ -110,11 +97,24 @@ class Chatbox extends Component {
             }
         }
     }
+
+    moreMessagesFetchedHandler = async () => {
+        this.setState({ isFetchingMore: true });
+        const messagesRes = await axios.get('/api/message/' + this.props.activeContact.roomId + '?count=' + (this.state.messages.length + 1), { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+        
+        const messages = messagesRes.data;
+        for (let i = 0; i < messages.length; i++) {
+            messages[i].time = (new Date(messages[i].time)).getTime();
+        }
+        this.setState({ messages, isFetchingMore: false });
+    }
     
     textInputSubmittedHandler = (e) => {
         e.preventDefault();
 
         // TODO: handle socket emit here
+
+        if (this.state.textInput === '') return;
 
         this.setState(prevState => ({
             textInput: '',
@@ -133,7 +133,16 @@ class Chatbox extends Component {
             <ChatboxContext.Provider value={this.props.activeContact}>
                 <div className="chatbox">
                     
-                    <MessageContainer LHSTyping={this.state.LHSTyping} messages={this.state.messages} isLoading={this.state.isLoading}/>
+                    <MessageContainer
+                        LHSTyping={this.state.LHSTyping}
+                        messages={this.state.messages}
+                        isLoading={this.state.isLoading}
+                        moreMessagesFetchedHandler={this.moreMessagesFetchedHandler}
+                        activeContactUsername={this.props.activeContact.username}
+                        isFetchingMore={this.state.isFetchingMore}
+                        positiveIsFetchingMore={this.positiveIsFetchingMore}
+                        negativeIsFetchingMore={this.negativeIsFetchingMore}
+                    />
 
                     <div className="chatbox__inputs">
                         <form className="chatbox__inputs__text" onSubmit={this.textInputSubmittedHandler} >

@@ -4,7 +4,7 @@ import avatar from '../../../assets/images/user.svg';
 
 import './Typing.css';
 
-const Typing = (avatarUrl, text) => (
+const Typing = ({ avatarUrl, text }) => (
     <div className={`$lhs-message-container`}>
         <div className="lhs-message-avatar">
             <img src="/images/profile-image.jpg" alt="Avatar" />

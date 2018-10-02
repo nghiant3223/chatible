@@ -14,8 +14,33 @@ import './ContactInfo.css';
 class ContactInfo extends Component {
     state = {
         colorThemeOption: this.props.colorTheme,
-        colorThemeModalOpen: false
+        colorThemeModalOpen: false,
+        isFetchingMoreImages: false,
+        files: [],
+        images: []
     }
+
+    componentDidMount = () => {
+        Promise.all([
+            axios.get('/api/file/' + this.props.roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } }),
+            axios.get('/api/file/image/' + this.props.roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } })
+        ]).then(([filesRes, imagesRes]) => {
+            this.setState({ files: filesRes.data, images: imagesRes.data });
+        });
+    }
+
+    componentDidUpdate = async (prevProps, prevState) => {
+        if (prevProps.roomId !== this.props.roomId) {
+            Promise.all([
+                axios.get('/api/file/' + this.props.roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } }),
+                axios.get('/api/file/image/' + this.props.roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } })
+            ]).then(([filesRes, imagesRes]) => {
+                console.log('roomId', this.props.roomId, 'filesRes', filesRes.data);
+                this.setState({ files: filesRes.data, images: imagesRes.data });
+            });
+        }
+    }
+    
 
     colorThemeClickedHandler = (i) => {
         this.setState({ colorThemeOption: colorThemes[i] });
@@ -37,12 +62,11 @@ class ContactInfo extends Component {
 
     changeColorThemeClickedHandler = () => {
         this.setState({ colorThemeModalOpen: true });
-    }
+    };
 
     render() {
-        console.log('contactinfo rerender');
         return (
-            <div className="contact-info">
+            <div className="contact-info" onScroll={this.contactInfoScrolledBottomHandler}>
                 <ColorThemeModal modalOpen={this.state.colorThemeModalOpen}
                     onCancel={() => this.setState({ colorThemeModalOpen: false })}
                     colorThemeOption={this.state.colorThemeOption}
@@ -52,11 +76,11 @@ class ContactInfo extends Component {
                 <ContactInfoHeader />
                 <div className="contact-info__main">
                     <OptionList changeColorThemeClickedHandler={this.changeColorThemeClickedHandler}/>
-                    <SharedFileList />
-                    <SharedImageList />
+                    <SharedFileList files={this.state.files} />
+                    <SharedImageList images={this.state.images} isFetchingMoreImages={this.state.isFetchingMoreImages}/>
                 </div>
             </div>
-        )
+        );
     }
 }
 

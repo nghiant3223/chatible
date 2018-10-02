@@ -8,9 +8,6 @@ import avatar from '../../../assets/images/user.svg';
 
 class ContactInfoHeader extends Component {
     render() {
-        console.log('render');
-        console.log(this.props.activeContact.counterpart && this.props.activeContact.counterpart.username);
-        console.log('last logout', this.props.activeContact.counterpart && this.props.activeContact.counterpart.lastLogout);
         return (
             <div className="contact-info__header">
                 <div className="contact-info__header__left">

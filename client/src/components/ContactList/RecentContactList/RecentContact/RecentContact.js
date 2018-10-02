@@ -18,7 +18,7 @@ const recentContact = (props) => {
     );
 }
 
-const mapStateToProps = ({ recentContacts }) => ({ recentContacts });
+const mapStateToProps = ({ recentContacts, thisUser }) => ({ recentContacts, thisUser });
 
 const mapDispatchToProps = dispatch => ({
     setActiveContact: roomId => dispatch({ type: 'MAKE_CONTACT_ACTIVE', payload: roomId })
@@ -27,16 +27,13 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(recentContact);
 
 function renderLastMessage(props) {
-    console.log('foo', props); 
-
     if (props.lastMessage !== undefined) {
         const messageDateTime = new Date(props.lastMessage.time);
-        console.log(',',    messageDateTime, props.lastMessage.time);
         return (
             <Fragment>
                 <div className="recent-contact__mid">
                     <div className="recent-contact__mid__title">{(props.counterpart && props.counterpart.fullname) || props.roomId}</div>
-                    <div className="recent-contact__mid__content">{props.lastMessage.content}</div>
+                    <div className="recent-contact__mid__content">{props.thisUser.username === props.lastMessage.from ? "You: " : "" +  props.lastMessage.content}</div>
                 </div>
                 <div className="recent-contact__right">{messageDateTime.getHours() + ':' + messageDateTime.getMinutes()}</div>
             </Fragment>
