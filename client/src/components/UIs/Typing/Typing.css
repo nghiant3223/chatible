@@ -1,7 +1,7 @@
 .message-typing {
     display: flex;
     align-items: center;
-    height: 14px;
+    height: 17px;
 }
 
 .message-typing div {

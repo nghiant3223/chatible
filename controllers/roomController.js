@@ -20,14 +20,18 @@ const getRoom = async (req, res) => {
                     users: room.users,
                     seen: lastMessage.peopleSeen.indexOf(username) !== -1,
                     colorTheme: room.colorTheme,
-                    type: room.type
+                    type: room.type,
+                    files: room.files,
+                    images: room.images
                 });
                 else ret.push({
                     roomId: roomId,
                     users: room.users,
                     seen: false,
                     colorTheme: room.colorTheme,
-                    type: room.type
+                    type: room.type,
+                    files: room.files,
+                    images: room.images
                 });
             } else {
                 const counterpart = await User.findOne({ username: room.users[0] !== username ? room.users[0] : room.users[1] }, { password: 0, _id: 0, __v: 0 });
@@ -37,14 +41,18 @@ const getRoom = async (req, res) => {
                     counterpart,
                     seen: lastMessage.peopleSeen.indexOf(username) !== -1,
                     colorTheme: room.colorTheme,
-                    type: room.type
+                    type: room.type,
+                    files: room.files,
+                    images: room.images
                 });
                 else ret.push({
                     roomId: roomId,
                     counterpart,
                     seen: false,
                     colorTheme: room.colorTheme,
-                    type: room.type
+                    type: room.type,
+                    files: room.files,
+                    images: room.images
                 });
             }
         } catch (e) {

@@ -5,12 +5,32 @@ const saveRoomFile = async (req, res) => {
     const { originalName, hashedName, username, fileExt } = req;
     try {
         if (['jpg', 'png', 'svg', 'jpeg', 'ico'].indexOf(fileExt) === -1) {
-            console.log('is images', fileExt);
-            await Room.updateOne({ _id: roomId }, { $addToSet: { files: { originalName, hashedName, uploader: username } } });
+            await Room.updateOne({ _id: roomId }, {
+                $push: {
+                    files: {
+                        $each: [{
+                            originalName,
+                            hashedName,
+                            uploader: username
+                        }],
+                        $sort: { time: -1 }
+                    }
+                }
+            });
             return res.status(200).send('Save file successfully.');
         } else {
-            console.log('is not images', fileExt);
-            await Room.updateOne({ _id: roomId }, { $addToSet: { images: { originalName, hashedName, uploader: username } } });
+            await Room.updateOne({ _id: roomId }, {
+                $push: {
+                    images: {
+                        $each: [{
+                            originalName,
+                            hashedName,
+                            uploader: username
+                        }],
+                        $sort: { time: -1 }
+                    }
+                }
+            });
             return res.status(200).send('Save image successfully.');
         }
     } catch (e) {

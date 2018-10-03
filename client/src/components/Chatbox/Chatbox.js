@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import axios from 'axios';
 
 import MessageContainer from './MessageContainer/MessageContainer';
@@ -6,10 +6,11 @@ import EmojiPanel from './EmojiPanel/EmojiPanel';
 import StickerPanel from './StickerPanel/StickerPanel';
 import { connect } from 'react-redux';
 import ChatboxContext from '../../contexts/ChatboxContext';
+import socketGetter from '../../socket';
 
 import './Chatbox.css';
 
-class Chatbox extends Component {
+class Chatbox extends PureComponent {
     state = {
         emojiPanelVisible: false,
         stickerPanelVisible: false,
@@ -17,7 +18,9 @@ class Chatbox extends Component {
         textInput: '',
         isLoading: false,
         messages: [],
-        isFetchingMore: false
+        isFetchingMore: false,
+        seen: false,
+        shouldScroll: false
     }
 
     componentDidMount = async () => {
@@ -31,6 +34,24 @@ class Chatbox extends Component {
         } catch (e) {
             console.log(e);
         }
+
+        const socket = socketGetter.getInstance();
+
+        socket.on('aUserSendsMessage', data => {
+            console.log('data', data);
+            this.setState(prevState => ({
+                messages: prevState.messages.concat(data),
+                LHSTyping: false
+            }));
+        });
+
+        socket.on('aUserIsTyping', data => {
+            this.setState({ LHSTyping: true });
+        });
+
+        socket.on('aUserStopsTyping', data => {
+            this.setState({ LHSTyping: false });
+        })
     }
 
     componentDidUpdate = async (prevProps, prevState) => {
@@ -90,11 +111,9 @@ class Chatbox extends Component {
         this.setState({ textInput: e.target.value });
 
         if (e.target.value === '') {
-            this.setState({ RHSTyping: false });
+            socketGetter.getInstance().emit('thisUserStopsTyping', {roomId: this.props.activeContact.roomId});
         } else {
-            if (!this.state.RHSTyping) {
-                this.setState({ RHSTyping: true });
-            }
+            socketGetter.getInstance().emit('thisUserIsTyping', {roomId: this.props.activeContact.roomId});
         }
     }
 
@@ -112,18 +131,44 @@ class Chatbox extends Component {
     textInputSubmittedHandler = (e) => {
         e.preventDefault();
 
-        // TODO: handle socket emit here
-
         if (this.state.textInput === '') return;
 
+        socketGetter.getInstance().emit('thisUserSendsMessage', {
+            from: this.props.thisUser.username,
+            roomId: this.props.activeContact.roomId,
+            content: this.state.textInput,
+            time: new Date().toISOString()
+        });
+
+        axios.post('/api/message/' + this.props.activeContact.roomId, {
+            content: this.state.textInput
+        }, {
+            headers: {
+                'x-access-token': localStorage.getItem('x-access-token')
+            }
+        });
+    
         this.setState(prevState => ({
             textInput: '',
             RHSTyping: false,
             messages: prevState.messages.concat({
-                from: 'r',
-                content: prevState.textInput,
+                from: this.props.thisUser.username,
+                content: this.state.textInput,
                 time: (new Date()).getTime()
             })
+        }));
+    }
+
+    fileInputChangedHandler = (e) => {
+        e.persist();
+        this.setState(prevState => ({
+            messages: prevState.messages.concat({
+                from: this.props.currentUser.username,
+                content: 'thisIsAFile',
+                time: new Date().getTime(),
+                file: e.target.files[0]
+            }),
+            seenAt: null
         }));
     }
 
@@ -138,11 +183,11 @@ class Chatbox extends Component {
                         messages={this.state.messages}
                         isLoading={this.state.isLoading}
                         moreMessagesFetchedHandler={this.moreMessagesFetchedHandler}
-                        activeContactUsername={this.props.activeContact.username}
                         isFetchingMore={this.state.isFetchingMore}
                         positiveIsFetchingMore={this.positiveIsFetchingMore}
                         negativeIsFetchingMore={this.negativeIsFetchingMore}
-                    />
+                        activeContact={this.props.activeContact}
+                        thisUser={this.props.thisUser}/>
 
                     <div className="chatbox__inputs">
                         <form className="chatbox__inputs__text" onSubmit={this.textInputSubmittedHandler} >
@@ -177,7 +222,7 @@ class Chatbox extends Component {
     }
 }
 
-const mapStateToProps = ({ recentContacts }) => ({ activeContact: recentContacts.activeContact });
+const mapStateToProps = ({ recentContacts, thisUser }) => ({ activeContact: recentContacts.activeContact, thisUser });
 
 
 export default connect(mapStateToProps)(Chatbox);

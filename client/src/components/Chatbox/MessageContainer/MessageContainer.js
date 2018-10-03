@@ -11,10 +11,11 @@ class MessageContainer extends Component {
     constructor() {
         super();
         this.initialFetching = true; // this is used to make when user first login to the page, this makes the messages container scroll to bottom
+        this.activeContactChanged = false;
     }
     
     componentDidUpdate = (prevProps, prevState) => {
-        if (prevProps.messages.length != this.props.messages.length) {
+        if (prevProps.messages.length !== this.props.messages.length) {
             const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;
             if (scrollTop + clientHeight >= scrollHeight - 60) {
                 this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
@@ -28,8 +29,13 @@ class MessageContainer extends Component {
             }
         }
 
-        if (prevProps.activeContactUsername !== this.props.activeContactUsername) {
+        if (prevProps.activeContact && this.props.activeContact && prevProps.activeContact.roomId !== this.props.activeContact.roomId) {
+            this.activeContactChanged = true;
+        }
+
+        if (this.activeContactChanged) {
             this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
+            this.activeContactChanged = false;
         }
     }
 
@@ -60,7 +66,7 @@ class MessageContainer extends Component {
             <Fragment>
                 {this.props.isFetchingMore && <div className="fetching-more"><Spinner /></div>}
                 
-                {seperateMessages(this.props.messages, 'r')}
+                {seperateMessages(this.props.messages, this.props.thisUser.username)}
                 
                 {this.props.LHSTyping && <Typing />}
             </Fragment>

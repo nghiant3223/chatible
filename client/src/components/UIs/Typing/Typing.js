@@ -1,13 +1,11 @@
 import React from 'react';
 
-import avatar from '../../../assets/images/user.svg';
-
 import './Typing.css';
 
 const Typing = ({ avatarUrl, text }) => (
-    <div className={`$lhs-message-container`}>
+    <div className={`lhs-message-container`}>
         <div className="lhs-message-avatar">
-            <img src="/images/profile-image.jpg" alt="Avatar" />
+            <img src="/images/profile_image.png" alt="Avatar" />
         </div>
         <div className="lhs-message-container__messages">
             <div className={`lhs-message-item`}>

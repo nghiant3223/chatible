@@ -11,7 +11,7 @@
     overflow-y: scroll;
     flex-shrink: 0; 
     height: calc(100vh - 85px);
-    padding: 15px;
+    padding: 5px 15px;
     position: relative;
 }
 
@@ -30,7 +30,7 @@
     font-size: 0.85em;
     outline: none;
     border: none;
-    font-family: Muli;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     width: 100%;
     height: 100%;
 }

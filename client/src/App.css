@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Pacifico');
-
 * {
 	box-sizing: border-box;
 }
@@ -7,7 +5,7 @@
 body {
 	margin: 0;
 	padding: 0;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, Helvetica, sans-serif, Arial;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 a {

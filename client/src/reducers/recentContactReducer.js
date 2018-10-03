@@ -43,7 +43,7 @@ const recentContactReducer = (state = initialState, action) => {
 
             activeContact.colorTheme = colorTheme;
             for (let i = 0; i < contacts.length; i++) {
-                if (contacts[i].roomId == roomId) {
+                if (contacts[i].roomId === roomId) {
                     contacts[i].colorTheme = colorTheme;
                     break;
                 }

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 
 import './RecentContact.css';
@@ -33,7 +33,7 @@ function renderLastMessage(props) {
             <Fragment>
                 <div className="recent-contact__mid">
                     <div className="recent-contact__mid__title">{(props.counterpart && props.counterpart.fullname) || props.roomId}</div>
-                    <div className="recent-contact__mid__content">{props.thisUser.username === props.lastMessage.from ? "You: " : "" +  props.lastMessage.content}</div>
+                    <div className="recent-contact__mid__content">{(props.thisUser.username === props.lastMessage.from ? "You: " : "") +  props.lastMessage.content}</div>
                 </div>
                 <div className="recent-contact__right">{messageDateTime.getHours() + ':' + messageDateTime.getMinutes()}</div>
             </Fragment>
