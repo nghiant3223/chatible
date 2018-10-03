@@ -28,7 +28,7 @@ class Chatbox extends PureComponent {
             const messagesRes = await axios.get('/api/message/' + this.props.activeContact.roomId + '?count=17', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
             const messages = messagesRes.data;
             for (let i = 0; i < messages.length; i++) {
-                messages[i].time = (new Date(messages[i].time)).getTime();
+                messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
             }
             this.setState({ messages });
         } catch (e) {
@@ -55,13 +55,13 @@ class Chatbox extends PureComponent {
     }
 
     componentDidUpdate = async (prevProps, prevState) => {
-        if (prevProps.activeContact !== this.props.activeContact) {
-            this.setState({ isLoading: true });
+        if (prevProps.activeContact.roomId !== this.props.activeContact.roomId) {
+            this.setState({ isLoading: true, messages: [] });
             try {
                 const messagesRes = await axios.get('/api/message/' + this.props.activeContact.roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
                 const messages = messagesRes.data;
                 for (let i = 0; i < messages.length; i++) {
-                    messages[i].time = (new Date(messages[i].time)).getTime();
+                    messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
                 }
                 this.setState({ isLoading: false, messages });
             } catch (e) {
@@ -118,12 +118,13 @@ class Chatbox extends PureComponent {
     }
 
     moreMessagesFetchedHandler = async () => {
+        console.log('more');
         this.setState({ isFetchingMore: true });
         const messagesRes = await axios.get('/api/message/' + this.props.activeContact.roomId + '?count=' + (this.state.messages.length + 1), { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
         
         const messages = messagesRes.data;
         for (let i = 0; i < messages.length; i++) {
-            messages[i].time = (new Date(messages[i].time)).getTime();
+            messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
         }
         this.setState({ messages, isFetchingMore: false });
     }
@@ -184,9 +185,7 @@ class Chatbox extends PureComponent {
                         isLoading={this.state.isLoading}
                         moreMessagesFetchedHandler={this.moreMessagesFetchedHandler}
                         isFetchingMore={this.state.isFetchingMore}
-                        positiveIsFetchingMore={this.positiveIsFetchingMore}
-                        negativeIsFetchingMore={this.negativeIsFetchingMore}
-                        activeContact={this.props.activeContact}
+                        roomId={this.props.activeContact.roomId}
                         thisUser={this.props.thisUser}/>
 
                     <div className="chatbox__inputs">
