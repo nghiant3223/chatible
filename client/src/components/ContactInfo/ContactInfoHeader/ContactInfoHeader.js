@@ -56,6 +56,6 @@ class ContactInfoHeader extends Component {
     }
 }
 
-const mapStateToProps = ({ recentContacts }) => ({ activeContact: recentContacts.activeContact });
+const mapStateToProps = ({ activeContact }) => ({ activeContact });
 
 export default connect(mapStateToProps)(ContactInfoHeader);

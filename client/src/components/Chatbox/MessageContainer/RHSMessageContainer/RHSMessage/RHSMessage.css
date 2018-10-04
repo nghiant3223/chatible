@@ -4,6 +4,11 @@
     justify-content: flex-end;
     cursor: default;
     align-items: center;
+    position: relative;
+}
+
+.rhs-message-item--error {
+    margin-bottom: 20px;
 }
 
 .rhs-message-item>div {
@@ -46,10 +51,11 @@
 }
 
 .rhs-message-item--error::after {
-    content: "\0026A0 There is network connection error!";
+    content: "\0026A0 There is a problem while sending this message !";
     position: absolute;
-    bottom: -12.5px;
-    font-size: 0.6rem;
+    bottom: -15px;
+    right: 0;
+    font-size: 0.70rem;
     color: rgb(255, 0, 0);
 }
 

@@ -11,6 +11,7 @@ const header = (props) => {
     const logoutButtonClickedHandler = () => {
         axios.post('/api/logout', {}, { headers: { 'x-access-token': localStorage.getItem("x-access-token") } });
         localStorage.removeItem("x-access-token");
+        props.clearState();
         socketGetter.getInstance().emit('thisUserGoesOffline', { username: props.thisUser.username });
         props.history.replace('/login');
     }
@@ -31,4 +32,8 @@ const header = (props) => {
 
 const mapStateToProps = ({ thisUser }) => ({ thisUser });
 
-export default connect(mapStateToProps)(withRouter(header));
+const mapDispatchToProps = dispatch => ({
+    clearState: () => dispatch({ type: 'CLEAR' })
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(header));

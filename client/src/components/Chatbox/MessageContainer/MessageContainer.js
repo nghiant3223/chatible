@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import Typing from '../../UIs/Typing/Typing';
 import Spinner from '../../UIs/Spinner/Spinner';
@@ -7,7 +7,7 @@ import { seperateMessages } from '../../../utils';
 
 import './MessageContainer.css';
 
-class MessageContainer extends PureComponent {
+class MessageContainer extends Component {
     constructor() {
         super();
         this.initialFetching = true; // this flag is used to make when user first login to the page, this makes the messages container scroll to bottom
@@ -16,11 +16,9 @@ class MessageContainer extends PureComponent {
     }
     
     componentDidUpdate = (prevProps, prevState) => {
-        console.log('update', prevProps, this.props);
-
-        if (prevProps.messages.length !== this.props.messages.length) {
+        if (prevProps.messages.length !== this.props.messages.length || this.props.LHSTyping) {
             const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;
-            if (scrollTop + clientHeight >= scrollHeight - 100) {
+            if (scrollTop + clientHeight >= scrollHeight - 100 ) {
                 this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
             }
             if (this.initialFetching) {

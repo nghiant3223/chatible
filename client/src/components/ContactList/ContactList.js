@@ -36,13 +36,13 @@ class ContactList extends Component {
 
     renderContactList() {
         if (this.state.recentVisible) {
-            return <RecentContactList contactList={this.props.recentContactList} />;
+            return <RecentContactList contactList={this.props.recentContacts} />;
         } else {
-            return <AvailableContactList contactList={this.props.recentContactList} searchValue={this.state.searchValue}/>;
+            return <AvailableContactList contactList={this.props.recentContacts} searchValue={this.state.searchValue}/>;
         }
     }
 }
 
-const mapStateToProps = ({ recentContacts }) => ({ recentContactList: recentContacts.contacts });
+const mapStateToProps = ({ recentContacts }) => ({ recentContacts });
 
 export default connect(mapStateToProps)(ContactList);

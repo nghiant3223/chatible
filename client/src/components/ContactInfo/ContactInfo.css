@@ -28,6 +28,7 @@ ul[class^="contact-info__main"] {
 ul[class^="contact-info__main"] li {
     display: grid;
     grid-template-columns: 20px 1fr;
+    grid-template-rows: 20px;
     align-items: center;
     padding-top: 10px;
     padding-bottom: 10px;

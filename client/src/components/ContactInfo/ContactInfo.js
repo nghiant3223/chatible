@@ -65,6 +65,6 @@ const mapDispatchToProps = dispatch => ({
     changeContactColor: (roomId, colorTheme) => dispatch({ type: 'CHANGE_CONTACT_COLOR', payload: { roomId, colorTheme } })
 });
 
-const mapStateToProps = ({ recentContacts }) => ({ activeContact: recentContacts.activeContact });
+const mapStateToProps = ({ activeContact }) => ({ activeContact });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactInfo);

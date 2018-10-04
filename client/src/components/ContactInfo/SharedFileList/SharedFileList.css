@@ -8,5 +8,11 @@
     background-size: auto;
     background-position: -17px -79px;
     width: 20px;
-    height: 20px;
+    height: 100%;
+    display: block;
+}
+
+.contact-info__main__files a {
+    display: block;
+    height: 100%;
 }

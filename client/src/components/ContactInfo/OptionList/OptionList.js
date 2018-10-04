@@ -25,12 +25,12 @@ const optionList = (props) => (
                             strokeLinejoin="round" strokeWidth="4%" transform="translate(-895.5 -1561.5)"></path>
                     </svg>
                 </div>
-                <a> Change color theme </a>
+                <div> Change color theme </div>
             </li>
         </ul>
     </Dropdown>
 );
 
-const mapStateToProps = ({ recentContacts }) => ({ colorTheme: recentContacts.activeContact.colorTheme });
+const mapStateToProps = ({ activeContact }) => ({ colorTheme: activeContact.colorTheme });
 
 export default connect(mapStateToProps)(optionList);

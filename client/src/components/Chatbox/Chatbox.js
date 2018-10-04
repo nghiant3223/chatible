@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Component } from 'react';
 import axios from 'axios';
 
 import MessageContainer from './MessageContainer/MessageContainer';
@@ -25,7 +25,8 @@ class Chatbox extends PureComponent {
 
     componentDidMount = async () => {
         try {
-            const messagesRes = await axios.get('/api/message/' + this.props.activeContact.roomId + '?count=17', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+            const messagesRes = await axios.get('/api/message/' + this.props.roomId + '?count=17', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+            console.log(messagesRes.data);
             const messages = messagesRes.data;
             for (let i = 0; i < messages.length; i++) {
                 messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
@@ -55,10 +56,10 @@ class Chatbox extends PureComponent {
     }
 
     componentDidUpdate = async (prevProps, prevState) => {
-        if (prevProps.activeContact.roomId !== this.props.activeContact.roomId) {
+        if (prevProps.roomId !== this.props.roomId) {
             this.setState({ isLoading: true, messages: [] });
             try {
-                const messagesRes = await axios.get('/api/message/' + this.props.activeContact.roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+                const messagesRes = await axios.get('/api/message/' + this.props.roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
                 const messages = messagesRes.data;
                 for (let i = 0; i < messages.length; i++) {
                     messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
@@ -111,16 +112,16 @@ class Chatbox extends PureComponent {
         this.setState({ textInput: e.target.value });
 
         if (e.target.value === '') {
-            socketGetter.getInstance().emit('thisUserStopsTyping', {roomId: this.props.activeContact.roomId});
+            socketGetter.getInstance().emit('thisUserStopsTyping', {roomId: this.props.roomId});
         } else {
-            socketGetter.getInstance().emit('thisUserIsTyping', {roomId: this.props.activeContact.roomId});
+            socketGetter.getInstance().emit('thisUserIsTyping', {roomId: this.props.roomId});
         }
     }
 
     moreMessagesFetchedHandler = async () => {
         console.log('more');
         this.setState({ isFetchingMore: true });
-        const messagesRes = await axios.get('/api/message/' + this.props.activeContact.roomId + '?count=' + (this.state.messages.length + 1), { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+        const messagesRes = await axios.get('/api/message/' + this.props.roomId + '?count=' + (this.state.messages.length + 1), { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
         
         const messages = messagesRes.data;
         for (let i = 0; i < messages.length; i++) {
@@ -133,21 +134,6 @@ class Chatbox extends PureComponent {
         e.preventDefault();
 
         if (this.state.textInput === '') return;
-
-        socketGetter.getInstance().emit('thisUserSendsMessage', {
-            from: this.props.thisUser.username,
-            roomId: this.props.activeContact.roomId,
-            content: this.state.textInput,
-            time: new Date().toISOString()
-        });
-
-        axios.post('/api/message/' + this.props.activeContact.roomId, {
-            content: this.state.textInput
-        }, {
-            headers: {
-                'x-access-token': localStorage.getItem('x-access-token')
-            }
-        });
     
         this.setState(prevState => ({
             textInput: '',
@@ -155,7 +141,9 @@ class Chatbox extends PureComponent {
             messages: prevState.messages.concat({
                 from: this.props.thisUser.username,
                 content: this.state.textInput,
-                time: (new Date()).getTime()
+                time: (new Date()).getTime(),
+                roomId: this.props.roomId,
+                isNew: true
             })
         }));
     }
@@ -176,7 +164,7 @@ class Chatbox extends PureComponent {
     render() {
 
         return (
-            <ChatboxContext.Provider value={this.props.activeContact}>
+            <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme }}>
                 <div className="chatbox">
                     
                     <MessageContainer
@@ -185,7 +173,7 @@ class Chatbox extends PureComponent {
                         isLoading={this.state.isLoading}
                         moreMessagesFetchedHandler={this.moreMessagesFetchedHandler}
                         isFetchingMore={this.state.isFetchingMore}
-                        roomId={this.props.activeContact.roomId}
+                        roomId={this.props.roomId}
                         thisUser={this.props.thisUser}/>
 
                     <div className="chatbox__inputs">
@@ -208,7 +196,7 @@ class Chatbox extends PureComponent {
                                 <svg aria-labelledby="js_9be" version="1.1" viewBox="0 0 40.16 42.24" preserveAspectRatio="xMinYMax meet" style={{ height: '85%', width: '66%' }}>
                                     <title id="js_9be">Send a thumb up</title>
                                     <path d="M935.36,1582.44a0,0,0,0,0,0,.06,3.59,3.59,0,0,1-.72,6.53,0,0,0,0,0,0,0,3.56,3.56,0,0,1,.71,2.13,3.6,3.6,0,0,1-3,3.54, 0,0,0,0,0,0,.05,3.56,3.56,0,0,1,.38,1.61,3.61,3.61,0,0,1-3.42,3.6H910v-19.6l5.27-7.9a4,4,0,0,0,.66-2.31l-0.1-4c-0.22-2.4-.09-2.06, 1.13-2.37,2-.51,7.16,1.59,5.13,12.17h11.06A3.59,3.59,0,0,1,935.36,1582.44ZM899,1581h7v22h-7v-22Z"
-                                        transform="translate(-898.5 -1563.26)" fill="transparent" fillRule="evenodd" stroke={this.props.activeContact.colorTheme}
+                                        transform="translate(-898.5 -1563.26)" fill="transparent" fillRule="evenodd" stroke={this.props.colorTheme}
                                         strokeLinecap="round" strokeWidth="5%">
                                     </path>
                                 </svg>
@@ -221,7 +209,7 @@ class Chatbox extends PureComponent {
     }
 }
 
-const mapStateToProps = ({ recentContacts, thisUser }) => ({ activeContact: recentContacts.activeContact, thisUser });
+const mapStateToProps = ({ activeContact, thisUser }) => ({ roomId: activeContact.roomId, thisUser, colorTheme: activeContact.colorTheme });
 
 
 export default connect(mapStateToProps)(Chatbox);

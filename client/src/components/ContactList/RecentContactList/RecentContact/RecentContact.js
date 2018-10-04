@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 
+import * as actions from '../../../../actions/index';
+
 import './RecentContact.css';
 
 const recentContact = (props) => {
@@ -21,7 +23,7 @@ const recentContact = (props) => {
 const mapStateToProps = ({ recentContacts, thisUser }) => ({ recentContacts, thisUser });
 
 const mapDispatchToProps = dispatch => ({
-    setActiveContact: roomId => dispatch({ type: 'MAKE_CONTACT_ACTIVE', payload: roomId })
+    setActiveContact: roomId => dispatch(actions.setActiveContact(roomId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(recentContact);

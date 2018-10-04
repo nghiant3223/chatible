@@ -9,16 +9,18 @@ module.exports = (server) => {
 
 
         socket.on('thisUserGoesOnline', data => {
-            const { username } = data;
-            const now = new Date();
+            setTimeout(() => {
+                const { username } = data;
+                const now = new Date();
 
-            console.log(username, 'goes online');
-            socket.broadcast.emit('aUserGoesOnline', { ...data, lastLogin: now.toISOString() });
+                console.log(username, 'goes online');
+                socket.broadcast.emit('aUserGoesOnline', { ...data, lastLogin: now.toISOString() });
 
-            User.findOne({ username }).then(user => {
-                const { rooms } = user;
-                rooms.forEach(room => socket.join(room));
-            });
+                User.findOne({ username }).then(user => {
+                    const { rooms } = user;
+                    rooms.forEach(room => socket.join(room));
+                });
+            }, 3000);
         });
 
         socket.on('thisUserGoesOffline', data => {
@@ -35,6 +37,7 @@ module.exports = (server) => {
         });
 
         socket.on('thisUserSendsMessage', data => {
+            console.log('send');
             socket.broadcast.to(data.roomId).emit('aUserSendsMessage', data);   
         });
 

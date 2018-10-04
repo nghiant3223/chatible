@@ -1,3 +1,7 @@
 .contact-info__main__options li {
     grid-column-gap: 10px;
 }
+
+.contact-info__main__options div {
+    height: 100%;
+}
