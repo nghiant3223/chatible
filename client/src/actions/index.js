@@ -78,3 +78,8 @@ export const setActiveContact = (roomId) => {
         dispatch({ type: 'SET_ACTIVE_CONTACT', payload: { ...activeContact } });
     }
 }
+
+export const changeColorTheme = (roomId, colorTheme) => ({
+    type: 'CHANGE_COLOR_THEME',
+    payload: { roomId, colorTheme }
+});

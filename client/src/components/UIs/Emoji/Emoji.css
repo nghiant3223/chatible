@@ -1,0 +1,45 @@
+.em--1f642 {
+    background: url('../../../assets/emojis/1f642.png');
+}
+
+.em--1f601 {
+    background: url('../../../assets/emojis/1f601.png');
+}
+
+.em--1f62d {
+    background: url('../../../assets/emojis/1f62d.png');
+}
+
+.em--1f611 {
+    background: url('../../../assets/emojis/1f611.png');
+}
+
+.em--1f622 {
+    background: url('../../../assets/emojis/1f622.png');
+}
+
+.em--1f61e {
+    background: url('../../../assets/emojis/1f61e.png');
+}
+
+.em--1f610 {
+    background: url('../../../assets/emojis/1f610.png');
+}
+
+.em {
+    width: 2rem;
+    height: 2rem;
+    background-position: 50% 50%;
+    background-size: 100%;
+    display: inline-block;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.em--small {
+    width: 1.25em;
+    height: 1.25em;
+    margin-bottom: -0.25em;
+    margin-left: 1px;
+    margin-right: 1px;
+}

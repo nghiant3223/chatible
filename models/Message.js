@@ -11,6 +11,11 @@ let messageSchema = new Schema({
     peopleSeen: {
         type: [String],
         default: []
+    },
+    type: {
+        type: String,
+        enum: ['text', 'image', 'file'],
+        default: 'text'
     }
 });
 

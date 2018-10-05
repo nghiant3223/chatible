@@ -9,6 +9,8 @@ import SharedFileList from './SharedFileList/SharedFileList';
 import SharedImageList from './SharedImageList/SharedImageList';
 import ColorThemeModal from '../UIs/ColorThemeModal/ColorThemeModal';
 
+import * as actions from '../../actions/index';
+
 import './ContactInfo.css';
 
 class ContactInfo extends Component {
@@ -62,7 +64,7 @@ class ContactInfo extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    changeContactColor: (roomId, colorTheme) => dispatch({ type: 'CHANGE_CONTACT_COLOR', payload: { roomId, colorTheme } })
+    changeContactColor: (roomId, colorTheme) => dispatch(actions.changeColorTheme(roomId, colorTheme))
 });
 
 const mapStateToProps = ({ activeContact }) => ({ activeContact });

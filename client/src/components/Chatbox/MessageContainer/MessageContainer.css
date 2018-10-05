@@ -18,3 +18,11 @@
     display: flex;
     justify-content: center;
 }
+
+.no-background-message {
+    background: none;
+}
+
+.no-padding-message {
+    padding: 0;
+}

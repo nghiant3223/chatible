@@ -15,12 +15,21 @@ const activeContactReducer = (state = initialState, action) => {
         }
             
         case 'UPDATE_CONTACT_STATUS__OFFLINE': {
-            console.log('active fire')
             const { lastLogout, username } = action.payload;
             const activeContact = { ...state };
 
             if (state.username == username) {
                 activeContact.lastLogout = lastLogout;
+            }
+            return activeContact;
+        }
+            
+        case 'CHANGE_COLOR_THEME': {
+            const { colorTheme, roomId } = action.payload;
+            const activeContact = { ...state };
+
+            if (state.roomId == roomId) {
+                activeContact.colorTheme = colorTheme;
             }
             return activeContact;
         }

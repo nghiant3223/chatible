@@ -1,20 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
+
+import ChatboxContext from '../../../../../contexts/ChatboxContext';
+import { renderContent } from '../../../../../utils';
+
 
 import './LHSMessage.css';
 
-class LHSMessage extends Component {
-    render() {
-        return (
+const lhsMessage = (props) => (
+    <ChatboxContext.Consumer>
+        {value => (
             <div className="lhs-message-item">
-                <div className="lhs-message-item__content">
-                    {this.props.content}
-                </div>
+                {renderContent({ type: props.type, from: props.from, content: props.content, colorTheme: value.colorTheme })}
                 <div className="lhs-message-item__time">
-                    <span>12:25</span>
+                    <span>{props.time}</span>
                 </div>
             </div>
-        );
-    }
-}
+        )}
+    </ChatboxContext.Consumer>
+);
 
-export default LHSMessage;
+export default lhsMessage;
