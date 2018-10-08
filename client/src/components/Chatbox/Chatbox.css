@@ -50,7 +50,7 @@
 }
 
 .chatbox__actions__file{
-    background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yU/r/CzBkBCFcKp1.png");
+    background-image: url(../../assets/images/W0HBEEIUJCb.png);
     background-repeat: no-repeat;
     background-size: auto;
     background-position: -99px -327px;
@@ -64,7 +64,7 @@
 }
 
 .chatbox__actions__emoji {
-    background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yU/r/CzBkBCFcKp1.png");
+    background-image: url(../../assets/images/W0HBEEIUJCb.png);
     background-repeat: no-repeat;
     background-size: auto;
     background-position: -2px -360px;
@@ -74,7 +74,7 @@
 }
 
 .chatbox__actions__sticker {
-    background-image: url("https://www.facebook.com/rsrc.php/v3/yW/r/mwEqPflk1kE.png");
+    background-image: url(../../assets/images/W0HBEEIUJCb.png);
     background-repeat: no-repeat;
     background-size: auto;
     background-position: -24px -555.499px;

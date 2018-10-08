@@ -17,7 +17,7 @@ const saveRoomFile = async (req, res) => {
                     }
                 }
             });
-            return res.status(200).send({type: 'file', originalName, hashedName });
+            return res.status(200).send({originalName, hashedName });
         } else {
             await Room.updateOne({ _id: roomId }, {
                 $push: {
@@ -31,7 +31,7 @@ const saveRoomFile = async (req, res) => {
                     }
                 }
             });
-            return res.status(200).send({type: 'image', originalName, hashedName });
+            return res.status(200).send({originalName, hashedName });
         }
     } catch (e) {
         console.log(e);

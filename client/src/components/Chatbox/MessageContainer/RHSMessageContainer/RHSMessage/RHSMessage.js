@@ -23,7 +23,7 @@ class RHSMessage extends Component {
         if (isNew) {
             switch (type) {
                 case 'image':
-                    
+                
                 case 'file':
                     this.setState({ isLoading: true });
                     try {
@@ -33,7 +33,7 @@ class RHSMessage extends Component {
                         const returnedContent = JSON.stringify(fileRes.data);
                         axios.post('/api/message/' + roomId, { content: returnedContent, type }, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
                         this.setState({ content: returnedContent });
-                        socket.emit('thisUserSendsMessage', {from, roomId, content: returnedContent });
+                        socket.emit('thisUserSendsMessage', {from, roomId, content: returnedContent, type });
                     } catch (e) {
                         console.log(e);
                         this.setState({ error: true });

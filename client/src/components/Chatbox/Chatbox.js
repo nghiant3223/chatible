@@ -148,7 +148,7 @@ class Chatbox extends PureComponent {
             messages: prevState.messages.concat({
                 from: this.props.thisUser.username,
                 content: this.state.textInput,
-                time: (new Date()).getTime(),
+                time: new Date().toISOString(),
                 roomId: this.props.roomId,
                 isNew: true,
                 type: 'text'
@@ -163,7 +163,7 @@ class Chatbox extends PureComponent {
             RHSTyping: false,
             messages: prevState.messages.concat({
                 from: this.props.thisUser.username,
-                time: (new Date()).getTime(),
+                time: new Date().toISOString(),
                 roomId: this.props.roomId,
                 isNew: true,
                 type: 'thumbup'
@@ -175,13 +175,13 @@ class Chatbox extends PureComponent {
     fileInputChangedHandler = (e) => {
         e.persist();
         const file = e.target.files[0];
-        const isImage = (/[\/.](gif|jpg|jpeg|tiff|png)$/i).test(file.name);
+        const isImage = (/[\/.](gif|jpg|jpeg|tiff|png|ico)$/i).test(file.name);
 
         this.setState(prevState => ({
             messages: prevState.messages.concat({
                 from: this.props.thisUser.username,
                 type: isImage ? 'image' : 'file',
-                time: new Date().getTime(),
+                time: new Date().toISOString(),
                 file,
                 isNew: true,
                 roomId: this.props.roomId

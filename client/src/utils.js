@@ -300,21 +300,26 @@ export const renderContent = ({ content, type, from, colorTheme, right }) => {
                 </div>
             );
         
-        case 'image':
+        case 'image': {
+            const { hashedName, originalName } = JSON.parse(content);
             return (
                 <div className={`${side}hs-message-item__content no-background-message no-padding-message`}
                     style={{ cursor: 'pointer' }}>
-                    <img src="" alt="Upload..." />
+                    <img src={"/uploads/" + hashedName} alt={originalName} />
                 </div>
             );
+        }
         
-        case 'file':
-            const {hashedName, originalName} = JSON.parse(content);
+        case 'file': {
+            const { hashedName, originalName } = JSON.parse(content);
             return (
-                <div className={`${side}hs-message-item__content`}>
-                    <a href={"/uploads/" + hashedName} download>{originalName}</a>
+                <div className={`${side}hs-message-item__content ${side}hs-message-item__content--file`}>
+                    <a href={"/uploads/" + hashedName} download>
+                        <div ></div>{originalName}</a>
                 </div>
             );
+        }
+
         
         default:
             console.log('type',type, content);

@@ -68,3 +68,15 @@
 .lhs-message-item__content:hover + .lhs-message-item__time {
     display: block;
 }
+
+.lhs-message-item__content--file div {
+    background-image: url(../../../../../assets/images/W0HBEEIUJCb.png);
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-position: -68px -779px;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: text-bottom;
+    margin-right: 5px;
+}

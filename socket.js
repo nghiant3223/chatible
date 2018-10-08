@@ -37,8 +37,9 @@ module.exports = (server) => {
         });
 
         socket.on('thisUserSendsMessage', data => {
-            console.log('send');
-            socket.broadcast.to(data.roomId).emit('aUserSendsMessage', data);   
+            const now = new Date();
+
+            socket.broadcast.to(data.roomId).emit('aUserSendsMessage', { ...data, time: now.toISOString() });
         });
 
         socket.on('thisUserIsTyping', data => {
