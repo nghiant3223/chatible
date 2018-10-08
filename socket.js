@@ -23,6 +23,7 @@ module.exports = (server) => {
             }, 3000);
         });
 
+
         socket.on('thisUserGoesOffline', data => {
             const { username } = data;
             const now = new Date();
@@ -36,18 +37,27 @@ module.exports = (server) => {
             });
         });
 
+
         socket.on('thisUserSendsMessage', data => {
             const now = new Date();
-
             socket.broadcast.to(data.roomId).emit('aUserSendsMessage', { ...data, time: now.toISOString() });
         });
+
 
         socket.on('thisUserIsTyping', data => {
             socket.broadcast.to(data.roomId).emit('aUserIsTyping', data);
         });
 
+
         socket.on('thisUserStopsTyping', data => {
             socket.broadcast.to(data.roomId).emit('aUserStopsTyping', data);
+        });
+
+
+        socket.on('thisUserChangesColorTheme', data => {
+            const now = new Date();
+            socket.broadcast.to(data.roomId).emit('aUserChangesColorTheme', { ...data, time: now.toISOString() });
+            socket.emit('aUserChangesColorTheme', { ...data, time: now.toISOString() });
         });
     });
 }

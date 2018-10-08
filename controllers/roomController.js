@@ -2,7 +2,10 @@ const { User } = require('../models/User');
 const { Message } = require('../models/Message');
 const { Room } = require('../models/Room');
 
-const getRoom = async (req, res) => {
+/**
+ * Get room's short information for recent contact list
+ */
+const getRecentRooms = async (req, res) => {
     const { username } = req;
 
     let user = await User.findOne({ username }, { rooms: 1 });
@@ -14,20 +17,10 @@ const getRoom = async (req, res) => {
             const roomMessages = room.messages;
             const lastMessage = roomMessages[roomMessages.length - 1];
             if (room.type === 'GROUP') {
-                if (lastMessage) ret.push({
+                ret.push({
                     roomId: roomId,
                     lastMessage,
                     users: room.users,
-                    seen: lastMessage.peopleSeen.indexOf(username) !== -1,
-                    colorTheme: room.colorTheme,
-                    type: room.type,
-                    files: room.files,
-                    images: room.images
-                });
-                else ret.push({
-                    roomId: roomId,
-                    users: room.users,
-                    seen: false,
                     colorTheme: room.colorTheme,
                     type: room.type,
                     files: room.files,
@@ -39,16 +32,6 @@ const getRoom = async (req, res) => {
                     roomId: roomId,
                     lastMessage,
                     counterpart,
-                    seen: lastMessage.peopleSeen.indexOf(username) !== -1,
-                    colorTheme: room.colorTheme,
-                    type: room.type,
-                    files: room.files,
-                    images: room.images
-                });
-                else ret.push({
-                    roomId: roomId,
-                    counterpart,
-                    seen: false,
                     colorTheme: room.colorTheme,
                     type: room.type,
                     files: room.files,
@@ -70,8 +53,14 @@ const getRoomInfo = async (req, res) => {
 
     if (!room) return res.status(404).send('Room not found.');
 
-    room.messages = room.messages[room.messages.length - 1];
-    return res.status(200).send(room);
+    data = room.toObject(); 
+    data.lastMessage = data.messages[room.messages.length - 1];
+    
+    delete data.messages;
+    delete data.files;
+    delete data.images;
+
+    return res.status(200).send(data);
 }
 
 const createRoom = async (req, res) => {
@@ -111,4 +100,4 @@ const changeColorTheme = async (req, res) => {
     res.status(200).send("Change room's color theme successfully.");
 }
 
-module.exports = { getRoom, createRoom, getRoomInfo, changeColorTheme };
+module.exports = { getRecentRooms, createRoom, getRoomInfo, changeColorTheme };

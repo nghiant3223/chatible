@@ -4,7 +4,7 @@ const roomController = require('../../controllers/roomController');
 const { verifyToken, checkUserInRoom } = require('../../middleware/index');
 
 
-router.get('/', verifyToken, roomController.getRoom);
+router.get('/', verifyToken, roomController.getRecentRooms);
 
 router.get('/info/:roomId', verifyToken, checkUserInRoom, roomController.getRoomInfo);
 

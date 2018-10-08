@@ -8,7 +8,7 @@ import './RecentContact.css';
 const recentContact = (props) => {
     let className = "recent-contact";
     if (props.seen) className = "recent-contact recent-contact--unread";
-    if (props.recentContacts.activeContact && props.recentContacts.activeContact.roomId === props.roomId) className = "recent-contact recent-contact--active";
+    if (props.activeContact.roomId === props.roomId) className = "recent-contact recent-contact--active";
     return (
         <div className={className} onClick={() => props.setActiveContact(props.roomId)} >
             <div className="recent-contact__left">
@@ -20,7 +20,7 @@ const recentContact = (props) => {
     );
 }
 
-const mapStateToProps = ({ recentContacts, thisUser }) => ({ recentContacts, thisUser });
+const mapStateToProps = ({ activeContact, thisUser }) => ({ activeContact, thisUser });
 
 const mapDispatchToProps = dispatch => ({
     setActiveContact: roomId => dispatch(actions.setActiveContact(roomId))
@@ -29,7 +29,7 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(recentContact);
 
 function renderLastMessage(props) {
-    if (props.lastMessage !== undefined) {
+    if (props.lastMessage) {
         const messageDateTime = new Date(props.lastMessage.time);
         return (
             <Fragment>

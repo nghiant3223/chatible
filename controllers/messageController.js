@@ -5,15 +5,16 @@ const { Room } = require('../models/Room');
 
 const saveMessage = async (req, res) => {
     const { roomId } = req.params;
-    const { content, type } = req.body;
+    const { content, type, from } = req.body;
     const { username } = req;
-
+    
+    console.log('save');
     try {
         let room = await Room.findById(roomId);
         if (!room) return res.status(404).send('Room not found.');
         else await room.update({
             $push: {
-                messages: { $each: [{ from: username, content, type }] }
+                messages: { $each: [{ from: from || username, content, type }] }
             }
         });
 

@@ -21,21 +21,18 @@
 
 
 .contact-info__main__images {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-column-gap: 5px;
-    grid-row-gap: 5px;
-    padding-left: 3px;
-    padding-right: 3px;
-
-    grid-auto-rows: auto;
-    grid-auto-flow: row dense;
-    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: row;
 }
 
-.contact-info__main__images img {
-    width: 100%;
-    object-fit: cover;
-    overflow: hidden;
-    border-radius: 1px;
+.contact-info__main__images>div {
+    padding: 2px;
+    flex-basis: 33.33%;
+}
+
+.contact-info__main__images>div>div{
+    height: 100px;
+    background-position: 50% 50%;
 }

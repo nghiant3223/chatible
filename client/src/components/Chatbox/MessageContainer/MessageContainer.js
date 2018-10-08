@@ -15,6 +15,11 @@ class MessageContainer extends Component {
         this.colorThemeChanged = false;
     }
     
+    componentDidMount = () => {
+        this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
+    }
+    
+
     componentDidUpdate = (prevProps, prevState) => {
         if (prevProps.messages.length !== this.props.messages.length || this.props.LHSTyping) {
             const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;

@@ -10,6 +10,7 @@ import SharedImageList from './SharedImageList/SharedImageList';
 import ColorThemeModal from '../UIs/ColorThemeModal/ColorThemeModal';
 
 import * as actions from '../../actions/index';
+import socketGetter from '../../socket';
 
 import './ContactInfo.css';
 
@@ -37,6 +38,8 @@ class ContactInfo extends Component {
         this.setState({
             colorThemeModalOpen: false
         });
+
+        socketGetter.getInstance().emit('thisUserChangesColorTheme', { content: JSON.stringify({ colorTheme: this.state.colorThemeOption, changer: this.props.thisUser.username }), roomId }); 
     }
 
     changeColorThemeClickedHandler = () => {
@@ -67,6 +70,6 @@ const mapDispatchToProps = dispatch => ({
     changeContactColor: (roomId, colorTheme) => dispatch(actions.changeColorTheme(roomId, colorTheme))
 });
 
-const mapStateToProps = ({ activeContact }) => ({ activeContact });
+const mapStateToProps = ({ activeContact, thisUser }) => ({ activeContact, thisUser });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactInfo);

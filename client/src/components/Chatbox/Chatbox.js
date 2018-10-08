@@ -9,6 +9,7 @@ import StickerPanel from './StickerPanel/StickerPanel';
 import ChatboxContext from '../../contexts/ChatboxContext';
 import socketGetter from '../../socket';
 import { emojiMap } from '../../configs';
+import * as actions from '../../actions/index';
 
 import './Chatbox.css';
 
@@ -26,9 +27,10 @@ class Chatbox extends PureComponent {
     }
 
     componentDidMount = async () => {
+        const { roomId } = this.props;
+
         try {
-            const messagesRes = await axios.get('/api/message/' + this.props.roomId + '?count=17', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
-            console.log(messagesRes.data);
+            const messagesRes = await axios.get('/api/message/' + roomId + '?count=17', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
             const messages = messagesRes.data;
             for (let i = 0; i < messages.length; i++) {
                 messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
@@ -41,20 +43,35 @@ class Chatbox extends PureComponent {
         const socket = socketGetter.getInstance();
 
         socket.on('aUserSendsMessage', data => {
-            console.log('data', data);
-            this.setState(prevState => ({
-                messages: prevState.messages.concat(data),
-                LHSTyping: false
-            }));
+            if (data.roomId === roomId) {
+                this.setState(prevState => ({
+                    messages: prevState.messages.concat(data),
+                    LHSTyping: false
+                }));
+                data.type === 'file' ? this.props.updateSharedFiles(data.roomId, JSON.parse(data.content)) : this.props.updateSharedImages(data.roomId, JSON.parse(data.content));
+            }
         });
 
         socket.on('aUserIsTyping', data => {
-            this.setState({ LHSTyping: true });
+            if (data.roomId === roomId) {
+                this.setState({ LHSTyping: true });
+            }
         });
 
         socket.on('aUserStopsTyping', data => {
-            this.setState({ LHSTyping: false });
-        })
+            if (data.roomId === roomId) {
+                this.setState({ LHSTyping: false });
+            }
+        });
+
+        socket.on('aUserChangesColorTheme', data => {
+            if (data.roomId === roomId) {
+                this.setState(prevState => ({
+                    messages: prevState.messages.concat({ ...data, type: 'changeColorTheme', from: 'system', isNew: true }),
+                    LHSTyping: false
+                }));
+            }
+        });
     }
 
     componentDidUpdate = async (prevProps, prevState) => {
@@ -126,7 +143,6 @@ class Chatbox extends PureComponent {
     }
 
     moreMessagesFetchedHandler = async () => {
-        console.log('more');
         this.setState({ isFetchingMore: true });
         const messagesRes = await axios.get('/api/message/' + this.props.roomId + '?count=' + (this.state.messages.length + 1), { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
         
@@ -240,5 +256,10 @@ class Chatbox extends PureComponent {
 
 const mapStateToProps = ({ activeContact, thisUser }) => ({ roomId: activeContact.roomId, thisUser, colorTheme: activeContact.colorTheme });
 
+const mapDispatchToProps = dispatch => ({
+    updateSharedFiles: (roomId, fileInfo) => dispatch(actions.updateSharedFiles(roomId, fileInfo)),
+    updateSharedImages: (roomId, imageInfo) => dispatch(actions.updateSharedImages(roomId, imageInfo))
+});
 
-export default connect(mapStateToProps)(Chatbox);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chatbox);

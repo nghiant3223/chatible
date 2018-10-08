@@ -22,12 +22,10 @@ class HomePage extends Component {
         this.props.fetchInitialData();
        
         socket.on('aUserGoesOnline', ({ username, lastLogin }) => {
-            console.log('goes online');
             this.props.updateCounterpartLastLogin(username, lastLogin);
         });
 
         socket.on('aUserGoesOffline', ({ username, lastLogout }) => {
-            console.log('goes offline');
             this.props.updateCounterpartLastLogout(username, lastLogout);
         });
 
@@ -39,7 +37,6 @@ class HomePage extends Component {
         }
 
         if (this.props.thisUser === null || this.props.recentContacts === null || this.props.activeContact === null) {
-            console.log('readh')
             return (
                 <div className="main-loading">
                     <Spinner />
@@ -52,8 +49,8 @@ class HomePage extends Component {
                 <Header />
                 <main>
                     <ContactList />
-                    <Chatbox />
-                    <ContactInfo />
+                    <Chatbox key={'chatbox.' + this.props.activeContact.roomId}/>
+                    <ContactInfo key={'contact-info.' + this.props.activeContact.roomId}/>
                 </main>
             </div>
         );
