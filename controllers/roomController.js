@@ -28,7 +28,7 @@ const getRecentRooms = async (req, res) => {
                 });
             } else {
                 const counterpart = await User.findOne({ username: room.users[0] !== username ? room.users[0] : room.users[1] }, { password: 0, _id: 0, __v: 0 });
-                if (lastMessage) ret.push({
+                ret.push({
                     roomId: roomId,
                     lastMessage,
                     counterpart,

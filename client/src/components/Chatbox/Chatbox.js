@@ -48,7 +48,8 @@ class Chatbox extends PureComponent {
                     messages: prevState.messages.concat(data),
                     LHSTyping: false
                 }));
-                data.type === 'file' ? this.props.updateSharedFiles(data.roomId, JSON.parse(data.content)) : this.props.updateSharedImages(data.roomId, JSON.parse(data.content));
+                if (data.type === 'file') return this.props.updateSharedFiles(data.roomId, JSON.parse(data.content)) 
+                if (data.type === 'image') return this.props.updateSharedImages(data.roomId, JSON.parse(data.content));
             }
         });
 
@@ -67,7 +68,7 @@ class Chatbox extends PureComponent {
         socket.on('aUserChangesColorTheme', data => {
             if (data.roomId === roomId) {
                 this.setState(prevState => ({
-                    messages: prevState.messages.concat({ ...data, type: 'changeColorTheme', from: 'system', isNew: true }),
+                    messages: prevState.messages.concat({ ...data, type: 'changeColorTheme', from: 'system'}),
                     LHSTyping: false
                 }));
             }

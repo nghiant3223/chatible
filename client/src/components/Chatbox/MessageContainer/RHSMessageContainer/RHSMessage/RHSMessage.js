@@ -22,7 +22,7 @@ class RHSMessage extends Component {
     componentDidMount = async () => {
         const { from, roomId, content, isNew, type, file } = this.props;
         const socket = socketGetter.getInstance();
-
+        console.log(from, content);
         if (isNew) {
             switch (type) {
                 case 'image':

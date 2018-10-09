@@ -1,38 +1,4 @@
 .message-thumbup {
     width: 35px;
     height: 35px;
-    animation: grow-shake 0.15s ease-out;
-}
-
-@keyframes grow-shake {
-    0% {
-        transform: scale(0);
-    }
-    20% {
-        transform: rotate(10deg) scale(0.25);
-    }
-    25% {
-        transform: scale(0.2);
-    }
-    45% {
-        transform: rotate(-10deg) scale(0.5);
-    }
-    50% {
-        transform: scale(0.45);
-    }
-    70% {
-        transform: rotate(10deg) scale(0.75);
-    }
-    75% {
-        transform: scale(0.7);
-    }
-    90% {
-        transform: rotate(-10deg) scale(1);
-    }
-    95% {
-        transform: scale(0.95);
-    }
-    100% {
-        transform: rotate(0) scale(1);
-    }
 }

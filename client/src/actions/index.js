@@ -7,6 +7,7 @@ export const fetchUserAndRecentContact = () => {
             const meRes = await axios.get('/api/user/me', { headers: { 'x-access-token': localStorage.getItem("x-access-token") } });
             socketGetter.getInstance().emit('thisUserGoesOnline', { username: meRes.data.username });
             const contactRes = await axios.get('/api/room', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+            console.log('..', contactRes.data);
             dispatch(fetchRecentContactSuccess(contactRes.data));
             dispatch(fetchUserSuccess(meRes.data));
             dispatch(setInitialActiveContact(contactRes.data[0]));

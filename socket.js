@@ -1,5 +1,6 @@
 const socket = require('socket.io');
 const { User } = require('./models/User');
+const { Room } = require('./models/Room');
 
 module.exports = (server) => {
     const io = socket(server);
@@ -55,9 +56,17 @@ module.exports = (server) => {
 
 
         socket.on('thisUserChangesColorTheme', data => {
+            const { roomId, content, type } = data;
             const now = new Date();
+
             socket.broadcast.to(data.roomId).emit('aUserChangesColorTheme', { ...data, time: now.toISOString() });
             socket.emit('aUserChangesColorTheme', { ...data, time: now.toISOString() });
+            
+            Room.findByIdAndUpdate(roomId, {
+                $push: {
+                    messages: { $each: [{ from: 'system', content, type }] }
+                }
+            }, function () { });
         });
     });
 }
