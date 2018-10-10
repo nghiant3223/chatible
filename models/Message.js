@@ -9,12 +9,18 @@ let messageSchema = new Schema({
         default: () => new Date().toISOString()
     },
     peopleSeen: {
-        type: [String],
+        type: [{
+            username: String,
+            time: {
+                type: Date,
+                default: () => new Date().toISOString()
+            }
+        }],
         default: []
     },
     type: {
         type: String,
-        enum: ['text', 'image', 'file', 'changeColorTheme'],
+        enum: ['text', 'image', 'file', 'changeColorTheme', 'thumbup'],
         default: 'text'
     }
 });

@@ -34,6 +34,7 @@ const ColorThemeModal = (props) => {
                         return (
                             <div className={"color-theme-modal__option" + (colorTheme === props.colorThemeOption ? " color-theme-modal__option--selected" : "")}
                                 style={{ background: colorTheme }}
+                                key={i}
                                 onClick={() => props.colorThemeClickedHandler(i)} />
                         );
                     })}

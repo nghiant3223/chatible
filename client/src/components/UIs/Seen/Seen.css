@@ -1,0 +1,10 @@
+.chatbox__message-container__people-seen {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.chatbox__message-container__people-seen img {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}

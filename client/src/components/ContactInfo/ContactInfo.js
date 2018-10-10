@@ -27,7 +27,6 @@ class ContactInfo extends Component {
 
     colorThemeChangedHandler = () => {
         const { roomId } = this.props.activeContact;
-        this.props.changeContactColor(roomId, this.state.colorThemeOption);
         axios.post('/api/room/color/' + roomId, {
             colorTheme: this.state.colorThemeOption
         }, {
@@ -66,10 +65,6 @@ class ContactInfo extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => ({
-    changeContactColor: (roomId, colorTheme) => dispatch(actions.changeColorTheme(roomId, colorTheme))
-});
-
 const mapStateToProps = ({ activeContact, thisUser }) => ({ activeContact, thisUser });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactInfo);
+export default connect(mapStateToProps)(ContactInfo);

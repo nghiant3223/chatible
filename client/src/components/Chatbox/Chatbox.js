@@ -22,7 +22,6 @@ class Chatbox extends PureComponent {
         isLoading: false,
         messages: [],
         isFetchingMore: false,
-        seen: false,
         shouldScroll: false
     }
 
@@ -71,6 +70,9 @@ class Chatbox extends PureComponent {
                     messages: prevState.messages.concat({ ...data, type: 'changeColorTheme', from: 'system'}),
                     LHSTyping: false
                 }));
+                const { colorTheme } = JSON.parse(data.content);
+                console.log('colorTheme', colorTheme);
+                this.props.changeContactColor(data.roomId, colorTheme);
             }
         });
     }
@@ -259,8 +261,8 @@ const mapStateToProps = ({ activeContact, thisUser }) => ({ roomId: activeContac
 
 const mapDispatchToProps = dispatch => ({
     updateSharedFiles: (roomId, fileInfo) => dispatch(actions.updateSharedFiles(roomId, fileInfo)),
-    updateSharedImages: (roomId, imageInfo) => dispatch(actions.updateSharedImages(roomId, imageInfo))
+    updateSharedImages: (roomId, imageInfo) => dispatch(actions.updateSharedImages(roomId, imageInfo)),
+    changeContactColor: (roomId, colorTheme) => dispatch(actions.changeColorTheme(roomId, colorTheme))
 });
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chatbox);

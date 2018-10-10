@@ -64,5 +64,11 @@ module.exports = (server) => {
             
             Room.findByIdAndUpdate(roomId, { $push: { messages: { $each: [{ from: 'system', content, type }] } } }, function () { });
         });
+
+        socket.on('thisUserSeesMessage', data => {
+            const now = new Date();
+            console.log('see');
+            socket.broadcast.to(data.roomId).emit('aUserSeesMessage', { ...data, time: now.toISOString() });
+        });
     });
 }

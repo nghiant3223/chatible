@@ -35,4 +35,5 @@
 .contact-info__main__images>div>div{
     height: 100px;
     background-position: 50% 50%;
+    background-size: 200%;
 }

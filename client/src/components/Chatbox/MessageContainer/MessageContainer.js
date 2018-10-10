@@ -1,37 +1,85 @@
 import React, { Component, Fragment } from 'react';
+import axios from 'axios';
 
 import Typing from '../../UIs/Typing/Typing';
 import Spinner from '../../UIs/Spinner/Spinner';
+import Seen from '../../UIs/Seen/Seen';
 
 import { seperateMessages } from '../../../utils';
+import socketGetter from '../../../socket';
 
 import './MessageContainer.css';
 
 class MessageContainer extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.initialFetching = true; // this flag is used to make when user first login to the page, this makes the messages container scroll to bottom
         this.activeContactChanged = false; // this flag is used to make messageContainer scrolls down to bottom when activeContact changes
         this.colorThemeChanged = false;
     }
+
+    state = {
+        peopleSeen: []
+    }
     
     componentDidMount = () => {
         this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
+
+        socketGetter.getInstance().on('aUserSeesMessage', data => {
+            if (data.roomId === this.props.roomId) {
+                this.setState(prevState => {
+                    if (prevState.peopleSeen.map(user => user.username).indexOf(data.from) === -1) {
+                        axios.post('/api/message/see/' + this.props.roomId, {username: data.from}, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+                        return {
+                            peopleSeen: prevState.peopleSeen.concat({
+                                username: data.from,
+                                time: data.time
+                            })
+                        };
+                    } else return prevState;
+                });
+            }
+        });
     }
     
 
     componentDidUpdate = (prevProps, prevState) => {
-        if (prevProps.messages.length !== this.props.messages.length || this.props.LHSTyping) {
+        if (prevProps.messages.length !== this.props.messages.length) {
             const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;
             if (scrollTop + clientHeight >= scrollHeight - 100 ) {
                 this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
             }
+
             if (this.initialFetching) {
                 this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
                 this.initialFetching = false;
             }
+
             if (prevProps.isFetchingMore && !this.props.isFetchingMore) {
                 this.messageContainer.scrollTop = 10; // allow user to scroll up
+            }
+
+            this.setState({
+                peopleSeen: (function (messages) {
+                    if (messages.length > 0) {
+                        const lastMessage = messages[messages.length - 1];
+                        return lastMessage.peopleSeen || [];
+                    } else return [];
+                })(this.props.messages)
+            });
+        }
+
+        if (this.props.LHSTyping) {
+            const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;
+            if (scrollTop + clientHeight >= scrollHeight - 100 ) {
+                this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
+            }
+        }
+
+        if (this.state.peopleSeen.length != prevState.peopleSeen.length) {
+            const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;
+            if (scrollTop + clientHeight >= scrollHeight - 100 ) {
+                this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
             }
         }
 
@@ -62,9 +110,24 @@ class MessageContainer extends Component {
         }
     }
 
+    messageContainerClickedHandler = () => {
+        const length = this.props.messages.length;
+
+        if (length > 0 && this.props.messages[length - 1].from !== this.props.thisUser.username) {
+            socketGetter.getInstance().emit('thisUserSeesMessage', {
+                roomId: this.props.roomId,
+                from: this.props.thisUser.username
+            });
+        }
+    }
+
     render() {
         return (
-            <div className="chatbox__message-container" ref={el => this.messageContainer = el} onScroll={this.messageContainerScrolledHandler}>
+            <div
+                className="chatbox__message-container"
+                ref={el => this.messageContainer = el}
+                onScroll={this.messageContainerScrolledHandler}
+                onClick={this.messageContainerClickedHandler}>
                 {this.renderContent()}
             </div>
         );
@@ -86,6 +149,8 @@ class MessageContainer extends Component {
                 {seperateMessages(this.props.messages, this.props.thisUser.username)}
                 
                 {this.props.LHSTyping && <Typing />}
+
+                <Seen peopleSeen={this.state.peopleSeen} thisUser={this.props.thisUser}/>
             </Fragment>
         );
     }
