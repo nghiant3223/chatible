@@ -18,8 +18,10 @@ class HomePage extends Component {
 
     componentDidMount = () => {
         const socket = socketGetter.getInstance();
+        console.log(this.props.history);
+        
+        this.props.fetchInitialData(this.props.history);
 
-        this.props.fetchInitialData();
        
         socket.on('aUserGoesOnline', ({ username, lastLogin }) => {
             this.props.updateCounterpartLastLogin(username, lastLogin);
@@ -32,10 +34,6 @@ class HomePage extends Component {
     }
         
     render() {
-        if (this.props.thisUser === false || this.props.recentContacts === false) {
-            return <Redirect to = '/login' /> ;
-        }
-
         if (this.props.thisUser === null || this.props.recentContacts === null || this.props.activeContact === null) {
             return (
                 <div className="main-loading">
@@ -58,7 +56,7 @@ class HomePage extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    fetchInitialData: () => dispatch(actions.fetchUserAndRecentContact()),
+    fetchInitialData: (history) => dispatch(actions.fetchUserAndRecentContact(history)),
     updateCounterpartLastLogin: (username, lastLogin) => dispatch(actions.updateContactStatusOnline(username, lastLogin)),
     updateCounterpartLastLogout: (username, lastLogout) => dispatch(actions.updateContactStatusOffline(username, lastLogout))
 });

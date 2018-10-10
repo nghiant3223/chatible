@@ -6,7 +6,7 @@ const thisUserReducer = (state = initialState, action) => {
             return action.payload;
         
         case 'FETCH_USER_FAILURE':
-            return false;
+            return null;
         
         case 'CLEAR':
             return initialState;

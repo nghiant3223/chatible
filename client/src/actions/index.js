@@ -1,8 +1,9 @@
 import axios from 'axios';
 import socketGetter from '../socket';
 
-export const fetchUserAndRecentContact = () => {
+export const fetchUserAndRecentContact = (history) => {
     return async dispatch => {
+        console.log('history', history);
         try {
             const meRes = await axios.get('/api/user/me', { headers: { 'x-access-token': localStorage.getItem("x-access-token") } });
             socketGetter.getInstance().emit('thisUserGoesOnline', { username: meRes.data.username });
@@ -12,9 +13,11 @@ export const fetchUserAndRecentContact = () => {
             dispatch(fetchUserSuccess(meRes.data));
             dispatch(setInitialActiveContact(contactRes.data[0]));
         } catch (e) {
-            console.log(e);
             dispatch(fetchUserFailure());
             dispatch(fetchRecentContactFailure());
+
+            history.replace('/login');
+            console.log('replace');
         }
     }
 }
@@ -43,8 +46,7 @@ export const fetchRecentContactSuccess = (user) => ({
 
 
 export const fetchRecentContactFailure = () => ({
-    type: 'FETCH_CONTACTS_FAILURE',
-    payload: false
+    type: 'FETCH_CONTACTS_FAILURE'
 });
 
 

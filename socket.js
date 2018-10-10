@@ -62,11 +62,7 @@ module.exports = (server) => {
             socket.broadcast.to(data.roomId).emit('aUserChangesColorTheme', { ...data, time: now.toISOString() });
             socket.emit('aUserChangesColorTheme', { ...data, time: now.toISOString() });
             
-            Room.findByIdAndUpdate(roomId, {
-                $push: {
-                    messages: { $each: [{ from: 'system', content, type }] }
-                }
-            }, function () { });
+            Room.findByIdAndUpdate(roomId, { $push: { messages: { $each: [{ from: 'system', content, type }] } } }, function () { });
         });
     });
 }

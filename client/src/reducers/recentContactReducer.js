@@ -7,7 +7,7 @@ const recentContactReducer = (state = initialState, action) => {
             return action.payload;
         
         case 'FETCH_CONTACTS_FAILURE':
-            return false;
+            return null;
         
         case 'UPDATE_CONTACT_STATUS__ONLINE': {
             const { lastLogin, username } = action.payload;
