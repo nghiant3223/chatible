@@ -29,7 +29,6 @@ class MessageContainer extends Component {
             if (data.roomId === this.props.roomId) {
                 this.setState(prevState => {
                     if (prevState.peopleSeen.map(user => user.username).indexOf(data.from) === -1) {
-                        axios.post('/api/message/see/' + this.props.roomId, {username: data.from}, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
                         return {
                             peopleSeen: prevState.peopleSeen.concat({
                                 username: data.from,
@@ -45,8 +44,6 @@ class MessageContainer extends Component {
 
     componentDidUpdate = (prevProps, prevState) => {
         if (prevProps.messages.length !== this.props.messages.length) {
-            console.table(this.props.messages);
-
             const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;
             if (scrollTop + clientHeight >= scrollHeight - 150 ) {
                 this.messageContainer.scrollTop = this.messageContainer.scrollHeight;

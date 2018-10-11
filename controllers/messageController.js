@@ -63,17 +63,6 @@ const deleteMessages = async (req, res) => {
 }
 
 const seeMessage = async (req, res) => {
-    const { roomId } = req.params;
-    const { username } = req.body;
-    let room = await Room.findById(roomId);
-    let messages = [...room.messages];
-
-    // `messages` is required to be sorted in ascending order of time
-    for (let i = messages.length -1 ; i >= 0; i--) {
-        if (messages[i].peopleSeen.map(user => user.username).indexOf(username) === -1 && messages[i].from !== username) {
-            messages[i].peopleSeen.push({ username });
-        }
-    }
     room.set({ messages });
     await room.save();
     res.status(200).end('Update seen message successfully.');

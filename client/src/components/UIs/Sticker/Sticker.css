@@ -16,4 +16,6 @@
     width: 120px;
     background-position: -12px -12px;
     image-rendering: -webkit-optimize-contrast;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

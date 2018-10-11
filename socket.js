@@ -41,6 +41,7 @@ module.exports = (server) => {
 
         socket.on('thisUserSendsMessage', data => {
             const now = new Date();
+            console.log('send', data);
             socket.broadcast.to(data.roomId).emit('aUserSendsMessage', { ...data, time: now.toISOString() });
         });
 
@@ -65,10 +66,20 @@ module.exports = (server) => {
             Room.findByIdAndUpdate(roomId, { $push: { messages: { $each: [{ from: 'system', content, type }] } } }, function () { });
         });
 
-        socket.on('thisUserSeesMessage', data => {
+        socket.on('thisUserSeesMessage', async data => {
             const now = new Date();
-            console.log('see');
             socket.broadcast.to(data.roomId).emit('aUserSeesMessage', { ...data, time: now.toISOString() });
+            const { roomId, from } = data;
+            let room = await Room.findById(roomId);
+            let messages = [...room.messages];
+            for (let i = messages.length - 1; i >= 0; i--) {
+                if (messages[i].peopleSeen.map(user => user.username).indexOf(from) === -1 && messages[i].from !== from) {
+                    console.log('update');
+                    messages[i].peopleSeen.push({ username: from });
+                }
+            }
+            room.set({ messages });
+            room.save();
         });
     });
 }

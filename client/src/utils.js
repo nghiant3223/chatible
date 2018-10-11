@@ -386,7 +386,8 @@ export const renderUserMessageContent = ({ content, type, from, colorTheme, righ
 }
 
 export const renderRecentContactMessageContent = ({ content, type, from, thisUser }) => {
-    const sender = from === thisUser.username ? 'You' : '??';
+    console.log('////////', content, type, from, thisUser.username);
+    const sender = from === thisUser.username ? 'You' : from;
     switch (type) {
         case 'file': 
             return `${sender} has sent a file`;

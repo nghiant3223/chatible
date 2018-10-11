@@ -81,12 +81,20 @@ export const changeColorTheme = (roomId, colorTheme) => ({
     payload: { roomId, colorTheme }
 });
 
+
 export const updateSharedFiles = (roomId, fileInfo) => ({
     type: 'UPDATE_CONTACT_FILE',
     payload: { roomId, fileInfo }
 });
 
+
 export const updateSharedImages = (roomId, imageInfo) => ({
     type: 'UPDATE_CONTACT_IMAGE',
     payload: { roomId, imageInfo }
+});
+
+
+export const hoistContact = (roomId) => ({
+    type: 'HOIST_CONTACT',
+    payload: { roomId }
 });

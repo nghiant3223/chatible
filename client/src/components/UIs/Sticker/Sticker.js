@@ -10,24 +10,7 @@ class Sticker extends Component {
             isPlaying: true
         }
     }
-
-    componentDidMount = () => {
-        const { positions, interval } = this.props;
-        for (let i = 0; i < positions.length; i++) {
-            ((delay, i) => setTimeout(() => {
-                if (i === positions.length - 1) this.setState({
-                    bkgrPos: this.props.positions[i],
-                    isPlaying: false
-                });
-
-                else this.setState({
-                    bkgrPos: positions[i]
-                });
-            }, delay))(i * interval, i);
-        }
-    }
     
-
     stickerHoveredHandler = () => {
         const { positions, interval } = this.props;
         if (!this.state.isPlaying) {

@@ -51,6 +51,16 @@ const recentContactReducer = (state = initialState, action) => {
             return contacts;
         }
             
+        case 'HOIST_CONTACT': {
+            console.log('on hoist');
+            const { roomId } = action.payload;
+            let contacts = [...state];
+            const hoistedContact = contacts.find(contact => contact.roomId === roomId);
+            contacts = contacts.filter(contact => contact.roomId !== roomId);
+            contacts.unshift(hoistedContact);
+            return contacts;
+        }
+            
         case 'CLEAR':
             return initialState;
             
