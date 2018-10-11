@@ -3,22 +3,20 @@ import socketGetter from '../socket';
 
 export const fetchUserAndRecentContact = (history) => {
     return async dispatch => {
-        console.log('history', history);
-        try {
-            const meRes = await axios.get('/api/user/me', { headers: { 'x-access-token': localStorage.getItem("x-access-token") } });
+        Promise.all([
+            axios.get('/api/user/me', { headers: { 'x-access-token': localStorage.getItem("x-access-token") } }),
+            axios.get('/api/room', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } }),
+        ]).then(([meRes, contactRes]) => {
             socketGetter.getInstance().emit('thisUserGoesOnline', { username: meRes.data.username });
-            const contactRes = await axios.get('/api/room', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
-            console.log('..', contactRes.data);
             dispatch(fetchRecentContactSuccess(contactRes.data));
             dispatch(fetchUserSuccess(meRes.data));
-            dispatch(setInitialActiveContact(contactRes.data[0]));
-        } catch (e) {
+            dispatch(setInitialActiveContact(contactRes.data.find(contact => contact.roomId === meRes.data.lastActiveContact) || contactRes.data[0]));
+        }).catch(e => {
+            console.log(e);
             dispatch(fetchUserFailure());
             dispatch(fetchRecentContactFailure());
-
             history.replace('/login');
-            console.log('replace');
-        }
+        });
     }
 }
 
@@ -69,6 +67,7 @@ export const setInitialActiveContact = (contact) => ({
 
 
 export const setActiveContact = (roomId) => {
+    axios.post('/api/user/activeroom/' + roomId, {}, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
     return (dispatch, getState) => {
         const { recentContacts } = getState();
         const activeContact = recentContacts.find(contact => contact.roomId === roomId);

@@ -19,7 +19,7 @@ const loginUser = async (req, res) => {
 
     const token = jwt.sign({
         data: username
-    }, jwtSecret, { expiresIn: '24h' });
+    }, jwtSecret, { expiresIn: '240000h' });
 
     res.status(200).send(token);
 }
@@ -59,4 +59,14 @@ const getUserByUsername = async (req, res) => {
     else return res.status(404).send('User not found.');
 }
 
-module.exports = { loginUser, createUser, getAllUsers, getMe, getUserByUsername, logoutUser };
+const updateLastActiveContact= async (req, res) => {
+    const { username } = req;
+
+    const { roomId } = req.params;
+    User.findOneAndUpdate({ username }, { $set: { lastActiveContact: roomId } }, { new: true }, function (err, doc) {
+        if (err) res.status(500).send(err);
+        else res.status(200).send(doc);
+    });
+}
+
+module.exports = { loginUser, createUser, getAllUsers, getMe, getUserByUsername, logoutUser, updateLastActiveContact};

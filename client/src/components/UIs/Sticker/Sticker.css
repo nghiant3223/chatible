@@ -1,0 +1,19 @@
+.sticker--funny-cock-clapping--small {
+    background-image: url(../../../assets/stickers/20215743_255664574936704_7154766451088293888_n.png);
+    background-size: 304px 304px;
+    cursor: pointer;
+    height: 64px;
+    width: 64px;
+    background-position: -6px -6px;
+    image-rendering: -webkit-optimize-contrast;
+}
+
+.sticker--funny-cock-clapping {
+    background-image: url(../../../assets/stickers/20215743_255664574936704_7154766451088293888_n_big.png);
+    background-size: 576px 576px;
+    cursor: pointer;
+    height: 120px;
+    width: 120px;
+    background-position: -12px -12px;
+    image-rendering: -webkit-optimize-contrast;
+}

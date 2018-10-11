@@ -19,7 +19,11 @@ const userSchema = new Schema({
         type: Date,
         default: 0
     },
-    rooms: [String]
+    rooms: [String],
+    lastActiveContact: {
+        type: String,
+        default: null
+    }
 });
 
 const User = mongoose.model('user', userSchema);

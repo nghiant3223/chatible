@@ -24,3 +24,13 @@
     border-top: none;
     border-left: none;
 }
+
+.chatbox-item__actions__sticker__panel__container {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 64px;
+    align-items: center;
+    justify-items: center;
+    padding: 10px;
+}

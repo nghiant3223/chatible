@@ -26,8 +26,15 @@
     border-radius: 50%;
 }
 
+.recent-contact__mid {
+    width: 175px;
+}
+
 .recent-contact__mid__title {
     margin-bottom: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .recent-contact__mid__content {
@@ -37,12 +44,21 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    width: 175px;
 }
 
-.recent-contact__right {
+.recent-contact__right__time {
     font-size: 0.75em;
     color: #777;
+}
+
+.recent-contact__right__seen {
+    text-align: center;
+}
+
+.recent-contact__right__seen > img {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
 }
 
 .recent-contact--unread .recent-contact__mid__content,

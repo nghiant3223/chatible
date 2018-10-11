@@ -73,7 +73,6 @@ const seeMessage = async (req, res) => {
         if (messages[i].peopleSeen.map(user => user.username).indexOf(username) === -1 && messages[i].from !== username) {
             messages[i].peopleSeen.push({ username });
         }
-        else break;
     }
     room.set({ messages });
     await room.save();

@@ -45,8 +45,10 @@ class MessageContainer extends Component {
 
     componentDidUpdate = (prevProps, prevState) => {
         if (prevProps.messages.length !== this.props.messages.length) {
+            console.table(this.props.messages);
+
             const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;
-            if (scrollTop + clientHeight >= scrollHeight - 100 ) {
+            if (scrollTop + clientHeight >= scrollHeight - 150 ) {
                 this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
             }
 
@@ -69,16 +71,9 @@ class MessageContainer extends Component {
             });
         }
 
-        if (this.props.LHSTyping) {
+        if (this.props.LHSTyping || this.state.peopleSeen.length != prevState.peopleSeen.length) {
             const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;
-            if (scrollTop + clientHeight >= scrollHeight - 100 ) {
-                this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
-            }
-        }
-
-        if (this.state.peopleSeen.length != prevState.peopleSeen.length) {
-            const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;
-            if (scrollTop + clientHeight >= scrollHeight - 100 ) {
+            if (scrollTop + clientHeight >= scrollHeight - 150 ) {
                 this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
             }
         }

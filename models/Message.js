@@ -20,7 +20,7 @@ let messageSchema = new Schema({
     },
     type: {
         type: String,
-        enum: ['text', 'image', 'file', 'changeColorTheme', 'thumbup'],
+        enum: ['text', 'image', 'file', 'thumbup', 'sticker', 'changeColorTheme'],
         default: 'text'
     }
 });

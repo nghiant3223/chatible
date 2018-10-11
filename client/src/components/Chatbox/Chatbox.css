@@ -64,23 +64,29 @@
 }
 
 .chatbox__actions__emoji {
+    position: relative;
+}
+
+.chatbox__actions__emoji__icon {
     background-image: url(../../assets/images/W0HBEEIUJCb.png);
     background-repeat: no-repeat;
     background-size: auto;
     background-position: -2px -360px;
     width: 30px;
     height: 30px;
-    position: relative;
 }
 
 .chatbox__actions__sticker {
+    position: relative;
+}
+
+.chatbox__actions__sticker__icon {
     background-image: url(../../assets/images/W0HBEEIUJCb.png);
     background-repeat: no-repeat;
     background-size: auto;
     background-position: -24px -555.499px;
     width: 30px;
     height: 30px;
-    position: relative;
 }
 
 .chatbox__actions__thumbup {

@@ -18,7 +18,6 @@ class HomePage extends Component {
 
     componentDidMount = () => {
         const socket = socketGetter.getInstance();
-        console.log(this.props.history);
         
         this.props.fetchInitialData(this.props.history);
 

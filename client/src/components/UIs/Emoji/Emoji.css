@@ -26,6 +26,28 @@
     background: url('../../../assets/emojis/1f610.png');
 }
 
+.em--1f60f {
+    background: url('../../../assets/emojis/1f60f.png');
+}
+
+.em--1f636 {
+    background: url('../../../assets/emojis/1f636.png');
+}
+
+.em--1f4a9 {
+    background: url('../../../assets/emojis/1f4a9.png');
+}
+
+.em--1f621 {
+    background: url('../../../assets/emojis/1f621.png');
+}
+
+.em--1f468 {
+    background: url('../../../assets/emojis/1f468.png');
+}
+
+
+
 .em {
     width: 2rem;
     height: 2rem;

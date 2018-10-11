@@ -13,11 +13,14 @@ import * as actions from '../../../../../actions/index';
 import './RHSMessage.css';
 
 class RHSMessage extends Component {
-    state = {
-        error: false,
-        isLoading: false,
-        content: this.props.content
-    }
+    constructor(props) {    
+        super(props);
+        this.state = {
+            error: false,
+            isLoading: false,
+            content: props.content
+        }
+    }    
 
     componentDidMount = async () => {
         const { from, roomId, content, isNew, type, file } = this.props;
@@ -46,7 +49,7 @@ class RHSMessage extends Component {
                     }
                     break;
                 
-
+                // do the same thing with type 'text', 'thumbup', 'sticker'
                 default:
                     try {
                         axios.post('/api/message/' + roomId, { content, type }, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
@@ -78,7 +81,6 @@ class RHSMessage extends Component {
 
     renderMessageItem(value) {
         if (this.state.isLoading || ((this.props.type === 'file' || this.props.type === 'image') && this.state.content === undefined)) return <Spinner style={{ width: '15px', height: '15px' }} />;
-
         return (
             <Fragment>
                 {renderUserMessageContent({ type: this.props.type, from: this.props.from, colorTheme: value.colorTheme, content: this.state.content, right: true })}

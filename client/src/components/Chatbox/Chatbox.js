@@ -29,7 +29,7 @@ class Chatbox extends PureComponent {
         const { roomId } = this.props;
 
         try {
-            const messagesRes = await axios.get('/api/message/' + roomId + '?count=17', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+            const messagesRes = await axios.get('/api/message/' + roomId + '?count=100', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
             const messages = messagesRes.data;
             for (let i = 0; i < messages.length; i++) {
                 messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
@@ -71,7 +71,6 @@ class Chatbox extends PureComponent {
                     LHSTyping: false
                 }));
                 const { colorTheme } = JSON.parse(data.content);
-                console.log('colorTheme', colorTheme);
                 this.props.changeContactColor(data.roomId, colorTheme);
             }
         });
@@ -172,7 +171,6 @@ class Chatbox extends PureComponent {
                 isNew: true,
                 type: 'text'
             }),
-            seen: null
         }));
     }
 
@@ -187,7 +185,6 @@ class Chatbox extends PureComponent {
                 isNew: true,
                 type: 'thumbup'
             }),
-            seen: null
         }));
     }
 
@@ -205,7 +202,24 @@ class Chatbox extends PureComponent {
                 isNew: true,
                 roomId: this.props.roomId
             }),
-            seen: null
+        }));
+    }
+
+    emojiClickedHandler = (emoji) => {
+        this.setState(prevState => ({ textInput: prevState.textInput.concat(emoji) }));
+    }
+
+    stickerClickedHandler = (stickerName) => {
+        console.log('clicked');
+        this.setState(prevState => ({
+            messages: prevState.messages.concat({
+                from: this.props.thisUser.username,
+                content: stickerName,
+                time: new Date().toISOString(),
+                roomId: this.props.roomId,
+                isNew: true,
+                type: 'sticker'
+            }),
         }));
     }
 
@@ -234,12 +248,17 @@ class Chatbox extends PureComponent {
                                     <input type="file" name="file" id="file" onChange={this.fileInputChangedHandler}  onClick={e => e.target.value = null}/>
                                 </li>
                             </label>
-                            <li className="chatbox__actions__emoji" title="Send emoji" onClick={this.emojiButtonClickedHandler} ref={el => this.emojiPanel = el}>
-                                {this.state.emojiPanelVisible && <EmojiPanel />}
+
+                            <li className="chatbox__actions__emoji" ref={el => this.emojiPanel = el} >
+                                {this.state.emojiPanelVisible && <EmojiPanel emojiClickedHandler={this.emojiClickedHandler} />}
+                                <div className="chatbox__actions__emoji__icon" title="Send emoji" onClick={this.emojiButtonClickedHandler}/>
                             </li>
-                            <li className="chatbox__actions__sticker" title="Send sticker" onClick={this.stickerButtonClickedHandler} ref={el => this.stickerPanel = el}>
-                                {this.state.stickerPanelVisible && <StickerPanel />}
+
+                            <li className="chatbox__actions__sticker"  ref={el => this.stickerPanel = el} >
+                                {this.state.stickerPanelVisible && <StickerPanel stickerClickedHandler={this.stickerClickedHandler} />}
+                                <div className="chatbox__actions__sticker__icon" title="Sticker" onClick={this.stickerButtonClickedHandler}/>
                             </li>
+
                             <li className="chatbox__actions__thumbup" onClick={this.thumbUpClickedHandler}>
                                 <svg aria-labelledby="js_9be" version="1.1" viewBox="0 0 40.16 42.24" preserveAspectRatio="xMinYMax meet" style={{ height: '85%', width: '66%' }}>
                                     <title id="js_9be">Send a thumb up</title>
@@ -249,6 +268,7 @@ class Chatbox extends PureComponent {
                                     </path>
                                 </svg>
                             </li>
+
                         </ul>
                     </div>
                 </div>

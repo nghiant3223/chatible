@@ -6,8 +6,9 @@ import RHSMessageContainer from './components/Chatbox/MessageContainer/RHSMessag
 import LHSMessageContainer from './components/Chatbox/MessageContainer/LHSMessageContainer/LHSMessageContainer';
 import ThumbUp from './components/UIs/ThumbUp/ThumbUp';
 import Emoji from './components/UIs/Emoji/Emoji';
+import Sticker from './components/UIs/Sticker/Sticker';
 
-import { emojiMap } from './configs';
+import { emojiMap, stickerMap } from './configs';
 
 import wavinghand from './assets/images/waving-hand.png';
 
@@ -16,6 +17,9 @@ const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 const TIMEGAP = 3*SECOND;
+
+const splitByEmojiReg = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g;
+const splitByEmojiButRetainDelimiterReg = /((?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff]))/g;
 
 export const getOfflineTime = (offlineMoment) => {
     const now = new Date();
@@ -42,6 +46,10 @@ export const renderSystemMessageContent = (type, content, thisUser) => {
 
 export const seperateMessages = (messages, RHSName, avatarUrl) => {
     if (messages.length < 1) return [];
+
+    for (let i = 0; i < messages.length; i++) {
+        messages[i].time = new Date(messages[i].time).getTime();
+    }
 
     let retArr = [];
     let tempLeft = [];
@@ -285,11 +293,7 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
 }
 
 export const renderUserMessageContent = ({ content, type, from, colorTheme, right }) => {
-    const splitByEmojiReg = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g;
-    const splitByEmojiButRetainDelimiterReg = /((?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff]))/g;
-
     const side = right ? 'r' : 'l';
-
     switch (type) {
         case 'waving':
             return (
@@ -332,6 +336,14 @@ export const renderUserMessageContent = ({ content, type, from, colorTheme, righ
             );
         }
 
+        case 'sticker': {
+            return (
+                <div className={`${side}hs-message-item__content no-background-message no-padding-message`}>
+                    <Sticker name={content} interval={stickerMap[content].interval} positions={stickerMap[content].bigPositions} />
+                </div>
+            );
+
+        }
         
         default:
             if ((/^[\s]*$/).test(content.replace(splitByEmojiReg, ''))) {
@@ -353,7 +365,6 @@ export const renderUserMessageContent = ({ content, type, from, colorTheme, righ
                     </div>
                 );
             }
-
             return (
                 <div className={`${side}hs-message-item__content`} style={right ? {backgroundColor: colorTheme} : null}>
                     {(() => {
@@ -373,3 +384,42 @@ export const renderUserMessageContent = ({ content, type, from, colorTheme, righ
             );
     }
 }
+
+export const renderRecentContactMessageContent = ({ content, type, from, thisUser }) => {
+    const sender = from === thisUser.username ? 'You' : '??';
+    switch (type) {
+        case 'file': 
+            return `${sender} has sent a file`;
+            
+        case 'image': 
+            return `${sender} has sent an image`;
+            
+        case 'changeColorTheme':
+            return `${JSON.parse(content).changer} has changed color theme`;
+        
+        case 'sticker':
+            return `${sender} has sent a sticker`;
+        
+        case 'thumbup':
+            return `${sender} has sent a thumbup`;
+        
+        default:
+            return (
+                <div>
+                    {(() => {
+                        let ret = [from === thisUser.username ? 'You: ' : ''];
+                        content.split(splitByEmojiButRetainDelimiterReg).forEach((str, i) => {
+                            if (str !== "") {
+                                if (Object.keys(emojiMap).includes(str)) {
+                                    ret.push(<Emoji code={emojiMap[str].code} key={i} small />);
+                                } else {
+                                    ret.push(<span key={i}>{str}</span>);
+                                }
+                            }
+                        });
+                        return ret;
+                    })()}
+                </div>
+            );
+    }
+ }

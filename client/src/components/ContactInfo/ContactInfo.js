@@ -46,6 +46,8 @@ class ContactInfo extends Component {
     };
 
     render() {
+        if (!this.props.activeContact) return null;
+        
         return (
             <div className="contact-info" onScroll={this.contactInfoScrolledBottomHandler}>
                 <ColorThemeModal modalOpen={this.state.colorThemeModalOpen}
