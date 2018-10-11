@@ -23,7 +23,7 @@ class RHSMessage extends Component {
     }    
 
     componentDidMount = async () => {
-        const { from, roomId, content, isNew, type, file } = this.props;
+        const { from, roomId, content, isNew, type, file, time } = this.props;
         const socket = socketGetter.getInstance();
 
         if (isNew) {
@@ -60,6 +60,8 @@ class RHSMessage extends Component {
                         socket.emit('thisUserStopsTyping', { roomId });
                     }
             };
+            this.props.updateContactLastMessage(roomId, { type, time, from, content });
+            this.props.hoistContact(roomId);
         }
     }
 
@@ -94,7 +96,9 @@ class RHSMessage extends Component {
 
 const mapDispatchToProps = dispatch => ({
     updateSharedFiles: (roomId, fileInfo) => dispatch(actions.updateSharedFiles(roomId, fileInfo)),
-    updateSharedImages: (roomId, imageInfo) => dispatch(actions.updateSharedImages(roomId, imageInfo))
+    updateSharedImages: (roomId, imageInfo) => dispatch(actions.updateSharedImages(roomId, imageInfo)),
+    updateContactLastMessage: (roomId, messageInfo) => dispatch(actions.updateContactLastMessage(roomId, messageInfo)),
+    hoistContact: roomId => dispatch(actions.hoistContact(roomId))
 });
 
 export default connect(null, mapDispatchToProps)(RHSMessage);

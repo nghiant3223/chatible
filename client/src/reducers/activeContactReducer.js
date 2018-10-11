@@ -54,7 +54,18 @@ const activeContactReducer = (state = initialState, action) => {
             }
             return activeContact;
         }
-            
+        
+        case 'UPDATE_CONTACT_LAST_MESSAGE': {
+            const { type, time, from, content, roomId } = action.payload;
+            const activeContact = { ...state };
+
+            if (activeContact.roomId === roomId) {
+                activeContact.lastMessage = { type, time, from, content, peopleSeen: [] };
+            }
+
+            return activeContact;
+        }    
+        
         case 'CLEAR':
             return initialState;
 

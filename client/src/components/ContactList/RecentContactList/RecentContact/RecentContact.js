@@ -45,6 +45,10 @@ class RecentContact extends Component {
                 from: this.props.thisUser.username  
             });
         }
+
+        if (this.props.roomId === this.props.activeContact.roomId && JSON.stringify(prevProps.activeContact.lastMessage) !== JSON.stringify(this.props.activeContact.lastMessage)) {
+            this.setState({ ...this.props.activeContact.lastMessage, isNew: false });
+        }
     }
     
 

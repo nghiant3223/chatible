@@ -7,7 +7,7 @@ class Sticker extends Component {
         super(props);
         this.state = {
             bkgrPos: props.positions[0],
-            isPlaying: true
+            isPlaying: false
         }
     }
     

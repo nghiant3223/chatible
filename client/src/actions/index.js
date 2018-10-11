@@ -98,3 +98,9 @@ export const hoistContact = (roomId) => ({
     type: 'HOIST_CONTACT',
     payload: { roomId }
 });
+
+
+export const updateContactLastMessage = (roomId, messageInfo) => ({
+    type: 'UPDATE_CONTACT_LAST_MESSAGE',
+    payload: { roomId, ...messageInfo }
+});
