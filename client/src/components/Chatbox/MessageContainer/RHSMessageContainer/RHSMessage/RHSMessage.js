@@ -40,7 +40,7 @@ class RHSMessage extends Component {
                         axios.post('/api/message/' + roomId, { content: returnedContent, type }, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
                         this.setState({ content: returnedContent });
                         socket.emit('thisUserSendsMessage', { from, roomId, content: returnedContent, type });
-                        type === 'file' ? this.props.updateSharedFiles(roomId, JSON.parse(returnedContent)) : this.props.updateSharedImages(roomId, JSON.parse(returnedContent));
+                        type === 'file' ? this.props.updateSharedFiles(roomId) : this.props.updateSharedImages(roomId);
                     } catch (e) {
                         console.log(e);
                         this.setState({ error: true });
@@ -95,8 +95,8 @@ class RHSMessage extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    updateSharedFiles: (roomId, fileInfo) => dispatch(actions.updateSharedFiles(roomId, fileInfo)),
-    updateSharedImages: (roomId, imageInfo) => dispatch(actions.updateSharedImages(roomId, imageInfo)),
+    updateSharedFiles: roomId => dispatch(actions.fetchSharedFiles(roomId)),
+    updateSharedImages: roomId => dispatch(actions.fetchSharedImages(roomId)),
     updateContactLastMessage: (roomId, messageInfo) => dispatch(actions.updateContactLastMessage(roomId, messageInfo)),
     hoistContact: roomId => dispatch(actions.hoistContact(roomId))
 });

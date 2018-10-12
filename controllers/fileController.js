@@ -1,6 +1,8 @@
 const { Room } = require('../models/Room');
 const { File } = require('../models/File');
 const { Image } = require('../models/Image');
+const fs = require('fs');
+const path = require('path');
 
 const saveRoomFile = async (req, res) => {
     const { roomId } = req.params;
@@ -56,4 +58,26 @@ const getRoomImages = async (req, res) => {
     } else return res.status(404).send('Room not found');
 }
 
-module.exports = { saveRoomFile, getRoomFiles, getRoomImages };
+const deleteRoomFiles = async (req, res) => {
+    const { roomId } = req.params;
+    const room = await Room.findById(roomId);
+
+    try {
+        room.files.forEach(file => {
+            fs.unlinkSync(path.resolve(global.rootDirName + '/public/uploads/' + file.hashedName));
+        });
+        room.images.forEach(image => {
+            fs.unlinkSync(path.resolve(global.rootDirName + '/public/uploads/' + image.hashedName));
+        });
+        room.set({
+            files: [],
+            images: []
+        });
+        room.save();
+        res.status(200).send('Delete file success')
+    } catch (e) {
+        res.status(500).send('Internal server error ' + e);
+    }
+}
+
+module.exports = { saveRoomFile, getRoomFiles, getRoomImages, deleteRoomFiles };

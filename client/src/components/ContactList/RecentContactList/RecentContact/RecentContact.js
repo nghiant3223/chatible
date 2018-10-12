@@ -9,7 +9,7 @@ import socketGetter from '../../../../socket';
 import './RecentContact.css';
 
 class RecentContact extends Component {
-    // isNew = true if there is a last message, last message is not from current user and this user has't seen it yet.
+    // isNew = true if there is a last message, the last message is not from current user and this user has't seen it yet.
     constructor(props) {
         super(props);
         this.state = {
@@ -22,9 +22,11 @@ class RecentContact extends Component {
         socketGetter.getInstance().on('aUserSendsMessage', data => {
             const { roomId } = data;
             if (this.props.roomId === roomId) {
+                console.log('recent contact uodates');
                 const { content, time, type, from } = data;
                 this.props.hoistContact(this.props.roomId);
                 this.setState({ isNew: this.props.roomId !== this.props.activeContact.roomId, content, time, type, from, peopleSeen: [] });
+                this.props.updateContactLastMessage(roomId, { content, time, type, from });
             }
         });
 
@@ -33,12 +35,14 @@ class RecentContact extends Component {
         });
     }
 
-    // If this contact is active, activeRoom changes and lastMessage does not belong to current user then when contact is clicked, socket fires thisUserSeesMessage
     componentDidUpdate = (prevProps, prevState) => {
+        /**
+         * When user is from other room, 
+         * he visits this room, make this room old (isNew = false) and fire `thisUserSeesMessage`
+         */
         if (this.props.roomId === this.props.activeContact.roomId &&
             prevProps.activeContact.roomId !== this.props.activeContact.roomId &&
             this.state.from !== this.props.thisUser.username) {
-            console.log('did update');
             this.setState({ isNew: false });
             socketGetter.getInstance().emit('thisUserSeesMessage', {
                 roomId: this.props.roomId,
@@ -46,8 +50,14 @@ class RecentContact extends Component {
             });
         }
 
+        // When new message arrive and this room is active, make this room old (isNew = false)
         if (this.props.roomId === this.props.activeContact.roomId && JSON.stringify(prevProps.activeContact.lastMessage) !== JSON.stringify(this.props.activeContact.lastMessage)) {
             this.setState({ ...this.props.activeContact.lastMessage, isNew: false });
+        }
+
+        // When this room was previously active, user visits other room, make this room old (isNew = false)
+        if (prevState.isNew && this.props.activeContact.roomId !== this.props.roomId) {
+            this.setState({ isNew: false });
         }
     }
     
@@ -114,7 +124,8 @@ const mapStateToProps = ({ activeContact, thisUser }) => ({ activeContact, thisU
 
 const mapDispatchToProps = dispatch => ({
     setActiveContact: roomId => dispatch(actions.setActiveContact(roomId)),
-    hoistContact: roomId => dispatch(actions.hoistContact(roomId))
+    hoistContact: roomId => dispatch(actions.hoistContact(roomId)),
+    updateContactLastMessage: (roomId, messageInfo) => dispatch(actions.updateContactLastMessage(roomId, messageInfo)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecentContact);

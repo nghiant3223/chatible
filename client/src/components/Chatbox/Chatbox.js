@@ -47,8 +47,12 @@ class Chatbox extends PureComponent {
                     messages: prevState.messages.concat(data),
                     LHSTyping: false
                 }));
-                if (data.type === 'file') return this.props.updateSharedFiles(data.roomId, JSON.parse(data.content)) 
-                if (data.type === 'image') return this.props.updateSharedImages(data.roomId, JSON.parse(data.content));
+                if (data.type === 'file') {
+                    this.props.updateSharedFiles(roomId);
+                }
+                if (data.type === 'image') {
+                    this.props.updateSharedImages(roomId);
+                }
             }
         });
 
@@ -210,7 +214,6 @@ class Chatbox extends PureComponent {
     }
 
     stickerClickedHandler = (stickerName) => {
-        console.log('clicked');
         this.setState(prevState => ({
             messages: prevState.messages.concat({
                 from: this.props.thisUser.username,
@@ -280,8 +283,8 @@ class Chatbox extends PureComponent {
 const mapStateToProps = ({ activeContact, thisUser }) => ({ roomId: activeContact.roomId, thisUser, colorTheme: activeContact.colorTheme });
 
 const mapDispatchToProps = dispatch => ({
-    updateSharedFiles: (roomId, fileInfo) => dispatch(actions.updateSharedFiles(roomId, fileInfo)),
-    updateSharedImages: (roomId, imageInfo) => dispatch(actions.updateSharedImages(roomId, imageInfo)),
+    updateSharedFiles: roomId => dispatch(actions.fetchSharedFiles(roomId)),
+    updateSharedImages: roomId => dispatch(actions.fetchSharedImages(roomId)),
     changeContactColor: (roomId, colorTheme) => dispatch(actions.changeColorTheme(roomId, colorTheme))
 });
 

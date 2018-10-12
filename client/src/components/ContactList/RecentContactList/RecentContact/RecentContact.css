@@ -61,9 +61,16 @@
     border-radius: 50%;
 }
 
-.recent-contact--new .recent-contact__mid__content,
-.recent-contact--new .recent-contact__right,
 .recent-contact--new .recent-contact__mid__title {
     font-weight: bold;
+    color: black;
+}
+
+.recent-contact--new .recent-contact__mid__content {
+    font-weight: 600;
+    color: black;
+}
+
+.recent-contact--new .recent-contact__right__time {
     color: black;
 }

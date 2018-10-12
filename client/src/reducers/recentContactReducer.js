@@ -11,7 +11,7 @@ const recentContactReducer = (state = initialState, action) => {
         
         case 'UPDATE_CONTACT_STATUS__ONLINE': {
             const { lastLogin, username } = action.payload;
-            const contacts = [...state];
+            const contacts = state ? [...state] : [];
 
             for (let i = 0; i < contacts.length; i++) {
                 if (contacts[i].counterpart && contacts[i].counterpart.username === username) {
@@ -51,8 +51,49 @@ const recentContactReducer = (state = initialState, action) => {
             return contacts;
         }
             
+        case 'UPDATE_CONTACT_FILE': {
+            const { roomId, files} = action.payload;
+            const contacts = [...state ];
+
+            for (let i = 0; i < contacts.length; i++) {
+                if (contacts[i].roomId === roomId) {
+                    contacts[i].files = files;
+                    break;
+                }
+            }
+            
+            return contacts;
+        }
+            
+        case 'UPDATE_CONTACT_IMAGE': {
+            const { roomId, images } = action.payload;
+            const contacts = [ ...state ];
+
+            for (let i = 0; i < contacts.length; i++) {
+                if (contacts[i].roomId === roomId) {
+                    contacts[i].images = images;
+                    break;
+                }
+            }
+            
+            return contacts;
+        }
+            
+        case 'UPDATE_CONTACT_LAST_MESSAGE': {
+            const { type, time, from, content, roomId } = action.payload;
+            const contacts = [ ...state ];
+
+            for (let i = 0; i < contacts.length; i++) {
+                if (contacts[i].roomId === roomId) {
+                    contacts[i].lastMessage = { type, time, from, content, peopleSeen: [] };
+                    break;
+                }
+            }
+            
+            return contacts;
+        }   
+            
         case 'HOIST_CONTACT': {
-            console.log('on hoist');
             const { roomId } = action.payload;
             let contacts = [...state];
             const hoistedContact = contacts.find(contact => contact.roomId === roomId);

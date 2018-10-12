@@ -62,7 +62,7 @@ export const updateContactStatusOffline = (username, lastLogout) => ({
 
 export const setInitialActiveContact = (contact) => ({
     type: 'SET_ACTIVE_CONTACT',
-    payload: contact
+    payload: Object.assign({}, contact)
 });
 
 
@@ -71,7 +71,7 @@ export const setActiveContact = (roomId) => {
     return (dispatch, getState) => {
         const { recentContacts } = getState();
         const activeContact = recentContacts.find(contact => contact.roomId === roomId);
-        dispatch({ type: 'SET_ACTIVE_CONTACT', payload: { ...activeContact } });
+        dispatch({ type: 'SET_ACTIVE_CONTACT', payload: Object.assign({}, activeContact) });
     }
 }
 
@@ -82,15 +82,28 @@ export const changeColorTheme = (roomId, colorTheme) => ({
 });
 
 
-export const updateSharedFiles = (roomId, fileInfo) => ({
+export const fetchSharedFiles = (roomId) => {
+    return async dispatch => {
+        const fileRes = await axios.get('/api/file/' + roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+        dispatch(updateSharedFiles(roomId, fileRes.data));
+    }
+}
+
+export const updateSharedFiles = (roomId, files) => ({
     type: 'UPDATE_CONTACT_FILE',
-    payload: { roomId, fileInfo }
+    payload: { roomId, files }
 });
 
+export const fetchSharedImages = (roomId) => {
+    return async dispatch => {
+        const imageRes = await axios.get('/api/file/image/' + roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+        dispatch(updateSharedImages(roomId, imageRes.data));
+    }
+}
 
-export const updateSharedImages = (roomId, imageInfo) => ({
+export const updateSharedImages = (roomId, images) => ({
     type: 'UPDATE_CONTACT_IMAGE',
-    payload: { roomId, imageInfo }
+    payload: { roomId, images }
 });
 
 

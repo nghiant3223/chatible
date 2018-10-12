@@ -5,7 +5,7 @@ const path = require('path');
 const crypto = require('crypto');
 
 const { verifyToken, checkUserInRoom } = require('../../middleware');
-const { saveRoomFile, getRoomFiles, getRoomImages} = require('../../controllers/fileController');
+const { saveRoomFile, getRoomFiles, getRoomImages, deleteRoomFiles} = require('../../controllers/fileController');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 
         const { roomId } = req.params;
         const uploader = req.username;
-        const hashedFilename = crypto.createHash('md5').update(uploader + roomId + (new Date().getTime())).digest('hex');
+        const hashedFilename = crypto.createHash('sha256').update(uploader + roomId + (new Date().getTime())).digest('hex');
         req.originalName = file.originalname;
         req.hashedName = hashedFilename + '.' + ext;
         req.fileExt = ext;
@@ -32,5 +32,7 @@ router.post('/:roomId', verifyToken, checkUserInRoom, upload.single('file'), sav
 router.get('/:roomId', verifyToken, checkUserInRoom, getRoomFiles);
 
 router.get('/image/:roomId', verifyToken, checkUserInRoom, getRoomImages);
+
+router.delete('/:roomId', verifyToken, checkUserInRoom, deleteRoomFiles);
 
 module.exports = router;
