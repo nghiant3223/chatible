@@ -35,11 +35,16 @@ class RHSMessage extends Component {
                     try {
                         const data = new FormData();
                         data.append('file', file);
+
                         const fileRes = await axios.post('/api/file/' + roomId, data, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
                         const returnedContent = JSON.stringify(fileRes.data);
+
                         axios.post('/api/message/' + roomId, { content: returnedContent, type }, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+                        
                         this.setState({ content: returnedContent });
+                        
                         socket.emit('thisUserSendsMessage', { from, roomId, content: returnedContent, type });
+                        
                         type === 'file' ? this.props.updateSharedFiles(roomId) : this.props.updateSharedImages(roomId);
                     } catch (e) {
                         console.log(e);
@@ -60,7 +65,7 @@ class RHSMessage extends Component {
                         socket.emit('thisUserStopsTyping', { roomId });
                     }
             };
-            this.props.updateContactLastMessage(roomId, { type, time, from, content });
+            this.props.updateContactLastMessage(roomId, { type, time, from, content, peopleSeen: [] });
             this.props.hoistContact(roomId);
         }
     }
@@ -68,6 +73,7 @@ class RHSMessage extends Component {
     render() {
         let className = "rhs-message-item";
         if (this.state.error) className += " rhs-message-item--error";
+        
         return (
             <ChatboxContext.Consumer>
                 {
@@ -82,7 +88,10 @@ class RHSMessage extends Component {
     }
 
     renderMessageItem(value) {
+        if (this.state.error) return <div />
+
         if (this.state.isLoading || ((this.props.type === 'file' || this.props.type === 'image') && this.state.content === undefined)) return <Spinner style={{ width: '15px', height: '15px' }} />;
+        
         return (
             <Fragment>
                 {renderUserMessageContent({ type: this.props.type, from: this.props.from, colorTheme: value.colorTheme, content: this.state.content, right: true })}

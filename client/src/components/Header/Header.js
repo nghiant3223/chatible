@@ -12,7 +12,12 @@ const header = (props) => {
         axios.post('/api/logout', {}, { headers: { 'x-access-token': localStorage.getItem("x-access-token") } });
         localStorage.removeItem("x-access-token");
         props.clearState();
-        socketGetter.getInstance().emit('thisUserGoesOffline', { username: props.thisUser.username });
+
+        const socket = socketGetter.getInstance();
+        socket.emit('thisUserGoesOffline', { username: props.thisUser.username });
+        socket.disconnect();
+        socketGetter.deleteInstance();
+        
         props.history.replace('/login');
     }
 

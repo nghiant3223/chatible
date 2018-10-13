@@ -4,17 +4,17 @@ import AvailableContact from './AvailableContact/AvailableContact';
 
 import './AvailableContactList.css';
 
-const availableContactList = ({searchValue, contactList}) => {
+const availableContactList = ({ searchValue, allUsers }) => {
     if (searchValue === '') {
         return (
             <div className="contact-list__all">
-                {contactList.map(contact => <AvailableContact {...contact} />)}
+                {allUsers.map(user => <AvailableContact key={user.username} {...user} />)}
             </div>
         );
     } else {
         return (
             <div className="contact-list__all">
-                {contactList.map(contact => contact.counterpart.fullname.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1 ? <AvailableContact fullname={contact.counterpart.fullname} /> : null)}
+                {allUsers.map(user => user.fullname.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1 ? <AvailableContact key={user.username} {...user} /> : null)}
             </div>
         );
     }

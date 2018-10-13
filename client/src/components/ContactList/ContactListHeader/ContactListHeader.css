@@ -1,5 +1,5 @@
 .contact-list__header {
-    display: flex;
+    padding: 0 10px;
 }
 
 
@@ -32,7 +32,7 @@
     background-color: #eee;
     font-size: 0.80em;
     color: #555;
-    font-family: Muli;
+    font-family: inherit;
     outline: none
 }
 

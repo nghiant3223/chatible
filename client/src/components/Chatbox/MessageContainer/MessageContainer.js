@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import axios from 'axios';
 
 import Typing from '../../UIs/Typing/Typing';
@@ -10,7 +10,7 @@ import socketGetter from '../../../socket';
 
 import './MessageContainer.css';
 
-class MessageContainer extends Component {
+class MessageContainer extends PureComponent {
     constructor(props) {
         super(props);
         this.initialFetching = true; // this flag is used to make when user first login to the page, this makes the messages container scroll to bottom
@@ -43,6 +43,7 @@ class MessageContainer extends Component {
     
 
     componentDidUpdate = (prevProps, prevState) => {
+        console.log('update');
         if (prevProps.messages.length !== this.props.messages.length) {
             const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;
             if (scrollTop + clientHeight >= scrollHeight - 150 ) {

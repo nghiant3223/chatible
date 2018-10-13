@@ -134,7 +134,9 @@ class Chatbox extends PureComponent {
     }
 
     textInputChangedHandler = (e) => {
-        this.setState({ textInput: e.target.value });
+        let textInput = e.target.value;
+        Object.keys(emojiMap).forEach(emoji => textInput = textInput.replace(emojiMap[emoji].shortcut, emoji));
+        this.setState({ textInput });
 
         if (e.target.value === '') {
             socketGetter.getInstance().emit('thisUserStopsTyping', {roomId: this.props.roomId});
@@ -142,10 +144,6 @@ class Chatbox extends PureComponent {
             socketGetter.getInstance().emit('thisUserIsTyping', {roomId: this.props.roomId});
         }
 
-        let textInput = e.target.value;
-        Object.keys(emojiMap).forEach(emoji => textInput = textInput.replace(emojiMap[emoji].shortcut, emoji));
-
-        this.setState({ textInput });
     }
 
     moreMessagesFetchedHandler = async () => {
@@ -226,10 +224,9 @@ class Chatbox extends PureComponent {
         }));
     }
 
-    render() {
-
+    render() {  
         return (
-            <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme }}>
+            <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme || 'cyan' }}>
                 <div className="chatbox">
                     
                     <MessageContainer
@@ -266,7 +263,7 @@ class Chatbox extends PureComponent {
                                 <svg aria-labelledby="js_9be" version="1.1" viewBox="0 0 40.16 42.24" preserveAspectRatio="xMinYMax meet" style={{ height: '85%', width: '66%' }}>
                                     <title id="js_9be">Send a thumb up</title>
                                     <path d="M935.36,1582.44a0,0,0,0,0,0,.06,3.59,3.59,0,0,1-.72,6.53,0,0,0,0,0,0,0,3.56,3.56,0,0,1,.71,2.13,3.6,3.6,0,0,1-3,3.54, 0,0,0,0,0,0,.05,3.56,3.56,0,0,1,.38,1.61,3.61,3.61,0,0,1-3.42,3.6H910v-19.6l5.27-7.9a4,4,0,0,0,.66-2.31l-0.1-4c-0.22-2.4-.09-2.06, 1.13-2.37,2-.51,7.16,1.59,5.13,12.17h11.06A3.59,3.59,0,0,1,935.36,1582.44ZM899,1581h7v22h-7v-22Z"
-                                        transform="translate(-898.5 -1563.26)" fill="transparent" fillRule="evenodd" stroke={this.props.colorTheme}
+                                        transform="translate(-898.5 -1563.26)" fill="transparent" fillRule="evenodd" stroke={this.props.colorTheme || 'cyan'}
                                         strokeLinecap="round" strokeWidth="5%">
                                     </path>
                                 </svg>

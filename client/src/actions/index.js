@@ -66,6 +66,11 @@ export const setInitialActiveContact = (contact) => ({
 });
 
 
+export const setPseudoActiveContact = (username) => ({
+    type: 'SET_PSEUDO_ACTIVE_CONTACT',
+    payload: username
+});
+
 export const setActiveContact = (roomId) => {
     axios.post('/api/user/activeroom/' + roomId, {}, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
     return (dispatch, getState) => {
@@ -113,7 +118,13 @@ export const hoistContact = (roomId) => ({
 });
 
 
-export const updateContactLastMessage = (roomId, messageInfo) => ({
-    type: 'UPDATE_CONTACT_LAST_MESSAGE',
-    payload: { roomId, ...messageInfo }
-});
+export const updateContactLastMessage = (roomId, messageInfo) => {
+    console.log('...', messageInfo);
+    return ({
+        type: 'UPDATE_CONTACT_LAST_MESSAGE',
+        payload: {
+            roomId,
+            ...messageInfo
+        }
+    });
+};

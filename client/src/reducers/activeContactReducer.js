@@ -5,6 +5,18 @@ const activeContactReducer = (state = initialState, action) => {
         case 'SET_ACTIVE_CONTACT':
             return action.payload;
         
+        case 'SET_PSEUDO_ACTIVE_CONTACT': {
+            const { username } = action.payload;
+            return {
+                couterpart: { username },
+                files: [],
+                images: [],
+                type: 'DUAL',
+                colorTheme: 'blue',
+                isPseudo: true
+            }
+        }
+        
         case 'UPDATE_CONTACT_STATUS__ONLINE': {
             const { lastLogin, username } = action.payload;
             const activeContact = { ...state };
@@ -51,16 +63,19 @@ const activeContactReducer = (state = initialState, action) => {
         }
         
         case 'UPDATE_CONTACT_LAST_MESSAGE': {
-            const { type, time, from, content, roomId } = action.payload;
+            const { type, time, from, content, roomId,peopleSeen } = action.payload;
             const activeContact = { ...state };
 
-            if (activeContact.roomId === roomId)  activeContact.lastMessage = { type, time, from, content, peopleSeen: [] };
+            if (activeContact.roomId === roomId)  activeContact.lastMessage = { type, time, from, content, peopleSeen };
             
             return activeContact;
         }    
         
         case 'CLEAR':
             return initialState;
+        
+        case 'NEW_CONTACT':
+            return 'new';
 
         default:
             return state;

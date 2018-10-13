@@ -8,13 +8,19 @@ import socketGetter from '../../../../socket';
 
 import './RecentContact.css';
 
+const getInitIsNew = (props) => {
+    if (props.lastMessage && props.lastMessage.from !== props.thisUser.username) {
+        return props.lastMessage.peopleSeen.map(person => person.username).indexOf(props.thisUser.username) === -1;
+    }
+    else return false;
+}
+
 class RecentContact extends Component {
     // isNew = true if there is a last message, the last message is not from current user and this user has't seen it yet.
     constructor(props) {
         super(props);
         this.state = {
-            ...props.lastMessage,
-            isNew: props.lastMessage && props.lastMessage.from !== props.thisUser.username && props.lastMessage.peopleSeen.map(person => person.username).indexOf(props.thisUser.username) === -1
+            isNew: getInitIsNew(props)
         }
     }
 
@@ -22,16 +28,22 @@ class RecentContact extends Component {
         socketGetter.getInstance().on('aUserSendsMessage', data => {
             const { roomId } = data;
             if (this.props.roomId === roomId) {
-                console.log('recent contact uodates');
                 const { content, time, type, from } = data;
                 this.props.hoistContact(this.props.roomId);
-                this.setState({ isNew: this.props.roomId !== this.props.activeContact.roomId, content, time, type, from, peopleSeen: [] });
                 this.props.updateContactLastMessage(roomId, { content, time, type, from });
+                this.setState({
+                    isNew: this.props.roomId !== this.props.activeContact.roomId
+                });
             }
         });
 
         socketGetter.getInstance().on('aUserSeesMessage', data => {
-            if (this.props.roomId === data.roomId) this.setState(prevState => ({ peopleSeen: prevState.peopleSeen.concat({ from: data.from, time: data.time }) }));
+            if (this.props.roomId === data.roomId && this.props.lastMessage.peopleSeen.map(person => person.username).indexOf(data.from) === -1) {
+                this.props.updateContactLastMessage(this.props.roomId, {
+                    ...this.props.lastMessage,
+                    peopleSeen: this.props.lastMessage.peopleSeen.concat({ username: data.from, time: data.time })
+                });
+            }
         });
     }
 
@@ -52,11 +64,11 @@ class RecentContact extends Component {
 
         // When new message arrive and this room is active, make this room old (isNew = false)
         if (this.props.roomId === this.props.activeContact.roomId && JSON.stringify(prevProps.activeContact.lastMessage) !== JSON.stringify(this.props.activeContact.lastMessage)) {
-            this.setState({ ...this.props.activeContact.lastMessage, isNew: false });
+            this.setState({ isNew: false });
         }
 
         // When this room was previously active, user visits other room, make this room old (isNew = false)
-        if (prevState.isNew && this.props.activeContact.roomId !== this.props.roomId) {
+        if (prevState.isNew && this.props.activeContact.roomId === this.props.roomId) {
             this.setState({ isNew: false });
         }
     }
@@ -64,7 +76,7 @@ class RecentContact extends Component {
 
     renderLastMessage = () => {
         // This indicates that this room has at least one message
-        if (!this.state.from) return (
+        if (!this.props.lastMessage) return (
             <Fragment>
                 <div className="recent-contact__mid">
                     <div className="recent-contact__mid__title">{(this.props.counterpart && this.props.counterpart.fullname) || this.props.roomId}</div>
@@ -74,7 +86,7 @@ class RecentContact extends Component {
             </Fragment>
         );
         else {
-            const { content, type, from, peopleSeen, time } = this.state;
+            const { content, type, from, peopleSeen, time } = this.props.lastMessage;
             const messageDateTime = new Date(time);
             const { thisUser } = this.props;
             return (
@@ -107,7 +119,7 @@ class RecentContact extends Component {
     render() {
         let className = "recent-contact";
         if (this.state.isNew) className = className + " recent-contact--new";
-        if (this.props.activeContact.roomId === this.props.roomId) className = "recent-contact recent-contact--active";
+        if (this.props.activeContact.roomId === this.props.roomId) className += " recent-contact--active";
         return (
             <div className={className} onClick={() => this.props.setActiveContact(this.props.roomId)} >
                 <div className="recent-contact__left">

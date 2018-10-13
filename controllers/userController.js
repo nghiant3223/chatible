@@ -15,7 +15,7 @@ const loginUser = async (req, res) => {
 
     if (user.password !== password) return res.status(409).send('Incorrect password.');
     
-    User.findOneAndUpdate({ username }, { $set: { lastLogin: Date.now() } }, function () { });
+    User.findOneAndUpdate({ username }, { $set: { lastLogin: new Date().toISOString()} }, function () { });
 
     const token = jwt.sign({
         data: username
@@ -26,7 +26,7 @@ const loginUser = async (req, res) => {
 
 const logoutUser = async (req, res) => {
     const { username } = req;
-    User.findOneAndUpdate({ username }, { $set: { lastLogout: Date.now() } }, function () { });
+    User.findOneAndUpdate({ username }, { $set: { lastLogout: new Date().toISOString() } }, function () { });
     res.status(200).send('Logout user successfully.');
 }
 

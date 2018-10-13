@@ -2,20 +2,19 @@ import socketIOClient from 'socket.io-client';
 import { socketPath } from './configs';
 
 const socketGetter = (function () {
-        let instance;
+    let instance;
 
-        function createInstance() {
-            // TODO: add +  PORT if you want to run it locally
-            const socket = new socketIOClient(socketPath);
-            return socket;
-        }
-
-        return {
+    return {
             getInstance: function () {
                 if (!instance) {
-                    instance = createInstance();
+                    instance = new socketIOClient(socketPath);
                 }
                 return instance;
+            },
+            deleteInstance: function () {
+                if (instance) {
+                    instance = null;
+                }
             }
         };
 })();

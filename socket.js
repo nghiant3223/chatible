@@ -2,12 +2,18 @@ const socket = require('socket.io');
 const { User } = require('./models/User');
 const { Room } = require('./models/Room');
 
+const socketMap = {};
+
 module.exports = (server) => {
     const io = socket(server);
 
     io.on('connection', socket => {
         console.log('A new client connected to server', socket.id);
 
+        socket.on('establishConnection', data => { 
+            socket.join(data.roomId);
+            socketMap[data.counterpartUsername].join(data.roomId);
+        });
 
         socket.on('thisUserGoesOnline', data => {
             const { username } = data;
@@ -16,10 +22,14 @@ module.exports = (server) => {
             console.log(username, 'goes online');
             socket.broadcast.emit('aUserGoesOnline', { ...data, lastLogin: now.toISOString() });
 
+            socketMap[username] = socket;
+
             User.findOne({ username }).then(user => {
                 const { rooms } = user;
                 rooms.forEach(room => socket.join(room));
             });
+
+            console.log(socketMap);
         });
 
 
@@ -30,16 +40,19 @@ module.exports = (server) => {
             console.log(data.username, 'goes offline');
             socket.broadcast.emit('aUserGoesOffline', { ...data, lastLogout: now.toISOString() });
 
+            delete socketMap[username];
+
             User.findOne({ username }).then(user => {
                 const { rooms } = user;
                 rooms.forEach(room => socket.leave(room._id));
             });
+
+            console.log(socketMap);
         });
 
 
         socket.on('thisUserSendsMessage', data => {
             const now = new Date();
-            console.log('send', data);
             socket.broadcast.to(data.roomId).emit('aUserSendsMessage', { ...data, time: now.toISOString() });
         });
 

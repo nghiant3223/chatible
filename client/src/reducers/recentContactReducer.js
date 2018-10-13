@@ -80,12 +80,12 @@ const recentContactReducer = (state = initialState, action) => {
         }
             
         case 'UPDATE_CONTACT_LAST_MESSAGE': {
-            const { type, time, from, content, roomId } = action.payload;
+            const { type, time, from, content, roomId, peopleSeen } = action.payload;
             const contacts = [ ...state ];
 
             for (let i = 0; i < contacts.length; i++) {
                 if (contacts[i].roomId === roomId) {
-                    contacts[i].lastMessage = { type, time, from, content, peopleSeen: [] };
+                    contacts[i].lastMessage = { type, time, from, content, peopleSeen };
                     break;
                 }
             }

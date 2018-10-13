@@ -23,6 +23,7 @@ class HomePage extends Component {
 
        
         socket.on('aUserGoesOnline', ({ username, lastLogin }) => {
+            console.log('goes online');
             this.props.updateCounterpartLastLogin(username, lastLogin);
         });
 

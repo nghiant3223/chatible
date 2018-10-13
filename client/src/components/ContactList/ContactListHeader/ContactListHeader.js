@@ -14,10 +14,6 @@ const ContactListHeader = (props) => (
                     onChange={props.inputChangedHandler} />
             </label>
         </div>
-
-        <div className="contact-list__header__new">
-            <a></a>
-        </div>
     </div>
 );
 

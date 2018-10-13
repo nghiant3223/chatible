@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 import ContactListHeader from './ContactListHeader/ContactListHeader';
 import RecentContactList from './RecentContactList/RecentContactList';
@@ -10,8 +11,15 @@ import './ContactList.css';
 class ContactList extends Component {
     state = {
         recentVisible: true,
+        allUsers: [],
         searchValue: ''
     }
+
+    componentDidMount = async () => {
+        const allUsersRes = await axios.get('/api/user/');
+        this.setState({ allUsers: allUsersRes.data.filter(user => user.username !== this.props.thisUser.username )});
+    }
+    
 
     inputFocusedHandler = () => {
         this.setState(prevState => ({ recentVisible: !prevState.recentVisible }));
@@ -38,11 +46,11 @@ class ContactList extends Component {
         if (this.state.recentVisible) {
             return <RecentContactList contactList={this.props.recentContacts} />;
         } else {
-            return <AvailableContactList contactList={this.props.recentContacts} searchValue={this.state.searchValue}/>;
+            return <AvailableContactList allUsers={this.state.allUsers} searchValue={this.state.searchValue}/>;
         }
     }
 }
 
-const mapStateToProps = ({ recentContacts }) => ({ recentContacts });
+const mapStateToProps = ({ recentContacts, thisUser }) => ({ recentContacts, thisUser });
 
 export default connect(mapStateToProps)(ContactList);

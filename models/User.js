@@ -13,11 +13,11 @@ const userSchema = new Schema({
     },
     lastLogin: {
         type: Date,
-        default: 0
+        default: () => new Date().toISOString()
     },
     lastLogout: {
         type: Date,
-        default: 0
+        default: () => new Date().toISOString()
     },
     rooms: [String],
     lastActiveContact: {

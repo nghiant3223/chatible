@@ -7,6 +7,11 @@ import './ContactInfoHeader.css';
 import avatar from '../../../assets/images/user.svg';
 
 class ContactInfoHeader extends Component {
+    state = {
+        lastLogin: this.props.activeContact.counterpart.lastLogin || '',
+        lastLogout: this.props.activeContact.counterpart.lastLogout || ''
+    }
+
     render() {
         return (
             <div className="contact-info__header">
@@ -46,7 +51,7 @@ class ContactInfoHeader extends Component {
     renderStatus() {
         if (!this.props.activeContact.counterpart) return null;
 
-        if (this.props.activeContact.counterpart.lastLogin > this.props.activeContact.counterpart.lastLogout) return 'Active now';
+        if (new Date(this.props.activeContact.counterpart.lastLogin) > new Date(this.props.activeContact.counterpart.lastLogout)) return 'Active now';
         
         return (
             <Fragment>

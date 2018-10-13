@@ -6,6 +6,7 @@
     cursor: pointer;
     font-size: 0.85em;
     transition: background 0.15s;
+    z-index: 1000;
 }
 
 .contact-list__all__contact:hover {
