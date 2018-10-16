@@ -10,6 +10,30 @@ const userController = require('../../controllers/userController');
 
 const { verifyToken } = require('../../middleware/index');
 
+const multer = require('multer');
+const path = require('path');
+const crypto = require('crypto');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.resolve(global.rootDirName + '/public/avatars/'))
+    },
+    filename: function (req, file, cb) {
+        const { username } = req.body;
+        console.log('-------->', username);
+        const extReg = /(.*)[.](.*)$/;
+        const ext = extReg.exec(file.originalname)[2];
+
+        const hashedFilename = crypto.createHash('sha256').update(username + (new Date().getTime())).digest('hex');
+        const fullFileName = hashedFilename + '.' + ext;
+        req.fullFileName = fullFileName;
+        cb(null, fullFileName);
+    }
+});
+
+const upload = multer({ storage: storage });
+
+
 router.use('/room', roomRouter);
 
 router.use('/message', messageRouter);
@@ -21,7 +45,7 @@ router.use('/file', fileRouter)
 
 router.post('/login', userController.loginUser);
 
-router.post('/signup', userController.createUser);
+router.post('/signup', upload.single('avatar'), userController.createUser);
 
 router.post('/logout', verifyToken, userController.logoutUser);
 

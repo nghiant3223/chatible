@@ -61,11 +61,4 @@ const deleteMessages = async (req, res) => {
         return res.status(500).send('Internal server error.');
     }
 }
-
-const seeMessage = async (req, res) => {
-    room.set({ messages });
-    await room.save();
-    res.status(200).end('Update seen message successfully.');
-}
-
-module.exports = { getMessages, saveMessage, seeMessage, deleteMessages };
+module.exports = { getMessages, saveMessage, deleteMessages };

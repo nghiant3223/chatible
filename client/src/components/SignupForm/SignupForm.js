@@ -20,8 +20,12 @@ class SignupForm extends Component {
 
     formSubmittedHandler = async (e) => {
         e.preventDefault();
-
-        await axios.post('/api/signup', qs.stringify({ username: this.state.username, password: this.state.password, fullname: this.state.fullname }));
+        const data = new FormData();
+        data.append('username', this.state.username);
+        data.append('password', this.state.password);
+        data.append('fullname', this.state.fullname);
+        data.append('avatar', this.avatarInput.files[0]);
+        await axios.post('/api/signup', data);
         this.props.history.push('/login');
     }
 
@@ -37,6 +41,7 @@ class SignupForm extends Component {
                     <br />
                     <input placeholder="Password" onChange={this.passwordChangedHandler} />
                     <br />
+                    <input type="file" ref={el => this.avatarInput = el}/>
                     <button type="submit">Signup</button>
                 </form>
 

@@ -21,9 +21,10 @@
 }
 
 .recent-contact__left img {
-    height: 100%;
-    width: auto;
+    height: 50px;
+    width: 50px;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .recent-contact__mid {

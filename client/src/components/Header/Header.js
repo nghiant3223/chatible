@@ -25,7 +25,7 @@ const header = (props) => {
         <header>
             <div className="header__left">Chatible</div>
             <div className="header__right">
-                <div className="header__current-avatar"><img src="/images/profile_image.png" alt="Avatar" /></div>
+                <div className="header__current-avatar"><img src={props.thisUser.avatarUrl} alt="Avatar" /></div>
                 <div className="header__current-fullname">{props.thisUser.fullname}</div>
                 <div className="header__navigation-button" onClick={logoutButtonClickedHandler}>
                     Logout

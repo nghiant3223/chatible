@@ -9,7 +9,7 @@ const userSchema = new Schema({
     password: String,
     avatarUrl: {
         type: String,
-        default: '< default avatar url >'
+        default: '/avatars/default.png'
     },
     lastLogin: {
         type: Date,

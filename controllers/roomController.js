@@ -68,7 +68,7 @@ const createRoom = async (req, res) => {
     
     
     if (type === 'DUAL') {
-        let room = await Room.findOne({ users: { $all: [users[0], users[1]] }, type });
+        let room = await Room.findOne({ users: { $all: users }, type });
         if (room) return res.status(409).send('Room already exists.');
     }
 

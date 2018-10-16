@@ -142,7 +142,7 @@ class MessageContainer extends PureComponent {
                 
                 {this.props.LHSTyping && <Typing />}
 
-                <Seen peopleSeen={this.state.peopleSeen} thisUser={this.props.thisUser}/>
+                <Seen peopleSeen={this.state.peopleSeen} thisUser={this.props.thisUser} counterpartAvatarUrl={this.props.counterpartAvatarUrl}/>
             </Fragment>
         );
     }

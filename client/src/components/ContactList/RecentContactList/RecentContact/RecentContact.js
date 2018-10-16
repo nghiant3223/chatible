@@ -9,7 +9,7 @@ import socketGetter from '../../../../socket';
 import './RecentContact.css';
 
 const getInitIsNew = (props) => {
-    if (props.lastMessage && props.lastMessage.from !== props.thisUser.username) {
+    if ((props.lastMessage && props.lastMessage.from !== props.thisUser.username)) {
         return props.lastMessage.peopleSeen.map(person => person.username).indexOf(props.thisUser.username) === -1;
     }
     else return false;
@@ -20,7 +20,7 @@ class RecentContact extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isNew: getInitIsNew(props)
+            isNew: getInitIsNew(props) || props.isNew
         }
     }
 
@@ -101,7 +101,7 @@ class RecentContact extends Component {
                         </div>
                         {thisUser.username === from && peopleSeen.length > 0 && (
                             <div className="recent-contact__right__seen">
-                                <img src={`/images/profile_image.png`} alt="Avatar" />
+                                <img src={this.props.counterpart.avatarUrl} alt="Avatar" />
                             </div>
                         )}
                     </div>
@@ -123,7 +123,7 @@ class RecentContact extends Component {
         return (
             <div className={className} onClick={() => this.props.setActiveContact(this.props.roomId)} >
                 <div className="recent-contact__left">
-                    <img src="/images/profile_image.png" alt="Avatar" />
+                    <img src={(this.props.counterpart && this.props.counterpart.avatarUrl) || '/avatars/default.png'} alt="Avatar" />
                 </div>
 
                 {this.renderLastMessage()}

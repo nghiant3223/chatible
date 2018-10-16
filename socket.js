@@ -86,8 +86,7 @@ module.exports = (server) => {
             let room = await Room.findById(roomId);
             let messages = [...room.messages];
             for (let i = messages.length - 1; i >= 0; i--) {
-                if (messages[i].peopleSeen.map(user => user.username).indexOf(from) === -1 && messages[i].from !== from) {
-                    console.log('update');
+                if (messages[i].peopleSeen.map(user => user.username).indexOf(from) === -1 && messages[i].from !== from && messages[i].from !== 'system') {
                     messages[i].peopleSeen.push({ username: from });
                 }
             }

@@ -213,18 +213,28 @@ class Chatbox extends PureComponent {
     render() {  
         if (!this.props.roomId) return <NewContact />
 
+        if (this.props.type === 'GROUP') return (
+            <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme }}>
+                <div className="chatbox">
+                </div>
+            </ChatboxContext.Provider>
+        );
+
         return (
-            <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme || 'cyan' }}>
+            <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme || 'cyan', counterpartAvatarUrl: this.props.counterpartAvatarUrl }}>
                 <div className="chatbox">
                     
-                    <MessageContainer
-                        LHSTyping={this.state.LHSTyping}
-                        messages={this.state.messages}
-                        isLoading={this.state.isLoading}
-                        moreMessagesFetchedHandler={this.moreMessagesFetchedHandler}
-                        isFetchingMore={this.state.isFetchingMore}
-                        roomId={this.props.roomId}
-                        thisUser={this.props.thisUser}/>
+                    {this.props.type === 'DUAL' ? (
+                        <MessageContainer
+                            LHSTyping={this.state.LHSTyping}
+                            messages={this.state.messages}
+                            isLoading={this.state.isLoading}
+                            moreMessagesFetchedHandler={this.moreMessagesFetchedHandler}
+                            isFetchingMore={this.state.isFetchingMore}
+                            roomId={this.props.roomId}
+                            thisUser={this.props.thisUser}
+                            counterpartAvatarUrl={this.props.counterpartAvatarUrl} />
+                    ) : null}
 
                     <div className="chatbox__inputs">
                         <form className="chatbox__inputs__text" onSubmit={this.textInputSubmittedHandler} >
@@ -265,7 +275,13 @@ class Chatbox extends PureComponent {
     }
 }
 
-const mapStateToProps = ({ activeContact, thisUser }) => ({ roomId: activeContact.roomId, thisUser, colorTheme: activeContact.colorTheme });
+const mapStateToProps = ({ activeContact, thisUser }) => ({
+    roomId: activeContact.roomId,
+    thisUser,
+    colorTheme: activeContact.colorTheme,
+    counterpartAvatarUrl: activeContact.counterpart ? activeContact.counterpart.avatarUrl : null,
+    type: activeContact.type
+});
 
 const mapDispatchToProps = dispatch => ({
     updateSharedFiles: roomId => dispatch(actions.fetchSharedFiles(roomId)),

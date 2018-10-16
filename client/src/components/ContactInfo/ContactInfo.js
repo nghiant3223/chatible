@@ -16,7 +16,7 @@ import './ContactInfo.css';
 
 class ContactInfo extends Component {
     state = {
-        colorThemeOption: this.props.colorTheme,
+        colorThemeOption: this.props.activeContact.colorTheme,
         colorThemeModalOpen: false,
         isFetchingMoreImages: false
     }

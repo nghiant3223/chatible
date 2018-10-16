@@ -22,8 +22,8 @@
 }
 
 .contact-list__all__contact__avatar>img {
-    height: 100%;
-    width: auto;
+    height: 35px;
+    width: 35px;
     border-radius:50%;
 }
 

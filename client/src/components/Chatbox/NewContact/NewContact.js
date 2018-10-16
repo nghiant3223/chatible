@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { connect } from 'react-redux';
+import StandardModal from '../../UIs/StandardModal/StandardModal';
 
 import SelectedTag from './SelectedTag/SelectedTag';
 
@@ -44,36 +45,20 @@ const input = (
     </div>
 );
 
-const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        zIndex: 2000,
-        padding: '15px 20px',
-        transform: 'translate(-50%,-50%)'
-    },
-    overlay: {
-        zIndex: 1000,
-        background: 'rgba(0, 0, 0, 0.15)'
-    }
-};
-
-
 class NewContact extends Component {
     state = {
         toAddList: [],
         textInput: '',
         allUsers: [],
         searchResultVisible: false,
-        modalVisible: false
+        modalVisible: false,
+        modalMessage: ''
     }
 
     componentDidMount = () => {
         window.addEventListener('click', this.handleSearchResultContainerOutsideClick, false);
 
-        axios.get('/api/user/').then(userRes => this.setState({ allUsers: userRes.data.map(({ username, fullname }) => ({username, fullname})) }));
+        axios.get('/api/user/').then(userRes => this.setState({ allUsers: userRes.data.map(({ username, fullname, avatarUrl }) => ({username, fullname, avatarUrl})) }));
     }
     
 
@@ -91,8 +76,8 @@ class NewContact extends Component {
         }
     }
 
-    findFullnameByUsername = (username) => {
-        return this.state.allUsers.find(user => user.username == username).fullname;
+    findUserByUsername = (username) => {
+        return this.state.allUsers.find(user => user.username == username);
     }
 
     handleSearchResultContainerOutsideClick = (e) => {
@@ -106,12 +91,15 @@ class NewContact extends Component {
     }
 
     createButtonClicked = () => {
-        if (this.state.toAddList.length === 1) {
-            if (this.props.recentContacts.map(contact => contact.counterpart && contact.counterpart.username).indexOf(this.state.toAddList[0].username) !== -1) {
-                return this.setState({ modalVisible: true });
-            }
+        if (this.state.toAddList.length < 1) {
+            return this.setState({modalVisible: true, modalMessage: 'No user to create new room.'})
         }
-        this.props.createRoom([...this.state.toAddList.map(user => user.username), this.props.thisUser.username]);
+
+        if (this.state.toAddList.length < 2) {
+            if (this.props.recentContacts.map(contact => contact.counterpart && contact.counterpart.username).indexOf(this.state.toAddList[0].username) !== -1) {
+                return this.setState({ modalVisible: true, modalMessage: 'Contact already exists' });
+            }
+        } else this.props.createRoom([...this.state.toAddList.map(user => user.username), this.props.thisUser.username]);
     }
 
     render() {
@@ -133,12 +121,12 @@ class NewContact extends Component {
 
                 {input}
 
-                <Modal isOpen={this.state.modalVisible} onRequestClose={() => this.setState({ modalVisible: false })} style={customStyles}>
-                    <div>Contact already exist</div>
+                <StandardModal isOpen={this.state.modalVisible} onRequestClose={() => this.setState({ modalVisible: false })}>
+                    <div>{this.state.modalMessage}</div>
                     <div style={{textAlign: "right"}}>
                         <button onClick={() => this.setState({ modalVisible: false })}>OK</button>
                     </div>
-                </Modal>
+                </StandardModal>
             </div>
         );
     }
@@ -148,11 +136,11 @@ class NewContact extends Component {
             .filter(username => username.indexOf(this.state.textInput) !== -1);
         if (searchResult.length < 1) return <div className="search-result__no-result">No results</div>;
         return searchResult.map(username => {
-            const fullname = this.findFullnameByUsername(username);
+            const user = this.findUserByUsername(username);
             return (
-                <div key={username} className="contact-list__all__contact" onClick={() => this.searchItemClickedHandler(username, fullname)}>
-                    <div className="contact-list__all__contact__avatar"><img src='/images/profile_image.png' alt="Avatar" /></div>
-                    <div className="contact-list__all__contact__fullname">{fullname}</div>
+                <div key={username} className="contact-list__all__contact" onClick={() => this.searchItemClickedHandler(username, user.fullname)}>
+                    <div className="contact-list__all__contact__avatar"><img src={user.avatarUrl} alt="Avatar" /></div>
+                    <div className="contact-list__all__contact__fullname">{user.fullname}</div>
                 </div>
             );
         });

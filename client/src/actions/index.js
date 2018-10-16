@@ -137,7 +137,8 @@ export const createContactAndSetActive = (users) => {
 
         const roomInfo = contactRes.data.find(contact => contact.roomId === roomIdRes.data);
         dispatch(setActiveContact(roomInfo.roomId));
-        socketGetter.getInstance().emit('thisUserCreatesRoom', { users, roomInfo });
+        socketGetter.getInstance().emit('thisUserCreatesRoom', { users, roomInfo: { ...roomInfo, isNew: true } });
+        // isNew to make recentContactActive bold.
     }
 }
 

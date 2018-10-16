@@ -9,12 +9,13 @@
     height: 50px;
     width: 50px;
     border-radius: 100%;
+    object-fit: cover;
 }
 
 .contact-info__header__mid__title {
     font-size: 0.9em;
     margin-bottom: 5px;
-    width: 130px;
+    width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
 }

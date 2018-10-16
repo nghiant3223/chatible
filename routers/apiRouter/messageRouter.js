@@ -10,7 +10,5 @@ router.post('/:roomId', verifyToken, checkUserInRoom, messageController.saveMess
 
 router.delete('/:roomId', verifyToken, checkUserInRoom, messageController.deleteMessages);
 
-router.post('/see/:roomId', verifyToken, checkUserInRoom, messageController.seeMessage);
-
 
 module.exports = router;

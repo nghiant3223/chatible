@@ -35,7 +35,7 @@ const createUser = async (req, res) => {
     let user = await User.findOne({ username });
     if (user) return res.status(409).send('User already exists.');
 
-    let newUser = new User({ username, password, fullname });
+    let newUser = new User({ username, password, fullname, avatarUrl: `/avatars/${req.fullFileName}` });
     await newUser.save();
     res.status(200).send('Create user successfully.');
 }
