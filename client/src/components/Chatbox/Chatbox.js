@@ -1,6 +1,7 @@
 import React, { PureComponent, Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import NewContact from './NewContact/NewContact';
 
 import MessageContainer from './MessageContainer/MessageContainer';
 import EmojiPanel from './EmojiPanel/EmojiPanel';
@@ -27,6 +28,8 @@ class Chatbox extends PureComponent {
 
     componentDidMount = async () => {
         const { roomId } = this.props;
+
+        if (!roomId) return;
 
         try {
             const messagesRes = await axios.get('/api/message/' + roomId + '?count=100', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
@@ -71,30 +74,13 @@ class Chatbox extends PureComponent {
         socket.on('aUserChangesColorTheme', data => {
             if (data.roomId === roomId) {
                 this.setState(prevState => ({
-                    messages: prevState.messages.concat({ ...data, type: 'changeColorTheme', from: 'system'}),
+                    messages: prevState.messages.concat({ ...data, type: 'changeColorTheme', from: 'system' }),
                     LHSTyping: false
                 }));
                 const { colorTheme } = JSON.parse(data.content);
                 this.props.changeContactColor(data.roomId, colorTheme);
             }
-        });
-    }
-
-    componentDidUpdate = async (prevProps, prevState) => {
-        if (prevProps.roomId !== this.props.roomId) {
-            this.setState({ isLoading: true, messages: [] });
-            try {
-                const messagesRes = await axios.get('/api/message/' + this.props.roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
-                const messages = messagesRes.data;
-                for (let i = 0; i < messages.length; i++) {
-                    messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
-                }
-                this.setState({ isLoading: false, messages });
-            } catch (e) {
-                console.log(e);
-                this.setState({ isLoading: false });
-            }
-        }
+        })
     }
     
     emojiButtonClickedHandler = () => {
@@ -193,7 +179,7 @@ class Chatbox extends PureComponent {
     fileInputChangedHandler = (e) => {
         e.persist();
         const file = e.target.files[0];
-        const isImage = (/[\/.](gif|jpg|jpeg|tiff|png|ico)$/i).test(file.name);
+        const isImage = (/[.](gif|jpg|jpeg|tiff|png|ico|gif)$/i).test(file.name);
 
         this.setState(prevState => ({
             messages: prevState.messages.concat({
@@ -225,6 +211,8 @@ class Chatbox extends PureComponent {
     }
 
     render() {  
+        if (!this.props.roomId) return <NewContact />
+
         return (
             <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme || 'cyan' }}>
                 <div className="chatbox">

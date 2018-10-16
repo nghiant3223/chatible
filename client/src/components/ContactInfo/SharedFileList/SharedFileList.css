@@ -3,10 +3,10 @@
 }
 
 .contact-info__main__files i {
-    background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/XHgnF9Vz1H8.png");
+    background-image: url(../../../assets/images/XHgnF9Vz1H8.png);
     background-repeat: no-repeat;
     background-size: auto;
-    background-position: -17px -79px;
+    background-position: -100px -61px;
     width: 20px;
     height: 100%;
     display: block;

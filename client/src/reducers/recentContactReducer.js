@@ -102,6 +102,11 @@ const recentContactReducer = (state = initialState, action) => {
             return contacts;
         }
             
+        case 'ADD_CONTACT': {
+            const { roomInfo } = action.payload;
+            return [roomInfo, ...state];
+        }
+            
         case 'CLEAR':
             return initialState;
             

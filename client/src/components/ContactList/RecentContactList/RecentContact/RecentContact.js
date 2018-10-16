@@ -38,7 +38,7 @@ class RecentContact extends Component {
         });
 
         socketGetter.getInstance().on('aUserSeesMessage', data => {
-            if (this.props.roomId === data.roomId && this.props.lastMessage.peopleSeen.map(person => person.username).indexOf(data.from) === -1) {
+            if (this.props.roomId === data.roomId && this.props.lastMessage && this.props.lastMessage.peopleSeen && this.props.lastMessage.peopleSeen.map(person => person.username).indexOf(data.from) === -1) {
                 this.props.updateContactLastMessage(this.props.roomId, {
                     ...this.props.lastMessage,
                     peopleSeen: this.props.lastMessage.peopleSeen.concat({ username: data.from, time: data.time })

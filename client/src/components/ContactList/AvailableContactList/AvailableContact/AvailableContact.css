@@ -1,27 +1,34 @@
 .contact-list__all__contact {
-    display: grid;
-    grid-template-columns: 35px 1fr;
+    display: flex;
     align-items: center;
-    grid-column-gap: 10px;
     cursor: pointer;
     font-size: 0.85em;
     transition: background 0.15s;
     z-index: 1000;
 }
 
+.contact-list__all__contact div {
+    margin-left: 7.5px;
+    margin-right: 7.5px;
+}
+
 .contact-list__all__contact:hover {
     background-color: #f1f1f1;
 }
 
-.contact-list__all__contact div:first-child {
+.contact-list__all__contact__avatar {
     width: 35px;
     height: 35px;
 }
 
-.contact-list__all__contact div:first-child>img {
+.contact-list__all__contact__avatar>img {
     height: 100%;
     width: auto;
     border-radius:50%;
+}
+
+.contact-list__all__contact__fullname {
+    flex-grow: 1;
 }
 
 .contact-list__all__contact {

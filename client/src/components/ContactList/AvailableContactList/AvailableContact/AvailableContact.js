@@ -5,25 +5,17 @@ import * as actions from '../../../../actions/index';
 
 import './AvailableContact.css';
 
-const availableContact = ({ username, fullname, setActiveContact, recentContacts, setPseudoActiveContact }) => {
-    let foundContact = recentContacts.find(contact => {
-        if (!contact.counterpart) return false;
-        return contact.counterpart.username === username;
-    });
-    
+const availableContact = ({ searchItem, roomId, setActiveContact}) => {
     return (
-        <div className="contact-list__all__contact" onMouseDown={() =>  foundContact !== undefined ? setActiveContact(foundContact.roomId) : setPseudoActiveContact(username)}>
-            <div><img src='/images/profile_image.png' alt="Avatar" /></div>
-            <div>{fullname}</div>
+        <div className="contact-list__all__contact" onMouseDown={() => setActiveContact(roomId)}>
+            <div className="contact-list__all__contact__avatar"><img src='/images/profile_image.png' alt="Avatar" /></div>
+            <div className="contact-list__all__contact__fullname">{searchItem}</div>
         </div>
     );
 }
 
-const mapStateToProps = ({ recentContacts }) => ({ recentContacts });
-
 const mapDispatchToProps = dispatch => ({
-    setActiveContact: roomId => dispatch(actions.setActiveContact(roomId)),
-    setPseudoActiveContact: username => dispatch(actions.setPseudoActiveContact(username))
+    setActiveContact: roomId => dispatch(actions.setActiveContact(roomId))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(availableContact);
+export default connect(null, mapDispatchToProps)(availableContact);

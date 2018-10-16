@@ -64,40 +64,48 @@ const getRoomInfo = async (req, res) => {
 }
 
 const createRoom = async (req, res) => {
-    const { type } = req.body;
+    const { type, users} = req.body; 
+    
+    
     if (type === 'DUAL') {
-        const { from, to } = req.body;
-        const fromUser = await User.findOne({ username: from });
-        const toUser = await User.findOne({ username: to });
-        if (fromUser === null || toUser === null) return res.status(404).send('User not found.');
-
-        let room = await Room.findOne({ users: { $all: [from, to] }, type });
+        let room = await Room.findOne({ users: { $all: [users[0], users[1]] }, type });
         if (room) return res.status(409).send('Room already exists.');
-
-        let newRoom = await Room.create({ users: [from, to], type });
-
-        User.findOneAndUpdate({ username: from }, { $push: { rooms: newRoom._id } }, function () {
-            User.findOneAndUpdate({ username: to }, { $push: { rooms: newRoom._id } }, function () {
-                return res.status(200).send(newRoom);
-            });
-        });
-    } else if (type === 'GROUP') {
-        const { creator } = req.body;
-
-        let newRoom = await Room.create({ users: [creator], type });
-        User.findOneAndUpdate({ username: creator }, { $push: { rooms: newRoom._id } }, function () {
-            return res.status(200).send(newRoom);
-        });
-    } else {
-        return res.status(422).send('Invalid request data.');
     }
+
+    let newRoom = await Room.create({ users, type });
+    Promise.all(users.reduce((promiseArray, username) => promiseArray = promiseArray.concat(User.findOneAndUpdate({ username }, { $push: { rooms: newRoom._id } })), []))
+        .then(() => {
+            res.status(200).send(newRoom._id);
+        }).catch(e => {
+            console.log(e);
+            res.status(500).send('Internal server error');
+        });
 }
 
 const changeColorTheme = async (req, res) => {
     const { roomId } = req.params;
     const { colorTheme } = req.body;
-    await Room.findByIdAndUpdate(roomId, { colorTheme });
-    res.status(200).send("Change room's color theme successfully.");
+    try {
+        await Room.findByIdAndUpdate(roomId, { colorTheme });
+        res.status(200).send("Change room's color theme successfully.");
+    } catch (e) {
+        res.status(404).send('Room not found');
+    }
 }
 
-module.exports = { getRecentRooms, createRoom, getRoomInfo, changeColorTheme };
+const deleteRoom = async (req, res) => {
+    const { roomId } = req.params;
+    const room = await Room.findById(roomId);
+    
+    if (!room) return res.status(404).send('Room not found');
+
+    Promise.all(room.users.reduce((promiseArray, username) => promiseArray = promiseArray.concat(User.findOneAndUpdate({ username }, { $pull: { rooms: roomId } })), []))
+        .then(() => {
+            room.remove();
+            res.status(200).send('Delete room succesfully');
+        }).catch(e => {
+            res.status(500).send(e);
+        });
+}
+
+module.exports = { getRecentRooms, createRoom, getRoomInfo, changeColorTheme, deleteRoom};

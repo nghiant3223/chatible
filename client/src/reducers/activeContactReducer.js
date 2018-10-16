@@ -5,18 +5,6 @@ const activeContactReducer = (state = initialState, action) => {
         case 'SET_ACTIVE_CONTACT':
             return action.payload;
         
-        case 'SET_PSEUDO_ACTIVE_CONTACT': {
-            const { username } = action.payload;
-            return {
-                couterpart: { username },
-                files: [],
-                images: [],
-                type: 'DUAL',
-                colorTheme: 'blue',
-                isPseudo: true
-            }
-        }
-        
         case 'UPDATE_CONTACT_STATUS__ONLINE': {
             const { lastLogin, username } = action.payload;
             const activeContact = { ...state };

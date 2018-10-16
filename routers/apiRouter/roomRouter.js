@@ -12,5 +12,7 @@ router.post('/', verifyToken, roomController.createRoom);
 
 router.post('/color/:roomId', verifyToken, checkUserInRoom, roomController.changeColorTheme);
 
+router.delete('/:roomId', verifyToken, checkUserInRoom, roomController.deleteRoom);
+
 
 module.exports = router;

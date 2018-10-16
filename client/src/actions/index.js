@@ -10,7 +10,8 @@ export const fetchUserAndRecentContact = (history) => {
             socketGetter.getInstance().emit('thisUserGoesOnline', { username: meRes.data.username });
             dispatch(fetchRecentContactSuccess(contactRes.data));
             dispatch(fetchUserSuccess(meRes.data));
-            dispatch(setInitialActiveContact(contactRes.data.find(contact => contact.roomId === meRes.data.lastActiveContact) || contactRes.data[0]));
+            dispatch(setInitialActiveContact(contactRes.data.find(contact => contact.roomId === meRes.data.lastActiveContact) || null));
+            console.log('...', contactRes.data);
         }).catch(e => {
             console.log(e);
             dispatch(fetchUserFailure());
@@ -66,11 +67,6 @@ export const setInitialActiveContact = (contact) => ({
 });
 
 
-export const setPseudoActiveContact = (username) => ({
-    type: 'SET_PSEUDO_ACTIVE_CONTACT',
-    payload: username
-});
-
 export const setActiveContact = (roomId) => {
     axios.post('/api/user/activeroom/' + roomId, {}, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
     return (dispatch, getState) => {
@@ -119,7 +115,6 @@ export const hoistContact = (roomId) => ({
 
 
 export const updateContactLastMessage = (roomId, messageInfo) => {
-    console.log('...', messageInfo);
     return ({
         type: 'UPDATE_CONTACT_LAST_MESSAGE',
         payload: {
@@ -128,3 +123,25 @@ export const updateContactLastMessage = (roomId, messageInfo) => {
         }
     });
 };
+
+
+export const newContact = () => ({
+    type: 'NEW_CONTACT'
+});
+
+export const createContactAndSetActive = (users) => {
+    return async dispatch => {
+        const roomIdRes = await axios.post('/api/room', { type: users.length == 2 ? 'DUAL' : 'GROUP', users }, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+        const contactRes = await axios.get('/api/room', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+        dispatch(fetchRecentContactSuccess(contactRes.data));
+
+        const roomInfo = contactRes.data.find(contact => contact.roomId === roomIdRes.data);
+        dispatch(setActiveContact(roomInfo.roomId));
+        socketGetter.getInstance().emit('thisUserCreatesRoom', { users, roomInfo });
+    }
+}
+
+export const addContact = (roomInfo) => ({
+    type: 'ADD_CONTACT',
+    payload: { roomInfo }
+});

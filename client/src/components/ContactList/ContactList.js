@@ -15,12 +15,6 @@ class ContactList extends Component {
         searchValue: ''
     }
 
-    componentDidMount = async () => {
-        const allUsersRes = await axios.get('/api/user/');
-        this.setState({ allUsers: allUsersRes.data.filter(user => user.username !== this.props.thisUser.username )});
-    }
-    
-
     inputFocusedHandler = () => {
         this.setState(prevState => ({ recentVisible: !prevState.recentVisible }));
     }
@@ -46,7 +40,7 @@ class ContactList extends Component {
         if (this.state.recentVisible) {
             return <RecentContactList contactList={this.props.recentContacts} />;
         } else {
-            return <AvailableContactList allUsers={this.state.allUsers} searchValue={this.state.searchValue}/>;
+            return <AvailableContactList contactList={this.props.recentContacts} searchValue={this.state.searchValue}/>;
         }
     }
 }

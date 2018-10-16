@@ -1,5 +1,6 @@
 .contact-list__header {
     padding: 0 10px;
+    display: flex;
 }
 
 
@@ -43,7 +44,7 @@
 }
 
 .contact-list__header__new a {
-    background-image: url("https://static.xx.fbcdn.net/rsrc.php/v3/yU/r/CzBkBCFcKp1.png");
+    background-image: url(../../../assets/images/W0HBEEIUJCb.png);
     background-repeat: no-repeat;
     background-size: auto;
     background-position: -99px -360px;

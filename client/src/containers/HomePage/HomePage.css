@@ -1,6 +1,5 @@
 main {
-    display: grid;
-    grid-template-columns: 300px 3fr 300px;
+    display: flex;
     height: calc(100vh - 45px);
     position: relative;
 }

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import axios from 'axios';
 
 import OfflineTimer from '../../UIs/OfflineTimer/OfflineTimer';
 import { connect } from 'react-redux';
@@ -7,11 +8,6 @@ import './ContactInfoHeader.css';
 import avatar from '../../../assets/images/user.svg';
 
 class ContactInfoHeader extends Component {
-    state = {
-        lastLogin: this.props.activeContact.counterpart.lastLogin || '',
-        lastLogout: this.props.activeContact.counterpart.lastLogout || ''
-    }
-
     render() {
         return (
             <div className="contact-info__header">
@@ -49,13 +45,17 @@ class ContactInfoHeader extends Component {
     }
 
     renderStatus() {
-        if (!this.props.activeContact.counterpart) return null;
+        const { counterpart } = this.props.activeContact;
+        if (!counterpart) return null;
 
-        if (new Date(this.props.activeContact.counterpart.lastLogin) > new Date(this.props.activeContact.counterpart.lastLogout)) return 'Active now';
+        const { lastLogin } = counterpart;
+        const { lastLogout } = counterpart;
+
+        if (new Date(lastLogin) > new Date(lastLogout)) return 'Active now';
         
         return (
             <Fragment>
-                Active <OfflineTimer offlineDate={this.props.activeContact.counterpart.lastLogout} /> ago
+                Active <OfflineTimer offlineDate={lastLogout} /> ago
             </Fragment>
         );    
     }

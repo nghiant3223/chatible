@@ -423,3 +423,7 @@ export const renderRecentContactMessageContent = ({ content, type, from, thisUse
             );
     }
  }
+
+export const arrayDiff = (left, right) => {
+    return left.filter(x => right.indexOf(x) < 0);
+}

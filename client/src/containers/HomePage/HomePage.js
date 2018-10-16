@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Header from '../../components/Header/Header';
@@ -31,6 +29,9 @@ class HomePage extends Component {
             this.props.updateCounterpartLastLogout(username, lastLogout);
         });
 
+        socket.on('aUserCreatesRoom', ({ roomInfo }) => {
+            this.props.addContact(roomInfo);
+        })
     }
         
     render() {
@@ -56,9 +57,10 @@ class HomePage extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    fetchInitialData: (history) => dispatch(actions.fetchUserAndRecentContact(history)),
+    fetchInitialData: history => dispatch(actions.fetchUserAndRecentContact(history)),
     updateCounterpartLastLogin: (username, lastLogin) => dispatch(actions.updateContactStatusOnline(username, lastLogin)),
-    updateCounterpartLastLogout: (username, lastLogout) => dispatch(actions.updateContactStatusOffline(username, lastLogout))
+    updateCounterpartLastLogout: (username, lastLogout) => dispatch(actions.updateContactStatusOffline(username, lastLogout)),
+    addContact: roomInfo => dispatch(actions.addContact(roomInfo))
 });
 
 const mapStateToProps = ({ thisUser, recentContacts, activeContact }) => ({ thisUser, recentContacts, activeContact });

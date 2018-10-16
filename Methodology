@@ -1,9 +1,24 @@
-1. Client get room ID 
-    @param:sender, receiver(forDualChat) // for dual chat only
-    + If room not exist, return null to indicate that no messages is available
-    + Else, return roomID for later data fetching;
-2. He sends a message
-    @param: roomID, from, to(room?)
-    + If room exists, append messages to room
-    + Otherwise, create new room then append message to room and insert room into user rooms (property)
-3. 
+Performance:
+1. The SFSS has a mechanic of control throughput, preventing sensors from continuously uploading data to external system.
+2. Reponse time must be relatively small to assure UX.
+
+Reliability:
+1. Cow location must be 100% accurate.
+2. Cow health status must be > 90% reliable.
+3. The statistics must describe exactly data supplied by external systems.
+4. Feeding must feed the cow evenly, assure fair between cows.
+5. The stable must be cleaned outrightly.
+
+Availability: 
+1. Sensors must be available 24/24, continuously keeps track of cow status and sends data to other system.
+2. Close-to-calving notifications must be pushed every 5 minutes.ke
+3. In case of system down, it must ta
+
+Usability:
+The application has a strategy of instructing user the usage step by step for the first time of use.
+
+Security: 
+The SFSS require user to login by username and password to perform any actions in the system.
+
+Recoverability: 
+Data of the whole system is backed up by other Cloud Storage System. Every update on one storage system is also updated in other storage systems.

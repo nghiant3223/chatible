@@ -32,10 +32,10 @@
 
 .sticker--one-rabit-shaking-another {
     background-image: url(../../../assets/stickers/23803307_184568325494156_8611297042070765568_n_big.png);
-       background-size: 432px 432px;
-       cursor: pointer;
-       height: 120px;
-       width: 120px;
-       background-position: -12px -12px;
-       image-rendering: -webkit-optimize-contrast;
+    background-size: 432px 432px;
+    cursor: pointer;
+    height: 120px;
+    width: 120px;
+    background-position: -12px -12px;
+    image-rendering: -webkit-optimize-contrast;
 }

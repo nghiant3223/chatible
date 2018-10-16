@@ -10,9 +10,10 @@ module.exports = (server) => {
     io.on('connection', socket => {
         console.log('A new client connected to server', socket.id);
 
-        socket.on('establishConnection', data => { 
-            socket.join(data.roomId);
-            socketMap[data.counterpartUsername].join(data.roomId);
+        socket.on('thisUserCreatesRoom', data => {
+            const { users, roomInfo } = data;
+            users.forEach(user => socketMap[user].join(roomInfo.roomId));
+            socket.broadcast.to(roomInfo.roomId).emit('aUserCreatesRoom', data);
         });
 
         socket.on('thisUserGoesOnline', data => {
@@ -29,7 +30,7 @@ module.exports = (server) => {
                 rooms.forEach(room => socket.join(room));
             });
 
-            console.log(socketMap);
+            // console.log(socketMap);
         });
 
 

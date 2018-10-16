@@ -1,0 +1,24 @@
+.new-contact__box__selected-tag__remove {
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 5px;
+    background-image: url(../../../../assets/images/cancel.png);
+    background-size: 100%;
+    width: 10px;
+    height: 10px;
+}
+
+.new-contact__box__selected-tag {
+    background: #d5e7ff;
+    padding: 2.5px 7.5px;
+    font-size: 0.85em;
+    color: #005ee2;
+    display: flex;
+    align-items: center;
+    border-radius: 3px;
+}
+
+.new-contact__box__selected-tag__name {
+    height: 100%;
+    margin-bottom: 1px;
+}

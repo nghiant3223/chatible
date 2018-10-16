@@ -4,6 +4,7 @@
     overflow-y: scroll;
     position: relative;  
     z-index: 50;
+    width: 300px;
 }
 
 .contact-info>div {

@@ -46,7 +46,7 @@ class ContactInfo extends Component {
     };
 
     render() {
-        if (JSON.stringify(this.props.activeContact) === '{}') return null;
+        if (JSON.stringify(this.props.activeContact) === '{}' || this.props.activeContact === 'new') return null;
 
         return (
             <div className="contact-info" onScroll={this.contactInfoScrolledBottomHandler}>

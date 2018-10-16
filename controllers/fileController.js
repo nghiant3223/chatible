@@ -9,7 +9,7 @@ const saveRoomFile = async (req, res) => {
     const { originalName, hashedName, username, fileExt } = req;
     try {
         const now = new Date();
-        if (['jpg', 'png', 'svg', 'jpeg', 'ico'].indexOf(fileExt) === -1) {
+        if (['jpg', 'png', 'svg', 'jpeg', 'ico', 'gif', 'bmp', 'tif'].indexOf(fileExt) === -1) {
             const file = new File({ originalName, hashedName, uploader: username });
             await Room.updateOne({ _id: roomId }, {
                 $push: {

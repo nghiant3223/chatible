@@ -4,17 +4,19 @@ import AvailableContact from './AvailableContact/AvailableContact';
 
 import './AvailableContactList.css';
 
-const availableContactList = ({ searchValue, allUsers }) => {
+const availableContactList = ({ searchValue, contactList }) => {
+    const searchList = contactList.map(contact => contact.counterpart ? contact.counterpart.fullname : contact.roomId);
+    console.log('searchList', searchList);
     if (searchValue === '') {
         return (
             <div className="contact-list__all">
-                {allUsers.map(user => <AvailableContact key={user.username} {...user} />)}
+                {searchList.map((searchItem, i) => <AvailableContact key={searchItem} searchItem={searchItem} roomId={contactList[i].roomId} />)}
             </div>
         );
-    } else {
+    } else { 
         return (
             <div className="contact-list__all">
-                {allUsers.map(user => user.fullname.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1 ? <AvailableContact key={user.username} {...user} /> : null)}
+                {searchList.map((searchItem, i) => searchItem.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1 ? <AvailableContact key={contactList[i].roomId} searchItem={searchItem} roomId={contactList[i].roomId} /> : null)}
             </div>
         );
     }

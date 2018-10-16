@@ -43,7 +43,6 @@ class MessageContainer extends PureComponent {
     
 
     componentDidUpdate = (prevProps, prevState) => {
-        console.log('update');
         if (prevProps.messages.length !== this.props.messages.length) {
             const { scrollTop, clientHeight, scrollHeight } = this.messageContainer;
             if (scrollTop + clientHeight >= scrollHeight - 150 ) {
@@ -106,7 +105,7 @@ class MessageContainer extends PureComponent {
     messageContainerClickedHandler = () => {
         const length = this.props.messages.length;
 
-        if (length > 0 && this.props.messages[length - 1].from !== this.props.thisUser.username) {
+        if (length > 0 && this.props.messages[length - 1].from !== this.props.thisUser.username && this.props.messages[length - 1].from !== 'system') {
             socketGetter.getInstance().emit('thisUserSeesMessage', {
                 roomId: this.props.roomId,
                 from: this.props.thisUser.username
