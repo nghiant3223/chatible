@@ -292,8 +292,10 @@ export const seperateDualRoomMessage = (messages, RHSName) => {
     return retArr;
 }
 
-export const seperateGroupRoomMessage = (messages, RHSName) => {
-    
+export const seperateGroupRoomMessage = (messages) => {
+    return messages.reduce((acc, cur, i) => {
+        return acc.concat(<div key={i}>{cur.from}: {cur.content}</div>)
+    }, []);
 }
 
 

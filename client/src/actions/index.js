@@ -2,7 +2,7 @@ import axios from 'axios';
 import socketGetter from '../socket';
 
 export const fetchUserAndRecentContact = (history) => {
-    return async dispatch => {
+    return dispatch => {
         Promise.all([
             axios.get('/api/user/me', { headers: { 'x-access-token': localStorage.getItem("x-access-token") } }),
             axios.get('/api/room', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } }),

@@ -87,8 +87,8 @@ class RecentContact extends Component {
         );
         else {
             const { content, type, from, peopleSeen, time } = this.props.lastMessage;
+            const { thisUser, allUsers } = this.props;
             const messageDateTime = new Date(time);
-            const { thisUser } = this.props;
             return (
                 <Fragment>
                     <div className="recent-contact__mid">
@@ -99,15 +99,15 @@ class RecentContact extends Component {
                         <div className="recent-contact__right__time">
                             {this.renderHHMM(messageDateTime)}
                         </div>
-                        {thisUser.username === from && peopleSeen.length > 0 && (
-                            <div className="recent-contact__right__seen">
-                                <img src={this.props.counterpart.avatarUrl} alt="Avatar" />
-                            </div>
-                        )}
+                        {peopleSeen && peopleSeen.length > 0 && thisUser.username === from && allUsers.length > 0 ? (
+                        <div className="recent-contact__right__seen">
+                            <img src={allUsers.find(user => user.username === peopleSeen[0].username).avatarUrl} alt="Avatar" />
+                        </div>
+                        ):null}
                     </div>
                 </Fragment>
             );
-        } 
+        }
     }
 
     renderHHMM = (messageDateTime)  => {
@@ -132,7 +132,7 @@ class RecentContact extends Component {
     }
 }
 
-const mapStateToProps = ({ activeContact, thisUser }) => ({ activeContact, thisUser });
+const mapStateToProps = ({ activeContact, thisUser, allUsers }) => ({ activeContact, thisUser, allUsers });
 
 const mapDispatchToProps = dispatch => ({
     setActiveContact: roomId => dispatch(actions.setActiveContact(roomId)),

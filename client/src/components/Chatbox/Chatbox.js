@@ -11,7 +11,7 @@ import ChatboxContext from '../../contexts/ChatboxContext';
 import socketGetter from '../../socket';
 import { emojiMap } from '../../configs';
 import * as actions from '../../actions/index';
-import { seperateDualRoomMessage } from '../../utils';
+import { seperateDualRoomMessage, seperateGroupRoomMessage } from '../../utils';
 
 import './Chatbox.css';
 
@@ -33,7 +33,7 @@ class Chatbox extends PureComponent {
         if (!roomId) return;
 
         try {
-            const messagesRes = await axios.get('/api/message/' + roomId + '?count=100', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+            const messagesRes = await axios.get('/api/message/' + roomId + '?count=10', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
             const messages = messagesRes.data;
             for (let i = 0; i < messages.length; i++) {
                 messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
@@ -240,7 +240,7 @@ class Chatbox extends PureComponent {
                             isFetchingMore={this.state.isFetchingMore}
                             roomId={this.props.roomId}
                             thisUser={this.props.thisUser}
-                            messagesRenderMethod={seperateDualRoomMessage}/>
+                            messagesRenderMethod={seperateGroupRoomMessage}/>
                     )}
 
                     <div className="chatbox__inputs">

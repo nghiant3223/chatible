@@ -8,8 +8,8 @@ import OptionList from './OptionList/OptionList';
 import SharedFileList from './SharedFileList/SharedFileList';
 import SharedImageList from './SharedImageList/SharedImageList';
 import ColorThemeModal from '../UIs/ColorThemeModal/ColorThemeModal';
+import UserList from './UserList/UserList';
 
-import * as actions from '../../actions/index';
 import socketGetter from '../../socket';
 
 import './ContactInfo.css';
@@ -58,7 +58,8 @@ class ContactInfo extends Component {
 
                 <ContactInfoHeader />
                 <div className="contact-info__main">
-                    <OptionList changeColorThemeClickedHandler={this.changeColorThemeClickedHandler}/>
+                    <OptionList changeColorThemeClickedHandler={this.changeColorThemeClickedHandler} />
+                    {this.props.activeContact.type === 'GROUP' && <UserList users={this.props.activeContact.users}/>}
                     <SharedFileList files={this.props.activeContact.files} />
                     <SharedImageList images={this.props.activeContact.images} isFetchingMoreImages={this.state.isFetchingMoreImages}/>
                 </div>
