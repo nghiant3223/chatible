@@ -49,7 +49,6 @@ class NewContact extends Component {
     state = {
         toAddList: [],
         textInput: '',
-        allUsers: [],
         searchResultVisible: false,
         modalVisible: false,
         modalMessage: ''
@@ -57,8 +56,6 @@ class NewContact extends Component {
 
     componentDidMount = () => {
         window.addEventListener('click', this.handleSearchResultContainerOutsideClick, false);
-
-        axios.get('/api/user/').then(userRes => this.setState({ allUsers: userRes.data.map(({ username, fullname, avatarUrl }) => ({username, fullname, avatarUrl})) }));
     }
     
 
@@ -77,7 +74,7 @@ class NewContact extends Component {
     }
 
     findUserByUsername = (username) => {
-        return this.state.allUsers.find(user => user.username == username);
+        return this.props.allUsers.find(user => user.username == username);
     }
 
     handleSearchResultContainerOutsideClick = (e) => {
@@ -99,7 +96,9 @@ class NewContact extends Component {
             if (this.props.recentContacts.map(contact => contact.counterpart && contact.counterpart.username).indexOf(this.state.toAddList[0].username) !== -1) {
                 return this.setState({ modalVisible: true, modalMessage: 'Contact already exists' });
             }
-        } else this.props.createRoom([...this.state.toAddList.map(user => user.username), this.props.thisUser.username]);
+            return this.props.createRoom([...this.state.toAddList.map(user => user.username), this.props.thisUser.username], this.props.thisUser);
+        }
+        this.props.createRoom([...this.state.toAddList.map(user => user.username), this.props.thisUser.username]);
     }
 
     render() {
@@ -132,7 +131,7 @@ class NewContact extends Component {
     }
 
     renderSearchResult = () => {
-        const searchResult = arrayDiff(this.state.allUsers.map(user => user.username), this.state.toAddList.map(user => user.username))
+        const searchResult = arrayDiff(this.props.allUsers.map(user => user.username), this.state.toAddList.map(user => user.username))
             .filter(username => username.indexOf(this.state.textInput) !== -1);
         if (searchResult.length < 1) return <div className="search-result__no-result">No results</div>;
         return searchResult.map(username => {
@@ -147,10 +146,10 @@ class NewContact extends Component {
     }
 }
 
-const mapStateToProps = ({ recentContacts, thisUser }) => ({ recentContacts, thisUser });
+const mapStateToProps = ({ recentContacts, thisUser, allUsers }) => ({ recentContacts, thisUser, allUsers });
 
 const mapDispatchToProps = dispatch => ({
-    createRoom: users => dispatch(actions.createContactAndSetActive(users))
+    createRoom: (users, counterpart) => dispatch(actions.createContactAndSetActive(users, counterpart))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewContact);

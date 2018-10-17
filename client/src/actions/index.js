@@ -6,12 +6,13 @@ export const fetchUserAndRecentContact = (history) => {
         Promise.all([
             axios.get('/api/user/me', { headers: { 'x-access-token': localStorage.getItem("x-access-token") } }),
             axios.get('/api/room', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } }),
-        ]).then(([meRes, contactRes]) => {
+            axios.get('/api/user/')
+        ]).then(([meRes, contactRes, allUsersRes]) => {
             socketGetter.getInstance().emit('thisUserGoesOnline', { username: meRes.data.username });
             dispatch(fetchRecentContactSuccess(contactRes.data));
             dispatch(fetchUserSuccess(meRes.data));
             dispatch(setInitialActiveContact(contactRes.data.find(contact => contact.roomId === meRes.data.lastActiveContact) || null));
-            console.log('...', contactRes.data);
+            dispatch(setAllUsers(allUsersRes.data.map(({ username, fullname, avatarUrl }) => ({username, fullname, avatarUrl}))))
         }).catch(e => {
             console.log(e);
             dispatch(fetchUserFailure());
@@ -129,7 +130,7 @@ export const newContact = () => ({
     type: 'NEW_CONTACT'
 });
 
-export const createContactAndSetActive = (users) => {
+export const createContactAndSetActive = (users, counterpart) => {
     return async dispatch => {
         const roomIdRes = await axios.post('/api/room', { type: users.length == 2 ? 'DUAL' : 'GROUP', users }, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
         const contactRes = await axios.get('/api/room', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
@@ -137,7 +138,7 @@ export const createContactAndSetActive = (users) => {
 
         const roomInfo = contactRes.data.find(contact => contact.roomId === roomIdRes.data);
         dispatch(setActiveContact(roomInfo.roomId));
-        socketGetter.getInstance().emit('thisUserCreatesRoom', { users, roomInfo: { ...roomInfo, isNew: true } });
+        socketGetter.getInstance().emit('thisUserCreatesRoom', { users, roomInfo: { ...roomInfo, counterpart, isNew: true } });
         // isNew to make recentContactActive bold.
     }
 }
@@ -145,4 +146,9 @@ export const createContactAndSetActive = (users) => {
 export const addContact = (roomInfo) => ({
     type: 'ADD_CONTACT',
     payload: { roomInfo }
+});
+
+export const setAllUsers = (users) => ({
+    type: 'SET_ALL_USER',
+    payload: users
 });

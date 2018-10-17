@@ -11,6 +11,7 @@ import ChatboxContext from '../../contexts/ChatboxContext';
 import socketGetter from '../../socket';
 import { emojiMap } from '../../configs';
 import * as actions from '../../actions/index';
+import { seperateDualRoomMessage } from '../../utils';
 
 import './Chatbox.css';
 
@@ -18,7 +19,7 @@ class Chatbox extends PureComponent {
     state = {
         emojiPanelVisible: false,
         stickerPanelVisible: false,
-        LHSTyping: false,
+        LHSTyping: [],
         textInput: '',
         isLoading: false,
         messages: [],
@@ -48,7 +49,7 @@ class Chatbox extends PureComponent {
             if (data.roomId === roomId) {
                 this.setState(prevState => ({
                     messages: prevState.messages.concat(data),
-                    LHSTyping: false
+                    LHSTyping: prevState.LHSTyping.filter(username => username !== data.from)
                 }));
                 if (data.type === 'file') {
                     this.props.updateSharedFiles(roomId);
@@ -61,21 +62,26 @@ class Chatbox extends PureComponent {
 
         socket.on('aUserIsTyping', data => {
             if (data.roomId === roomId) {
-                this.setState({ LHSTyping: true });
+                if (this.state.LHSTyping.indexOf(data.from) === -1) {
+                    this.setState(prevState => ({ LHSTyping: prevState.LHSTyping.concat(data.from) }));
+                }
             }
         });
 
         socket.on('aUserStopsTyping', data => {
             if (data.roomId === roomId) {
-                this.setState({ LHSTyping: false });
+                if (data.roomId === roomId) {
+                    if (this.state.LHSTyping.indexOf(data.from) !== -1) {
+                        this.setState(prevState => ({ LHSTyping: prevState.LHSTyping.filter(username => username !== data.from) }));
+                    }
+                }
             }
         });
 
         socket.on('aUserChangesColorTheme', data => {
             if (data.roomId === roomId) {
                 this.setState(prevState => ({
-                    messages: prevState.messages.concat({ ...data, type: 'changeColorTheme', from: 'system' }),
-                    LHSTyping: false
+                    messages: prevState.messages.concat({ ...data, type: 'changeColorTheme', from: 'system' })
                 }));
                 const { colorTheme } = JSON.parse(data.content);
                 this.props.changeContactColor(data.roomId, colorTheme);
@@ -125,9 +131,9 @@ class Chatbox extends PureComponent {
         this.setState({ textInput });
 
         if (e.target.value === '') {
-            socketGetter.getInstance().emit('thisUserStopsTyping', {roomId: this.props.roomId});
+            socketGetter.getInstance().emit('thisUserStopsTyping', {roomId: this.props.roomId, from: this.props.thisUser.username});
         } else {
-            socketGetter.getInstance().emit('thisUserIsTyping', {roomId: this.props.roomId});
+            socketGetter.getInstance().emit('thisUserIsTyping', {roomId: this.props.roomId, from: this.props.thisUser.username});
         }
 
     }
@@ -212,14 +218,6 @@ class Chatbox extends PureComponent {
 
     render() {  
         if (!this.props.roomId) return <NewContact />
-
-        if (this.props.type === 'GROUP') return (
-            <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme }}>
-                <div className="chatbox">
-                </div>
-            </ChatboxContext.Provider>
-        );
-
         return (
             <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme || 'cyan', counterpartAvatarUrl: this.props.counterpartAvatarUrl }}>
                 <div className="chatbox">
@@ -233,8 +231,17 @@ class Chatbox extends PureComponent {
                             isFetchingMore={this.state.isFetchingMore}
                             roomId={this.props.roomId}
                             thisUser={this.props.thisUser}
-                            counterpartAvatarUrl={this.props.counterpartAvatarUrl} />
-                    ) : null}
+                            messagesRenderMethod={seperateDualRoomMessage}/>
+                    ) : (
+                            <MessageContainer
+                            LHSTyping={this.state.LHSTyping}
+                            messages={this.state.messages}
+                            moreMessagesFetchedHandler={this.moreMessagesFetchedHandler}
+                            isFetchingMore={this.state.isFetchingMore}
+                            roomId={this.props.roomId}
+                            thisUser={this.props.thisUser}
+                            messagesRenderMethod={seperateDualRoomMessage}/>
+                    )}
 
                     <div className="chatbox__inputs">
                         <form className="chatbox__inputs__text" onSubmit={this.textInputSubmittedHandler} >

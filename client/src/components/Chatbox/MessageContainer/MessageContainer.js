@@ -5,7 +5,6 @@ import Typing from '../../UIs/Typing/Typing';
 import Spinner from '../../UIs/Spinner/Spinner';
 import Seen from '../../UIs/Seen/Seen';
 
-import { seperateMessages } from '../../../utils';
 import socketGetter from '../../../socket';
 
 import './MessageContainer.css';
@@ -135,14 +134,15 @@ class MessageContainer extends PureComponent {
         }
 
         return (
+            
             <Fragment>
                 {this.props.isFetchingMore && <div className="fetching-more"><Spinner /></div>}
                 
-                {seperateMessages(this.props.messages, this.props.thisUser.username)}
+                {this.props.messagesRenderMethod(this.props.messages, this.props.thisUser.username)}
                 
-                {this.props.LHSTyping && <Typing />}
+                {this.props.LHSTyping.map(username => <Typing username={username} key={username}/>)}
 
-                <Seen peopleSeen={this.state.peopleSeen} thisUser={this.props.thisUser} counterpartAvatarUrl={this.props.counterpartAvatarUrl}/>
+                <Seen peopleSeen={this.state.peopleSeen} thisUser={this.props.thisUser}/>
             </Fragment>
         );
     }

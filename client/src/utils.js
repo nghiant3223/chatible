@@ -44,7 +44,7 @@ export const renderSystemMessageContent = (type, content, thisUser) => {
 }
 
 
-export const seperateMessages = (messages, RHSName, avatarUrl) => {
+export const seperateDualRoomMessage = (messages, RHSName) => {
     if (messages.length < 1) return [];
 
     for (let i = 0; i < messages.length; i++) {
@@ -80,7 +80,7 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
                 let subKey = 0;
                 for (let j = 1; j < tempLeft.length; j++) {
                     if (tempLeft[j].time - tempLeft[j - 1].time > TIMEGAP) {
-                        retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} avatarUrl={avatarUrl}/>);
+                        retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
                         retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
                         tempArr = [];
                         subKey = j;
@@ -89,7 +89,7 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
                 }
 
                 if (tempArr.length !== 0) {
-                    retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} avatarUrl={avatarUrl}/>);
+                    retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
                 }
         
                 tempLeft = [];
@@ -103,7 +103,7 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
                 let subKey = 0;
                 for (let j = 1; j < tempRight.length; j++) {
                     if (tempRight[j].time - tempRight[j - 1].time > TIMEGAP) {
-                        retArr.push(<RHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} avatarUrl={avatarUrl}/>);
+                        retArr.push(<RHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
                         retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
                         tempArr = [];
                         subKey = j;
@@ -112,7 +112,7 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
                 }
 
                 if (tempArr.length !== 0) {
-                    retArr.push(<RHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} avatarUrl={avatarUrl}/>);
+                    retArr.push(<RHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
                 }
         
                 tempRight = [];
@@ -129,7 +129,7 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
                 let subKey = 0;
                 for (let j = 1; j < tempLeft.length; j++) {
                     if (tempLeft[j].time - tempLeft[j - 1].time > TIMEGAP) {
-                        retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} avatarUrl={avatarUrl}/>);
+                        retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
                         retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
                         tempArr = [];
                         subKey = j;
@@ -138,7 +138,7 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
                 }
         
                 if (tempArr.length !== 0) {
-                    retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} avatarUrl={avatarUrl}/>);
+                    retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
                 }
         
                 tempLeft = [];
@@ -231,7 +231,7 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
         let subKey = 0;
         for (let j = 1; j < tempLeft.length; j++) {
             if (tempLeft[j].time - tempLeft[j - 1].time > TIMEGAP) {
-                retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} avatarUrl={avatarUrl} />);
+                retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey}  />);
                 retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
                 tempArr = [];
                 subKey = j;
@@ -240,7 +240,7 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
         }
 
         if (tempArr.length !== 0) {
-            retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} avatarUrl={avatarUrl} />);
+            retArr.push(<LHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey}  />);
             key++;
         }
     }
@@ -291,6 +291,11 @@ export const seperateMessages = (messages, RHSName, avatarUrl) => {
 
     return retArr;
 }
+
+export const seperateGroupRoomMessage = (messages, RHSName) => {
+    
+}
+
 
 export const renderUserMessageContent = ({ content, type, from, colorTheme, right }) => {
     const side = right ? 'r' : 'l';

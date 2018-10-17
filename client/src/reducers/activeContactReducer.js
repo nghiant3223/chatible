@@ -6,6 +6,8 @@ const activeContactReducer = (state = initialState, action) => {
             return action.payload;
         
         case 'UPDATE_CONTACT_STATUS__ONLINE': {
+            if (state === 'new') return state;
+
             const { lastLogin, username } = action.payload;
             const activeContact = { ...state };
 
@@ -15,6 +17,8 @@ const activeContactReducer = (state = initialState, action) => {
         }
             
         case 'UPDATE_CONTACT_STATUS__OFFLINE': {
+            if (state === 'new') return state;
+            
             const { lastLogout, username } = action.payload;
             const activeContact = { ...state };
 

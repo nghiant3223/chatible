@@ -12,6 +12,7 @@ module.exports = (server) => {
 
         socket.on('thisUserCreatesRoom', data => {
             const { users, roomInfo } = data;
+            console.log('--------->', roomInfo);
             users.forEach(user => socketMap[user].join(roomInfo.roomId));
             socket.broadcast.to(roomInfo.roomId).emit('aUserCreatesRoom', data);
         });

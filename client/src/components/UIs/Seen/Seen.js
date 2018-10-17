@@ -1,13 +1,17 @@
 import React from 'react';
 
+import { connect } from 'react-redux';
+
 import './Seen.css';
 
-const Seen = ({ peopleSeen, thisUser, counterpartAvatarUrl }) => {
+const seen = ({ peopleSeen, thisUser, counterpartAvatarUrl, allUsers }) => {
     return (
         <div className="chatbox__message-container__people-seen">
-            {peopleSeen.map(one => one.username !== thisUser.username ? <img key={one.username} src={counterpartAvatarUrl} title={`${one.username} saw at ${one.time}`} /> : null)}
+            {peopleSeen.map(one => one.username !== thisUser.username ? <img key={one.username} src={allUsers.find(user => user.username === one.username).avatarUrl} title={`${one.username} saw at ${one.time}`} /> : null)}
         </div>
     );
 }
 
-export default Seen;
+const mapStateToProps = ({ allUsers }) => ({ allUsers });
+
+export default connect(mapStateToProps)(seen);
