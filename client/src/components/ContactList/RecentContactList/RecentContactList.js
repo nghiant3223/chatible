@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import RecentContact from './RecentContact/RecentContact';
 
+import './RecentContactList.css';
+
 class RecentContacts extends Component {
     render() {
         return (

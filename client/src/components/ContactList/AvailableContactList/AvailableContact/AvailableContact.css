@@ -24,6 +24,7 @@
 .contact-list__all__contact__avatar>img {
     height: 35px;
     width: 35px;
+    object-fit: cover;
     border-radius:50%;
 }
 

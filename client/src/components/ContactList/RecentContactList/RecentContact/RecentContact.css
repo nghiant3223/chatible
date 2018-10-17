@@ -60,6 +60,7 @@
     width: 15px;
     height: 15px;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .recent-contact--new .recent-contact__mid__title {

@@ -20,7 +20,6 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         const { username } = req.body;
-        console.log('-------->', username);
         const extReg = /(.*)[.](.*)$/;
         const ext = extReg.exec(file.originalname)[2];
 

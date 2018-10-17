@@ -8,6 +8,14 @@ const allUsersReducer = (state = initialState, action) => {
         case 'CLEAR':
             return initialState;
         
+        case 'ADD_CONTACT': {
+            const { roomInfo: { counterpart } } = action.payload;
+            if (state.map(user => user.username).indexOf(counterpart.username) === -1)
+                return [counterpart, ...state];
+            return state;
+        }
+
+        
         default:
             return state;
     }

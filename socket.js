@@ -12,7 +12,7 @@ module.exports = (server) => {
 
         socket.on('thisUserCreatesRoom', data => {
             const { users, roomInfo } = data;
-            users.forEach(user => socketMap[user].join(roomInfo.roomId));
+            users.forEach(user => socketMap[user] && socketMap[user].join(roomInfo.roomId));
             socket.broadcast.to(roomInfo.roomId).emit('aUserCreatesRoom', data);
         });
 
@@ -80,6 +80,7 @@ module.exports = (server) => {
 
         
         socket.on('thisUserSeesMessage', async data => {
+            console.log(data.from, 'see message');
             const now = new Date();
             socket.broadcast.to(data.roomId).emit('aUserSeesMessage', { ...data, time: now.toISOString() });
             const { roomId, from } = data;

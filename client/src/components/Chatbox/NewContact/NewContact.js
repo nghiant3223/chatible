@@ -6,7 +6,6 @@ import StandardModal from '../../UIs/StandardModal/StandardModal';
 
 import SelectedTag from './SelectedTag/SelectedTag';
 
-import { arrayDiff } from '../../../utils';
 import * as actions from '../../../actions/index';
 
 import './NewContact.css';
@@ -131,13 +130,12 @@ class NewContact extends Component {
     }
 
     renderSearchResult = () => {
-        const searchResult = arrayDiff(this.props.allUsers.map(user => user.username), this.state.toAddList.map(user => user.username))
-            .filter(username => username.indexOf(this.state.textInput) !== -1);
+        const searchResult = this.props.allUsers.filter(user => this.state.toAddList.map(user => user.username).indexOf(user.username) === -1)
+            .filter(user => user.fullname.indexOf(this.state.textInput) !== -1);
         if (searchResult.length < 1) return <div className="search-result__no-result">No results</div>;
-        return searchResult.map(username => {
-            const user = this.findUserByUsername(username);
+        return searchResult.map(user => {
             return (
-                <div key={username} className="contact-list__all__contact" onClick={() => this.searchItemClickedHandler(username, user.fullname)}>
+                <div key={user.username} className="contact-list__all__contact" onClick={() => this.searchItemClickedHandler(user.username, user.fullname)}>
                     <div className="contact-list__all__contact__avatar"><img src={user.avatarUrl} alt="Avatar" /></div>
                     <div className="contact-list__all__contact__fullname">{user.fullname}</div>
                 </div>

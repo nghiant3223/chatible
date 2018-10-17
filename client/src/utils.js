@@ -292,14 +292,257 @@ export const seperateDualRoomMessage = (messages, RHSName) => {
     return retArr;
 }
 
-export const seperateGroupRoomMessage = (messages) => {
-    return messages.reduce((acc, cur, i) => {
-        return acc.concat(<div key={i}>{cur.from}: {cur.content}</div>)
-    }, []);
+export const seperateGroupRoomMessage = (messages, RHSName) => {
+    if (messages.length < 1) return [];
+
+    for (let i = 0; i < messages.length; i++) {
+        messages[i].time = new Date(messages[i].time).getTime();
+    }
+
+    let retArr = [];
+    let tempLeft = [];
+    let tempRight = [];
+    let tempMid = [];
+
+    let key = 0;
+
+    if (messages[0].from === RHSName) {
+        retArr.push(<SeperatingTime key={'st.' + key + '.-1'} time={messages[0].time} />);
+        tempRight.push(messages[0]);
+    } else if (messages[0].from === 'system') {
+        retArr.push(<SeperatingTime key={'st.' + key + '.-1'} time={messages[0].time} />);
+        tempMid.push(messages[0]);
+    } else {
+        retArr.push(<SeperatingTime key={'st.' + key + '.-1'} time={messages[0].time} />);
+        tempLeft.push(messages[0]);
+    }
+    
+    for (var i = 1; i < messages.length; i++) {
+        if (messages[i].from === 'system') {
+            if (tempLeft.length > 0) {
+                if (key > 0 && messages[key].time - messages[key - 1].time > TIMEGAP) {
+                    retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
+                }
+
+                let tempArr = [tempLeft[0]];
+                let subKey = 0;
+                for (let j = 1; j < tempLeft.length; j++) {
+                    if (tempLeft[j].time - tempLeft[j - 1].time > TIMEGAP) {
+                        retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+                        retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
+                        tempArr = [];
+                        subKey = j;
+                    }
+                    tempArr.push(tempLeft[j]);
+                }
+
+                if (tempArr.length !== 0) {
+                    retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+                }
+        
+                tempLeft = [];
+                key = i;
+            } else if (tempRight.length > 0) {
+                if (key > 0 && messages[key].time - messages[key - 1].time > TIMEGAP) {
+                    retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
+                }
+
+                let tempArr = [tempRight[0]];
+                let subKey = 0;
+                for (let j = 1; j < tempRight.length; j++) {
+                    if (tempRight[j].time - tempRight[j - 1].time > TIMEGAP) {
+                        retArr.push(<RHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
+                        retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
+                        tempArr = [];
+                        subKey = j;
+                    }
+                    tempArr.push(tempRight[j]);
+                }
+
+                if (tempArr.length !== 0) {
+                    retArr.push(<RHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
+                }
+        
+                tempRight = [];
+                key = i;
+            } 
+
+            tempMid.push(messages[i]);
+        } else if (messages[i].from === RHSName) {
+            if (tempLeft.length > 0)  {
+                if (key > 0 && messages[key].time - messages[key - 1].time > TIMEGAP) {
+                    retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
+                }
+                let tempArr = [tempLeft[0]];
+                let subKey = 0;
+                for (let j = 1; j < tempLeft.length; j++) {
+                    if (tempLeft[j].time - tempLeft[j - 1].time > TIMEGAP) {
+                        retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+                        retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
+                        tempArr = [];
+                        subKey = j;
+                    }
+                    tempArr.push(tempLeft[j]);
+                }
+        
+                if (tempArr.length !== 0) {
+                    retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+                }
+        
+                tempLeft = [];
+                key = i;
+            } else if (tempMid.length > 0) {
+                    if (key > 0 && messages[key].time - messages[key - 1].time > TIMEGAP) {
+                    retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
+                }
+                let tempArr = [tempMid[0]];
+                let subKey = 0;
+                for (let j = 1; j < tempMid.length; j++) {
+                    if (tempMid[j].time - tempMid[j - 1].time > TIMEGAP) {
+                        retArr.push(<SystemMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
+                        retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
+                        tempArr = [];
+                        subKey = j;
+                    }
+                    tempArr.push(tempMid[j]);
+                }
+        
+                if (tempArr.length !== 0) {
+                    retArr.push(<SystemMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
+                }
+        
+                tempMid = [];
+                key = i;
+            }
+
+            tempRight.push({ ...messages[i] });
+        } else {
+            if (tempRight.length > 0) {
+                if (key > 0 && messages[key].time - messages[key - 1].time > TIMEGAP) {
+                    retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
+                }
+                let tempArr = [tempRight[0]];
+                let subKey = 0;
+                for (let j = 1; j < tempRight.length; j++) {
+                    if (tempRight[j].time - tempRight[j - 1].time > TIMEGAP) {
+                        retArr.push(<RHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
+                        retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey} id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
+                        tempArr = [];
+                        subKey = j;
+                    }
+                    tempArr.push(tempRight[j]);
+                }
+        
+                if (tempArr.length !== 0) {
+                    retArr.push(<RHSMessageContainer messages={tempArr} key={key + '.' +subKey} id={key + '.' +subKey}  />);
+                }
+        
+                tempRight = [];
+                key = i;
+            } else if (tempMid.length > 0) {
+                if (key > 0 && messages[key].time - messages[key - 1].time > TIMEGAP) {
+                    retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
+                }
+                let tempArr = [tempMid[0]];
+                let subKey = 0;
+                for (let j = 1; j < tempMid.length; j++) {
+                    if (tempMid[j].time - tempMid[j - 1].time > TIMEGAP) {
+                        retArr.push(<SystemMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
+                        retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
+                        tempArr = [];
+                        subKey = j;
+                    }
+                    tempArr.push(tempMid[j]);
+                }
+        
+                if (tempArr.length !== 0) {
+                    retArr.push(<SystemMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
+                }
+        
+                tempMid = [];
+                key = i;
+            }
+
+            tempLeft.push({ ...messages[i] });
+        }
+    }
+    
+
+    i--;
+
+    if (tempLeft.length >0) {
+        if (key > 1 && messages[key].time - messages[key - 1].time > TIMEGAP) {
+            retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
+        }
+        let tempArr = [tempLeft[0]];
+
+        let subKey = 0;
+        for (let j = 1; j < tempLeft.length; j++) {
+            if (tempLeft[j].time - tempLeft[j - 1].time > TIMEGAP) {
+                retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+                retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
+                tempArr = [];
+                subKey = j;
+            }
+            tempArr.push(tempLeft[j]);
+        }
+
+        if (tempArr.length !== 0) {
+            retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+            key++;
+        }
+    }
+
+    if (tempRight.length > 0) {
+        if (key > 1 && messages[key].time - messages[key - 1].time > TIMEGAP) {
+            retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
+        }
+        let tempArr = [tempRight[0]];
+        let subKey = 0;
+        for (let j = 1; j < tempRight.length; j++) {
+            if (tempRight[j].time - tempRight[j- 1].time > TIMEGAP) {
+                retArr.push(<RHSMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
+                retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey} id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
+                tempArr = [];
+                subKey = j;
+            }
+            tempArr.push(tempRight[j]);
+        }
+
+        if (tempArr.length !== 0) {
+            retArr.push(<RHSMessageContainer messages={tempArr} key={key + '.' +subKey} id={key + '.' +subKey}  />);
+            key++;
+        }
+    }
+
+    if (tempMid.length > 0) {
+        if (key > 1 && messages[i].time - messages[key - 1].time > TIMEGAP) {
+            retArr.push(<SeperatingTime key={'st.' + key + '.'} time={messages[key].time} />);
+        }
+        let tempArr = [tempMid[0]];
+        let subKey = 0;
+        for (let j = 1; j < tempMid.length; j++) {
+            if (tempMid[j].time - tempMid[j- 1].time > TIMEGAP) {
+                retArr.push(<SystemMessageContainer messages={tempArr} key={key + '.' + subKey} id={key + '.' + subKey} />);
+                retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey} id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
+                tempArr = [];
+                subKey = j;
+            }
+            tempArr.push(tempMid[j]);
+        }
+
+        if (tempArr.length !== 0) {
+            retArr.push(<SystemMessageContainer messages={tempArr} key={key + '.' +subKey} id={key + '.' +subKey}  />);
+            key++;
+        }
+    }
+
+    return retArr;
 }
 
 
 export const renderUserMessageContent = ({ content, type, from, colorTheme, right }) => {
+    console.log('~>', content, type)
     const side = right ? 'r' : 'l';
     switch (type) {
         case 'waving':
@@ -430,7 +673,3 @@ export const renderRecentContactMessageContent = ({ content, type, from, thisUse
             );
     }
  }
-
-export const arrayDiff = (left, right) => {
-    return left.filter(x => right.indexOf(x) < 0);
-}

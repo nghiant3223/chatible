@@ -56,6 +56,7 @@ class RHSMessage extends Component {
                 
                 // do the same thing with type 'text', 'thumbup', 'sticker'
                 default:
+                    console.log('inside component did mount');
                     try {
                         axios.post('/api/message/' + roomId, { content, type }, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
                         socket.emit('thisUserSendsMessage', { from, roomId, content, type });
