@@ -13,7 +13,6 @@ import * as actions from '../../actions/index';
 import './HomePage.css';
 
 class HomePage extends Component {
-
     componentDidMount = () => {
         const socket = socketGetter.getInstance();
         

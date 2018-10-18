@@ -11,6 +11,8 @@ const { mongoDbURL } = require('./configs/keys');
 const app = express();
 const server = http.createServer(app);
 
+const port = process.env.PORT || 5000;
+
 global.rootDirName = path.resolve(__dirname);
 
 mongoose.connect(mongoDbURL , { useNewUrlParser: true }, (err) => {
@@ -25,12 +27,16 @@ app.use(logger('dev'));
 
 app.use('/api', apiRouter);
 
-app.get('/', (req, res) => {
-    res.send('Hello world!');
-});
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
+
+    app.use('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}
 
 socketIO(server);
 
-server.listen(5000, () => {
-    console.log('Listening on port 5000');
+server.listen(port, () => {
+    console.log('Listening on port', port);
 });
