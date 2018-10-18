@@ -11,6 +11,7 @@ export const colorThemes = [
     '#4A148C'];
 
 export const socketPath = 'https://frozen-ocean-90679.herokuapp.com/';
+// export const socketPath = 'https://localhost:5000/';
 
 export const emojiMap =  {
     "🙂": {

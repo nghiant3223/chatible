@@ -26,7 +26,7 @@ class App extends Component {
 			<BrowserRouter>
 				<div>
 					<Switch>
-						<Route path='/videocall/:num' exact component={VideoCallPage} />
+						<Route path='/videocall' exact component={VideoCallPage} />
 						<Route path='/' exact component={HomePage} />
 						<Route path='/(login|signup)' exact component={LandingPage} />
 					</Switch>

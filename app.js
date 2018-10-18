@@ -15,7 +15,7 @@ const port = process.env.PORT || 5000;
 
 global.rootDirName = path.resolve(__dirname);
 
-mongoose.connect('mongodb://root:ntn223@ds115963.mlab.com:15963/compnet1', {
+mongoose.connect(mongoDbURL, {
             useNewUrlParser: true
         }, (err) => {
     if (err) throw err;
