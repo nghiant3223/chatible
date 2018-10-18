@@ -9,7 +9,7 @@ const { saveRoomFile, getRoomFiles, getRoomImages, deleteRoomFiles} = require('.
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.resolve(global.rootDirName + '/public/uploads/'))
+        cb(null, 'public/uploads/')
     },
     filename: function (req, file, cb) {
         const extReg = /(.*)[.](.*)$/;

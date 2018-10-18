@@ -1,24 +1,24 @@
 import React, { Component } from 'react';
-import SimpleWebRTC from 'simplewebrtc';
+// import SimpleWebRTC from 'simplewebrtc';
 
 import './VideoCallPage.css';
 
 class VideoCallPage extends Component {
-    state = {
-        myinfo: null,
-        friendinfo: null
-    }
+    // state = {
+    //     myinfo: null,
+    //     friendinfo: null
+    // }
 
-    componentDidMount = () => {
-        var webrtc = new SimpleWebRTC({
-            localVideoEl: 'localVideo',
-            remoteVideosEl: 'remoteVideos',
-            autoRequestMedia: true
-        });
-        webrtc.on('readyToCall', function () {
-            webrtc.joinRoom('aRoom');
-        });
-    }
+    // componentDidMount = () => {
+    //     var webrtc = new SimpleWebRTC({
+    //         localVideoEl: 'localVideo',
+    //         remoteVideosEl: 'remoteVideos',
+    //         autoRequestMedia: true
+    //     });
+    //     webrtc.on('readyToCall', function () {
+    //         webrtc.joinRoom('aRoom');
+    //     });
+    // }
 
 
     render() {
