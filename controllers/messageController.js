@@ -18,24 +18,6 @@ const saveMessage = async (req, res) => {
             }
         });
 
-        // Delete room and append it at then end of rooms array
-        // User.updateOne({ username }, { $pull: { rooms: room._id } }, function () {
-        //     User.updateOne({ username }, { $addToSet: { rooms: room._id } }, function () {
-        //         let roomMembers = room.users;
-        //         roomMembers.forEach(member => {
-        //             if (member !== username) {
-        //                 // Delete room and append it at then end of rooms array
-        //                 User.updateOne({ username: member }, { $pull: { rooms: room._id } }, function () {
-        //                     User.updateOne({ username: member }, { $addToSet: { rooms: room._id } }, function () {
-        //                         res.status(200).send('Save message successfully.');
-        //                     });
-        //                 });
-        //             }
-        //         });
-
-        //     });
-        // });
-
         Promise.all(room.users.reduce((promiseArray, username) =>
             promiseArray.concat(User.updateOne({ username }, { $pull: { rooms: room._id } })
                 .then(_ => User.updateOne({ username }, { $addToSet: { rooms: room._id } }))

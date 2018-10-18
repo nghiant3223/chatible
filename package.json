@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+   "engines": {
+    "node": "8.9.3",
+    "npm": "5.5.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
@@ -10,7 +14,8 @@
     "client": "npm run start --prefix client",
     "debug": "nodemon --inspect app.js",
     "server": "node app.js",
-    "concurrent": "concurrently \"npm run server\" \"npm run client\""
+    "concurrent": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "",
   "license": "ISC",

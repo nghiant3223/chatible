@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import HomePage from './containers/HomePage/HomePage';
 import LandingPage from './containers/LandingPage/LandingPage';
+import VideoCallPage from './containers/VideoCallPage/VideoCallPage';
 
 import socketGetter from './socket';
 
@@ -25,6 +26,7 @@ class App extends Component {
 			<BrowserRouter>
 				<div>
 					<Switch>
+						<Route path='/videocall/:num' exact component={VideoCallPage} />
 						<Route path='/' exact component={HomePage} />
 						<Route path='/(login|signup)' exact component={LandingPage} />
 					</Switch>
