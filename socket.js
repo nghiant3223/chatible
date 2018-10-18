@@ -51,6 +51,10 @@ module.exports = (server) => {
             console.log(socketMap);
         });
 
+        socket.on('thisUserMakesVideoCall', data => {
+            console.log('make video call', data.roomId);
+            socket.broadcast.to(data.roomId).emit('aUserMakesVideoCall', data);
+        });
 
         socket.on('thisUserSendsMessage', data => {
             const now = new Date();

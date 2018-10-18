@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from 'react-modal';
 
 import { colorThemes } from '../../../configs';
+import StandarModal from '../../UIs/StandardModal/StandardModal';
 
 import './ColorThemeModal.css';
 
@@ -23,8 +24,7 @@ const ColorThemeModal = (props) => {
     };
 
     return (
-        <Modal
-            isOpen={props.modalOpen}
+        <StandarModal isOpen={props.isOpen}
             onRequestClose={props.onCancel}
             style={customStyles} >
             <div className="color-theme-modal">
@@ -44,7 +44,7 @@ const ColorThemeModal = (props) => {
                     <button onClick={props.onSubmit}>Change</button>
                 </div>
             </div>
-        </Modal>
+        </StandarModal>
     );
 }
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -7,14 +7,14 @@ import ContactInfoHeader from './ContactInfoHeader/ContactInfoHeader';
 import OptionList from './OptionList/OptionList';
 import SharedFileList from './SharedFileList/SharedFileList';
 import SharedImageList from './SharedImageList/SharedImageList';
-import ColorThemeModal from '../UIs/ColorThemeModal/ColorThemeModal';
+import ColorThemeModal from './ColorThemeModal/ColorThemeModal';
 import UserList from './UserList/UserList';
 
 import socketGetter from '../../socket';
 
 import './ContactInfo.css';
 
-class ContactInfo extends Component {
+class ContactInfo extends PureComponent {
     state = {
         colorThemeOption: this.props.activeContact.colorTheme,
         colorThemeModalOpen: false,
@@ -24,6 +24,11 @@ class ContactInfo extends Component {
     colorThemeClickedHandler = (i) => {
         this.setState({ colorThemeOption: colorThemes[i] });
     }
+
+    componentDidUpdate = (prevProps, prevState) => {
+        console.log('contact info uupdate');    
+    }
+    
 
     colorThemeChangedHandler = () => {
         const { roomId } = this.props.activeContact;
@@ -50,13 +55,13 @@ class ContactInfo extends Component {
 
         return (
             <div className="contact-info" onScroll={this.contactInfoScrolledBottomHandler}>
-                <ColorThemeModal modalOpen={this.state.colorThemeModalOpen}
+                <ColorThemeModal isOpen={this.state.colorThemeModalOpen}
                     onCancel={() => this.setState({ colorThemeModalOpen: false })}
                     colorThemeOption={this.state.colorThemeOption}
                     colorThemeClickedHandler={this.colorThemeClickedHandler}
-                    onSubmit={this.colorThemeChangedHandler}/>
+                    onSubmit={this.colorThemeChangedHandler} />
 
-                <ContactInfoHeader />
+                <ContactInfoHeader videoCallButtonOnClicked={this.videoCallButtonOnClicked}/>
                 <div className="contact-info__main">
                     <OptionList changeColorThemeClickedHandler={this.changeColorThemeClickedHandler} />
                     {this.props.activeContact.type === 'GROUP' && <UserList users={this.props.activeContact.users}/>}

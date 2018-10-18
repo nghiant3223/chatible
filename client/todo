@@ -1,1 +1,8 @@
-update new message content, time, peopleSeen on recentContact item.
+I. người tạo video call
+    1. emit('thisUserMakesVideoCall')
+    2. redirect sang trang /videocall, truyền chó nó roomId vào url
+    3. cho nó join vào roomId đó
+II. người nhận đc video call
+    1. catch event 'aUserMakesVideoCall'
+    2. accept => redirect sang trang /videocall với roomId truyền vào url
+    3. cho nó join và room
