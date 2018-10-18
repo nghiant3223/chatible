@@ -20,6 +20,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "express-formidable": "^1.0.0",
     "formidable": "^1.2.1",
