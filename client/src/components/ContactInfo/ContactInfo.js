@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -14,7 +14,7 @@ import socketGetter from '../../socket';
 
 import './ContactInfo.css';
 
-class ContactInfo extends PureComponent {
+class ContactInfo extends Component {
     state = {
         colorThemeOption: this.props.activeContact.colorTheme,
         colorThemeModalOpen: false,
@@ -24,12 +24,7 @@ class ContactInfo extends PureComponent {
     colorThemeClickedHandler = (i) => {
         this.setState({ colorThemeOption: colorThemes[i] });
     }
-
-    componentDidUpdate = (prevProps, prevState) => {
-        console.log('contact info uupdate');    
-    }
     
-
     colorThemeChangedHandler = () => {
         const { roomId } = this.props.activeContact;
         axios.post('/api/room/color/' + roomId, {

@@ -14,8 +14,4 @@ router.post('/color/:roomId', verifyToken, checkUserInRoom, roomController.chang
 
 router.delete('/:roomId', verifyToken, checkUserInRoom, roomController.deleteRoom);
 
-router.get('/check/:roomId', verifyToken, checkUserInRoom, (req, res) => {
-    res.status(200).send('User in this room.');
-});
-
 module.exports = router;

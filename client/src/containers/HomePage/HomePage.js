@@ -7,6 +7,7 @@ import Chatbox from '../../components/Chatbox/Chatbox';
 import ContactInfo from '../../components/ContactInfo/ContactInfo';
 import Spinner from '../../components/UIs/Spinner/Spinner';
 import StandardModal from '../../components/UIs/StandardModal/StandardModal';
+import Notification from '../../components/Notification/Notification';
 
 import socketGetter from '../../socket';
 import * as actions from '../../actions/index';
@@ -37,10 +38,6 @@ class HomePage extends Component {
         socket.on('aUserCreatesRoom', ({ roomInfo }) => {
             this.props.addContact(roomInfo);
         });
-
-        socket.on('aUserMakesVideoCall', data => {
-            this.setState({ videoCallRoomId: data.roomId, isVideoCallNotificationVisible: true });
-        });
     }
         
     render() {
@@ -54,13 +51,7 @@ class HomePage extends Component {
 
         return (
             <div>
-                <StandardModal isOpen={this.state.isVideoCallNotificationVisible}
-                    onRequestClose={() => this.setState({ isVideoCallNotificationVisible: false })}>
-                    <div>
-                        <div onClick={() => this.setState({ isVideoCallNotificationVisible: false })}>Decline</div>
-                        <a href={"/videocall?roomId="+this.state.videoCallRoomId} target="_blank">Accept</a>
-                    </div>
-                </StandardModal>
+                <Notification />
 
                 <Header />
                 <main>

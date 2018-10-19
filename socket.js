@@ -3,6 +3,7 @@ const { User } = require('./models/User');
 const { Room } = require('./models/Room');
 
 const socketMap = {};
+let inVideoCallUser = [];
 
 module.exports = (server) => {
     const io = socket(server);
@@ -10,11 +11,13 @@ module.exports = (server) => {
     io.on('connection', socket => {
         console.log('A new client connected to server', socket.id);
 
+
         socket.on('thisUserCreatesRoom', data => {
             const { users, roomInfo } = data;
             users.forEach(user => socketMap[user] && socketMap[user].join(roomInfo.roomId));
             socket.broadcast.to(roomInfo.roomId).emit('aUserCreatesRoom', data);
         });
+
 
         socket.on('thisUserGoesOnline', data => {
             const { username } = data;
@@ -24,6 +27,8 @@ module.exports = (server) => {
             socket.broadcast.emit('aUserGoesOnline', { ...data, lastLogin: now.toISOString() });
 
             socketMap[username] = socket;
+
+            User.findOneAndUpdate({ username }, { $set: { lastLogin: now.toISOString() } }, function () { });
 
             User.findOne({ username }).then(user => {
                 const { rooms } = user;
@@ -43,18 +48,41 @@ module.exports = (server) => {
 
             delete socketMap[username];
 
+            User.findOneAndUpdate({ username }, { $set: { lastLogout: now.toISOString() } }, function () { });
+
             User.findOne({ username }).then(user => {
                 const { rooms } = user;
                 rooms.forEach(room => socket.leave(room._id));
             });
 
-            console.log(socketMap);
+            inVideoCallUser = inVideoCallUser.filter(user => user !== username);
         });
 
-        socket.on('thisUserMakesVideoCall', data => {
-            console.log('make video call', data.roomId);
-            socket.broadcast.to(data.roomId).emit('aUserMakesVideoCall', data);
+
+        socket.on('thisUserMakesVideoCall', (data, cb) => {
+            console.log('A user makes video call.', data.roomId, data.from);
+
+            if (inVideoCallUser.indexOf(data.from) !== -1) return cb('YOU_ARE_CALLING');
+            if (inVideoCallUser.indexOf(data.counterpart) !== -1) return cb('USER_IS_CALLING');
+
+            
+            data.users.forEach(user => {
+                console.log('>', user, socketMap[user].id, inVideoCallUser);
+                if (socketMap[user] && inVideoCallUser.indexOf(user) === -1) {
+                    console.log('>>', user, socketMap[user].id, inVideoCallUser);
+                    inVideoCallUser = inVideoCallUser.concat(user);
+                        socket.broadcast.to(data.roomId).emit('aUserMakesVideoCall', data);
+                }
+            });
+
+            cb('OK');
         });
+
+
+        socket.on('thisUserQuitsVideoCall', data => {
+            inVideoCallUser = inVideoCallUser.filter(user => user !== data.from);
+        });
+
 
         socket.on('thisUserSendsMessage', data => {
             const now = new Date();
@@ -84,7 +112,6 @@ module.exports = (server) => {
 
         
         socket.on('thisUserSeesMessage', async data => {
-            console.log(data.from, 'see message');
             const now = new Date();
             socket.broadcast.to(data.roomId).emit('aUserSeesMessage', { ...data, time: now.toISOString() });
             const { roomId, from } = data;

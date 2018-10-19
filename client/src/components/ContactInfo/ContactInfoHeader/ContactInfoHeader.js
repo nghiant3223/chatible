@@ -8,12 +8,6 @@ import { connect } from 'react-redux';
 import './ContactInfoHeader.css';
 
 class ContactInfoHeader extends Component {
-    videoCallButtonOnClicked = () => {
-        console.log('before click');
-        socketGetter.getInstance().emit('thisUserMakesVideoCall', { roomId: this.props.activeContact.roomId });
-        console.log('after click');
-    }
-
     render() {
         return (
             <div className="contact-info__header">
@@ -34,7 +28,7 @@ class ContactInfoHeader extends Component {
         
                 {this.props.activeContact.type === 'DUAL' && (
                     <div className="contact-info__header__right">
-                        <a onClick={this.videoCallButtonOnClicked} href={"/videocall?roomId="+this.props.activeContact.roomId} target="_blank">
+                        <a href={"/videocall?init=true&roomId="+this.props.activeContact.roomId} target="_blank">
                             <div>
                             <svg viewBox="0 0 64 64" style={{ clipRule: 'evenodd', fill: 'none', fillRule: 'evenodd', stroke: this.props.activeContact.colorTheme, strokeMiterlimit: 10, strokeWidth: 2 }}><title>Make a video call</title><g><g><path d="M47,27.8v7.5l9,4.5V23.2L47,27.8z M37.2,17H13.8C10.6,17,8,19.6,8,22.8v17.4c0,3.2,2.6,5.8,5.8,5.8h23.3
                             c3.2,0,5.8-2.6,5.8-5.8V22.8C43,19.6,40.4,17,37.2,17z"></path></g></g></svg>

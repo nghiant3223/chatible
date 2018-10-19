@@ -88,10 +88,6 @@ class Chatbox extends PureComponent {
             }
         })
     }
-
-    componentDidUpdate = (prevProps, prevState) => {
-        console.log('udpate');
-    }
     
     
     emojiButtonClickedHandler = () => {

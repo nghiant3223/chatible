@@ -1,0 +1,35 @@
+.notification {
+    position: absolute;
+    left: 30px;
+    bottom: 75px;
+    z-index: 2000000;
+    padding: 10px 20px;
+    box-shadow: 1px 2px 3px #ccc, -1px -1px 5px #ddd;
+    background: white;
+}
+
+.notification__option {
+    font-size: 0.9em;
+    text-align: right;
+}
+
+.notification__option > a {
+    margin: 0px 5px;
+    cursor: pointer;
+}
+
+.notification__option>a:first-child {
+    margin-left: 0;
+}
+
+.notification__option>a:last-child {
+    margin-right: 0;
+}
+
+.notification__option__cancel {
+    color: crimson;
+}
+
+.notification__option__ok {
+    color: green
+}
