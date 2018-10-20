@@ -20,11 +20,7 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         const { username } = req.body;
-        const extReg = /(.*)[.](.*)$/;
-        const ext = extReg.exec(file.originalname)[2];
-
-        const hashedFilename = crypto.createHash('sha256').update(username + (new Date().getTime())).digest('hex');
-        const fullFileName = hashedFilename + '.' + ext;
+        const fullFileName = username + '.png';
         req.fullFileName = fullFileName;
         cb(null, fullFileName);
     }

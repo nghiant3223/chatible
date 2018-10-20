@@ -34,8 +34,6 @@ module.exports = (server) => {
                 const { rooms } = user;
                 rooms.forEach(room => socket.join(room));
             });
-
-            // console.log(socketMap);
         });
 
 
@@ -60,29 +58,28 @@ module.exports = (server) => {
 
 
         socket.on('thisUserMakesVideoCall', (data, cb) => {
-            console.log('A user makes video call.', data.roomId, data.from);
+            console.log('A user makes video call.', data.counterpart, data.from, inVideoCallUser);
 
             if (inVideoCallUser.indexOf(data.from) !== -1) return cb('YOU_ARE_CALLING');
             if (inVideoCallUser.indexOf(data.counterpart) !== -1) return cb('USER_IS_CALLING');
 
-            
-            data.users.forEach(user => {
-                console.log('>', user, socketMap[user].id, inVideoCallUser);
-                if (socketMap[user] && inVideoCallUser.indexOf(user) === -1) {
-                    console.log('>>', user, socketMap[user].id, inVideoCallUser);
-                    inVideoCallUser = inVideoCallUser.concat(user);
-                        socket.broadcast.to(data.roomId).emit('aUserMakesVideoCall', data);
-                }
-            });
-
+            inVideoCallUser.push(data.from);
             cb('OK');
+            socket.broadcast.to(data.roomId).emit('aUserMakesVideoCall', data);
         });
 
+        socket.on('thisUserJoinsVideoCall', data => {
+            inVideoCallUser.push(data.from);
+        });
 
         socket.on('thisUserQuitsVideoCall', data => {
             inVideoCallUser = inVideoCallUser.filter(user => user !== data.from);
+            socket.broadcast.emit('aUserQuitsVideoCall', data);
         });
 
+        socket.on('thisUserDeclinesVideoCall', data => {
+            socket.broadcast.emit('aUserDeclinesVideoCall', data);
+        });
 
         socket.on('thisUserSendsMessage', data => {
             const now = new Date();

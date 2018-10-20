@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 const { User } = require('../models/User');
 const { Message } = require('../models/Message');
@@ -13,13 +14,16 @@ const loginUser = async (req, res) => {
 
     if (!user) return res.status(404).send('User not found.');
 
+
     if (user.password !== password) return res.status(409).send('Incorrect password.');
     
     const token = jwt.sign({
         data: username
     }, jwtSecret, { expiresIn: '240000h' });
 
-    res.status(200).send(token);
+    User.findOneAndUpdate({ username }, { $set: { lastLogin: new Date().toISOString() } }, function () {
+        res.status(200).send(token);
+    });
 }
 
 const logoutUser = async (req, res) => {
@@ -32,7 +36,14 @@ const createUser = async (req, res) => {
     let user = await User.findOne({ username });
     if (user) return res.status(409).send('User already exists.');
 
-    let newUser = new User({ username, password, fullname, avatarUrl: `/avatars/${req.fullFileName || 'default.png'}` });
+    let avatarUrl = null;
+    if (req.fullFileName) {
+        avatarUrl = '/avatars/' + req.fullFileName;
+    } else {
+        fs.copyFileSync('public/avatars/default.png', 'public/avatars/' + req.body.username + '.png');
+        avatarUrl = '/avatars/' + req.body.username  + '.png';
+    }
+    let newUser = new User({ username, password, fullname, avatarUrl });
     await newUser.save();
     res.status(200).send('Create user successfully.');
 }

@@ -1,0 +1,43 @@
+.login-form__form {
+    display: grid;
+    grid-template-columns: 275px auto;
+}
+
+.login-form__form input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 175px;
+    height: 175px;
+    z-index: 100;
+}
+
+.login-form__form__avatar {
+    position: relative;
+    margin-left: 50px;
+    margin-top: 25px;
+}
+
+.login-form__form__avatar > img {
+    position: absolute;
+    width: 175px;
+    height: 175px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.login-form__form__avatar__init{
+    position: absolute;
+    left: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 175px;
+    height: 175px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.15);
+}

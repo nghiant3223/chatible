@@ -1,11 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom'
 import axios from 'axios';
-import qs from 'qs';
 
 import './SignupForm.css';
+import upload from '../../assets/images/upload.png';
 
 class SignupForm extends Component {
+    state = {
+        spinnerVisible: false
+    }
+
     fullnameChangedHandler = (e) => {
         this.setState({ fullname: e.target.value });
     }
@@ -20,34 +24,83 @@ class SignupForm extends Component {
 
     formSubmittedHandler = async (e) => {
         e.preventDefault();
-        const data = new FormData();
-        data.append('username', this.state.username);
-        data.append('password', this.state.password);
-        data.append('fullname', this.state.fullname);
-        data.append('avatar', this.avatarInput.files[0]);
-        await axios.post('/api/signup', data);
-        this.props.history.push('/login');
+
+        if (this.state.spinnerVisible) return;
+
+        this.setState({ spinnerVisible: true });
+        try {
+            const data = new FormData();
+            data.append('username', this.state.username);
+            data.append('password', this.state.password);
+            data.append('fullname', this.state.fullname);
+            data.append('avatar', this.avatarInput.files[0]);
+            await axios.post('/api/signup', data);
+            this.setState({ spinnerVisible: false });
+            this.props.history.push('/login');
+        } catch (e) {
+            console.log(e);
+            this.setState({ spinnerVisible: false });
+        }
+    }
+
+    avatarInputChangedHandler = (e) => {
+        this.avatarInputBackground.src = URL.createObjectURL(e.target.files[0])
     }
 
     render() {
         return (
-            <div>
-                SignupForm
+            <Fragment>
+                <div className="login-form__form">
+                    <form>
+                        <div>
+                            <div className="login-form__input">
+                                <input autoFocus type="text" placeholder="Fullname" tabIndex={1}
+                                    onChange={this.fullnameChangedHandler}
+                                    value={this.state.fullname} />
+                                <span>A</span>
+                                <div></div>
+                            </div>
+                            <div className="login-form__input">
+                                <input type="text" placeholder="Username" tabIndex={2}
+                                    onChange={this.usernameChangedHandler}
+                                    value={this.state.username} />
+                                <span><i className="icon ion-md-person"></i></span>
+                                <div></div>
+                            </div>
+                            <div className="login-form__input">
+                                <input type="password" placeholder="Password" tabIndex={3}
+                                    onChange={this.passwordChangedHandler}
+                                    value={this.state.password} />
+                                <span><i className="icon ion-md-lock"></i></span>
+                                <div></div>
+                            </div>
+                        </div>
+                        <div>
+                            <button className="submit-btn" disabled={this.state.spinnerVisible} onClick={this.formSubmittedHandler} tabIndex={4} onKeyDown={e => { if (e.keyCode == 13) this.formSubmittedHandler() }}>
+                                Signup
+                        </button>
+                        </div>
+                    </form>
 
-                <form onSubmit={this.formSubmittedHandler}>
-                    <input placeholder="Fullname" onChange={this.fullnameChangedHandler} autoFocus/>
-                    <br />
-                    <input placeholder="Username" onChange={this.usernameChangedHandler} />
-                    <br />
-                    <input placeholder="Password" onChange={this.passwordChangedHandler} />
-                    <br />
-                    <input type="file" ref={el => this.avatarInput = el}/>
-                    <button type="submit">Signup</button>
-                </form>
+                
+                    <div className="login-form__form__avatar">
+                        <div className="login-form__form__avatar__init">
+                            <div>
+                                <img src={upload}/>
+                            </div>
+                            <p>Upload your avatar</p>
+                        </div>
+                        <img ref={el => this.avatarInputBackground = el} src={null}/>
+                        <input type="file" accept="image/*" ref={el => this.avatarInput = el} onChange={this.avatarInputChangedHandler}/>
+                    </div>
+                </div>
 
-                <Link to="/login">Go to login</Link>
-            </div>
-        )
+
+                <div id="register-link">
+                    <Link to='/login'>Login existing account here!</Link>
+                </div>
+            </Fragment>
+        );
     }
 }
 

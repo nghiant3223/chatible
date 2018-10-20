@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import ChatboxContext from '../../../../../contexts/ChatboxContext';
 import Spinner from '../../../../UIs/Spinner/Spinner';
 
 import socketGetter from '../../../../../socket';
 import { renderUserMessageContent } from '../../../../../utils';
-
 import * as actions from '../../../../../actions/index';
 
 import './RHSMessage.css';
@@ -56,7 +56,6 @@ class RHSMessage extends Component {
                 
                 // do the same thing with type 'text', 'thumbup', 'sticker'
                 default:
-                    console.log('inside component did mount');
                     try {
                         axios.post('/api/message/' + roomId, { content, type }, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
                         socket.emit('thisUserSendsMessage', { from, roomId, content, type });
@@ -97,7 +96,7 @@ class RHSMessage extends Component {
             <Fragment>
                 {renderUserMessageContent({ type: this.props.type, from: this.props.from, colorTheme: value.colorTheme, content: this.state.content, right: true })}
                 <div className="rhs-message-item__time">
-                    <span>{this.props.time}</span>
+                    <span>{moment(this.props.time).format('LT')}</span>
                 </div>
             </Fragment>
         );

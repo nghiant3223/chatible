@@ -1,11 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import axios from 'axios';
-
 import { Link } from 'react-router-dom';
+
+import Spinner from '../UIs/Spinner/Spinner';
 
 import './LoginForm.css';
 
 class LoginForm extends Component {
+    state = {
+        spinnerVisible: false
+    }
+
     usernameChangedHandler = (e) => {
         this.setState({ username: e.target.value });
     }
@@ -16,32 +21,53 @@ class LoginForm extends Component {
 
     formSubmittedHandler = async (e) => {
         e.preventDefault();
+        if (this.state.spinnerVisible) return;
+
+        this.setState({ spinnerVisible: true });
         try {
             const res = await axios.post('/api/login', ({ username: this.state.username, password: this.state.password }));
+            this.setState({ spinnerVisible: false });
             localStorage.setItem("x-access-token", res.data);
             this.props.history.replace('/');
         } catch (e) {
             console.log(e);
+            this.setState({ spinnerVisible: false });
         }
         
     }
 
     render() {
         return (
-            <div>
-                LoginForm
-
-                <form onSubmit={this.formSubmittedHandler}>
-                    <input placeholder="Username" onChange={this.usernameChangedHandler} autoFocus/>
-                    <br />
-                    <input placeholder="Password" onChange={this.passwordChangedHandler} />
-                    <br />
-                    <button type="submit">Login</button>
+            <Fragment>
+                <form>
+                    <div>
+                        <div className="login-form__input">
+                            <input autoFocus type="text" placeholder="Username" tabIndex={1}
+                                onChange={this.usernameChangedHandler}
+                                value={this.state.username} />
+                            <span><i className="icon ion-md-person"></i></span>
+                            <div></div>
+                        </div>
+                        <div className="login-form__input">
+                            <input type="password" placeholder="Password" tabIndex={2}
+                                onChange={this.passwordChangedHandler}
+                                value={this.state.password} />
+                            <span><i className="icon ion-md-lock"></i></span>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div>
+                        <button className="submit-btn" disabled={this.state.spinnerVisible}  onClick={this.formSubmittedHandler} tabIndex={3} onKeyDown={e => { if (e.keyCode == 13) this.formSubmittedHandler() }}>
+                            LOGIN
+                        </button>
+                    </div>
                 </form>
                 
-                <Link to="/signup">Go to signup</Link>
-            </div>
-        )
+                <div id="register-link">
+                    <Link to='/signup'>Register new account here!</Link>
+                </div>
+            </Fragment>
+        );
     }
 }
 

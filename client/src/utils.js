@@ -16,7 +16,7 @@ const SECOND = 1000;
 const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
-const TIMEGAP = 3*SECOND;
+const TIMEGAP = 3*MINUTE;
 
 const splitByEmojiReg = /(?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff])/g;
 const splitByEmojiButRetainDelimiterReg = /((?:[\u2700-\u27bf]|(?:\ud83c[\udde6-\uddff]){2}|[\ud800-\udbff][\udc00-\udfff]|[\u0023-\u0039]\ufe0f?\u20e3|\u3299|\u3297|\u303d|\u3030|\u24c2|\ud83c[\udd70-\udd71]|\ud83c[\udd7e-\udd7f]|\ud83c\udd8e|\ud83c[\udd91-\udd9a]|\ud83c[\udde6-\uddff]|[\ud83c[\ude01-\ude02]|\ud83c\ude1a|\ud83c\ude2f|[\ud83c[\ude32-\ude3a]|[\ud83c[\ude50-\ude51]|\u203c|\u2049|[\u25aa-\u25ab]|\u25b6|\u25c0|[\u25fb-\u25fe]|\u00a9|\u00ae|\u2122|\u2139|\ud83c\udc04|[\u2600-\u26FF]|\u2b05|\u2b06|\u2b07|\u2b1b|\u2b1c|\u2b50|\u2b55|\u231a|\u231b|\u2328|\u23cf|[\u23e9-\u23f3]|[\u23f8-\u23fa]|\ud83c\udccf|\u2934|\u2935|[\u2190-\u21ff]))/g;
@@ -34,8 +34,8 @@ export const getOfflineTime = (offlineMoment) => {
 export const renderSystemMessageContent = (type, content, thisUser) => {
     switch (type) {
         case 'changeColorTheme': {
-            const { colorTheme, changer } = JSON.parse(content);
-            let renderedChanger = thisUser.username === changer ? 'You' : changer;
+            const { colorTheme, changer, changerFullname } = JSON.parse(content);
+            let renderedChanger = thisUser.username === changer ? 'You' : changerFullname;
             return <div>{renderedChanger} has changed color theme to <div className="color-theme-circle" style={{width: 12, height: 12, backgroundColor: colorTheme}}></div></div>
         }
         default:
@@ -328,7 +328,7 @@ export const seperateGroupRoomMessage = (messages, RHSName) => {
                 let subKey = 0;
                 for (let j = 1; j < tempLeft.length; j++) {
                     if (tempLeft[j].time - tempLeft[j - 1].time > TIMEGAP) {
-                        retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+                        retArr = tempArr.reduce((acc, cur, k) => acc.concat(<LHSMessageContainer messages={[cur]} key={key + '.' + subKey + '.' + k} id={key + '.' + subKey + '.' + k}  />), retArr)
                         retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
                         tempArr = [];
                         subKey = j;
@@ -337,7 +337,7 @@ export const seperateGroupRoomMessage = (messages, RHSName) => {
                 }
 
                 if (tempArr.length !== 0) {
-                    retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+                    retArr = tempArr.reduce((acc, cur, k) => acc.concat(<LHSMessageContainer messages={[cur]} key={key + '.' + subKey + '.' + k} id={key + '.' + subKey + '.' + k}  />), retArr)
                 }
         
                 tempLeft = [];
@@ -377,7 +377,7 @@ export const seperateGroupRoomMessage = (messages, RHSName) => {
                 let subKey = 0;
                 for (let j = 1; j < tempLeft.length; j++) {
                     if (tempLeft[j].time - tempLeft[j - 1].time > TIMEGAP) {
-                        retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+                        retArr = tempArr.reduce((acc, cur, k) => acc.concat(<LHSMessageContainer messages={[cur]} key={key + '.' + subKey + '.' + k} id={key + '.' + subKey + '.' + k}  />), retArr)
                         retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
                         tempArr = [];
                         subKey = j;
@@ -386,7 +386,7 @@ export const seperateGroupRoomMessage = (messages, RHSName) => {
                 }
         
                 if (tempArr.length !== 0) {
-                    retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+                    retArr = tempArr.reduce((acc, cur, k) => acc.concat(<LHSMessageContainer messages={[cur]} key={key + '.' + subKey + '.' + k} id={key + '.' + subKey + '.' + k}  />), retArr)
                 }
         
                 tempLeft = [];
@@ -479,7 +479,7 @@ export const seperateGroupRoomMessage = (messages, RHSName) => {
         let subKey = 0;
         for (let j = 1; j < tempLeft.length; j++) {
             if (tempLeft[j].time - tempLeft[j - 1].time > TIMEGAP) {
-                retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+                retArr = tempArr.reduce((acc, cur, k) => acc.concat(<LHSMessageContainer messages={[cur]} key={key + '.' + subKey + '.' + k} id={key + '.' + subKey + '.' + k}  />), retArr)
                 retArr.push(<SeperatingTime key={'st.' + key + '.' + subKey}  id={'st.' + key + '.' + subKey}  time={messages[key + j].time} />);
                 tempArr = [];
                 subKey = j;
@@ -488,7 +488,7 @@ export const seperateGroupRoomMessage = (messages, RHSName) => {
         }
 
         if (tempArr.length !== 0) {
-            retArr = tempArr.reduce((acc, cur, k) => acc.concat( <div style={{width: 100, wordWrap: 'break-word',overflow: 'hidden'}} key={key + '.' + subKey + '.' + k}>{cur.from}: {cur.content}</div>), retArr)
+            retArr = tempArr.reduce((acc, cur, k) => acc.concat(<LHSMessageContainer messages={[cur]} key={key + '.' + subKey + '.' + k} id={key + '.' + subKey + '.' + k}  />), retArr)
             key++;
         }
     }
@@ -542,7 +542,6 @@ export const seperateGroupRoomMessage = (messages, RHSName) => {
 
 
 export const renderUserMessageContent = ({ content, type, from, colorTheme, right }) => {
-    console.log('~>', content, type)
     const side = right ? 'r' : 'l';
     switch (type) {
         case 'waving':

@@ -1,0 +1,59 @@
+#landing-page {
+    height: 100vh;
+    background: url(../../assets/images/background.jpeg);
+    background-size: 110%;
+    background-position-x: -100px;
+    position: relative;
+    font-family: 'Inconsolata';
+    letter-spacing: 0.25px;
+}
+
+.background-layer {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.35);
+    position: absolute;
+}
+
+#main-panel {
+    position: absolute;
+    top: 15vh;
+    left: 16.5vw;
+    width: 275px;
+}
+
+#title {
+    color: #f4f3ef;
+    font-size: 2.5rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: 'Courgette';
+}
+
+#subtitle {
+    color: #f4f3ef;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 500;
+    font-style: italic;
+}
+
+#login-form {
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+#login-form>div {
+    margin-bottom: 25px;
+    margin-top: 25px;
+}
+
+
+@media (max-width: 500px) {
+    #main-panel {
+        left: calc(50% - 275px/2);
+    }
+}

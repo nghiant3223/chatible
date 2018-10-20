@@ -1,0 +1,99 @@
+.login-form__input {
+    position: relative;
+    margin: 30px 0;
+}
+
+div.login-form__input:last-child {
+    margin-bottom: 40px;
+}
+
+.login-form__input div {
+    margin: auto;
+    height: 2px;
+    width: 0%;
+    background: #2a252c;
+    transition: width 0.25s;
+    position: relative;
+    top: -2px;
+}
+
+.login-form__input input {
+    display: block;
+    width: 100%;
+    padding: 3px 3px 7.5px 25px;
+    outline: none;
+    background-color: transparent;
+    border: 0;
+    color: #fafafa;
+    font-family: 'Inconsolata';
+    border-bottom: 1.5px solid #ccc;
+    font-size: 0.975rem;
+}
+
+.login-form__input input::placeholder {
+    color: #ddd;
+    font-family: 'Inconsolata';
+
+}
+
+.login-form__input input:focus~div {
+    width: 100%;
+}
+
+.login-form__input input:focus~span {
+    color: #2a252c;
+}
+
+#login-form input[type="password"] {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.login-form__input>span {
+    position: absolute;
+    left: 2px;
+    top: 1px;
+    color: #afafaf;
+    font-size: 1.15rem;
+    width: 13px;
+    text-align: center;
+}
+
+#login-form .submit-btn {
+    border: 0;
+    border-radius: 2px;
+    display: block;
+    padding: 10px 0;
+    width: 100%;
+    color: white;
+    background: #2a252c;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background 0.5s;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.submit-btn:disabled {
+    background: #080708;
+}
+
+#login-form .submit-btn:hover,
+#login-form .submit-btn:focus {
+    background: black;
+}
+
+#register-link {
+    text-align: right;
+}
+
+#register-link a {
+    font-size: 0.8rem;
+    color: #1f1b20;
+    transition: color 0.5s;
+}
+
+#register-link:hover a {
+    color: black;
+}

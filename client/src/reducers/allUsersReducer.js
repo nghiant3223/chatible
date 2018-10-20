@@ -9,10 +9,10 @@ const allUsersReducer = (state = initialState, action) => {
             return initialState;
         
         case 'ADD_CONTACT': {
-            const { roomInfo: { counterpart } } = action.payload;
-            if (state.map(user => user.username).indexOf(counterpart.username) === -1)
+            const { roomInfo, roomInfo: { counterpart } } = action.payload;
+            if (counterpart && state.map(user => user.username).indexOf(counterpart.username) === -1)
                 return [counterpart, ...state];
-            return state;
+            else return [roomInfo, ...state];
         }
 
         

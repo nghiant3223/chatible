@@ -38,7 +38,7 @@ class ContactInfo extends Component {
             colorThemeModalOpen: false
         });
 
-        socketGetter.getInstance().emit('thisUserChangesColorTheme', { content: JSON.stringify({ colorTheme: this.state.colorThemeOption, changer: this.props.thisUser.username }), roomId, type: 'changeColorTheme' }); 
+        socketGetter.getInstance().emit('thisUserChangesColorTheme', { content: JSON.stringify({ colorTheme: this.state.colorThemeOption, changer: this.props.thisUser.username, changerFullname: this.props.thisUser.fullname }), roomId, type: 'changeColorTheme' }); 
     }
 
     changeColorThemeClickedHandler = () => {

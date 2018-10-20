@@ -45,12 +45,19 @@ const input = (
 );
 
 class NewContact extends Component {
-    state = {
-        toAddList: [],
-        textInput: '',
-        searchResultVisible: false,
-        modalVisible: false,
-        modalMessage: ''
+
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            toAddList: [],
+            textInput: '',
+            searchResultVisible: false,
+            modalVisible: false,
+            modalMessage: '',
+            searchResult: []
+        }
     }
 
     componentDidMount = () => {
@@ -62,8 +69,9 @@ class NewContact extends Component {
         this.setState({ textInput: e.target.value });
 
         if (e.target.value === '') return this.setState({ searchResultVisible: false });
-
+        
         if (!this.state.searchResultVisible) return this.setState({ searchResultVisible: true });
+
     }
 
     searchItemClickedHandler = (username, fullname) => {
@@ -77,13 +85,21 @@ class NewContact extends Component {
     }
 
     handleSearchResultContainerOutsideClick = (e) => {
-        if (this.searchResultContainer && !this.searchResultContainer.contains(e.target)) {
+        if (this.searchResultContainer && !(this.searchResultContainer.contains(e.target) || this.textInput.contains(e.target))) {
             this.setState({ searchResultVisible: false });
         }
     }
 
     handleSelectedTagRemoved = (username) => {
         this.setState(prevState => ({ toAddList: prevState.toAddList.filter(user => user.username !== username) }));
+    }
+
+    inputClickedHandler = () => {
+        if (this.state.textInput === '') {
+            this.setState({
+                searchResultVisible: true
+            });
+        }
     }
 
     createButtonClicked = () => {
@@ -108,7 +124,7 @@ class NewContact extends Component {
                         <span className="new-contact__box__title">To: </span>
                         {this.state.toAddList.map(user => <SelectedTag username={user.username} fullname={user.fullname} key={user.username} onClick={() => this.handleSelectedTagRemoved(user.username)} />)}
                         <div className="new-contact__box__input">
-                            <input onChange={this.handleChange} value={this.state.textInput} autoFocus/>
+                            <input onChange={this.handleChange} ref={el => this.textInput=el} value={this.state.textInput} autoFocus onMouseDown={this.inputClickedHandler}/>
                             {this.state.searchResultVisible && <div className="new-contact__box__input__search-result" ref={el => this.searchResultContainer = el}>
                                 {this.renderSearchResult()}
                             </div>}
@@ -131,7 +147,7 @@ class NewContact extends Component {
 
     renderSearchResult = () => {
         const searchResult = this.props.allUsers.filter(user => this.state.toAddList.map(user => user.username).indexOf(user.username) === -1)
-            .filter(user => user.fullname.indexOf(this.state.textInput) !== -1);
+            .filter(user => user.fullname.toLowerCase().indexOf(this.state.textInput.toLowerCase()) !== -1 && user.username !== this.props.thisUser.username);
         if (searchResult.length < 1) return <div className="search-result__no-result">No results</div>;
         return searchResult.map(user => {
             return (

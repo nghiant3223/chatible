@@ -61,7 +61,7 @@
 .em--small {
     width: 1.25em;
     height: 1.25em;
-    margin-bottom: -0.25em;
     margin-left: 1px;
     margin-right: 1px;
+    vertical-align: text-bottom;
 }

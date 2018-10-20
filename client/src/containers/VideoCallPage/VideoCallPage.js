@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import SimpleWebRTC from 'simplewebrtc';
 import axios from 'axios';
+import socketIOClient from 'socket.io-client';
 
-import socketGetter from '../../socket';
+import { socketPath } from '../../configs';
 
 import './VideoCallPage.css';
 
@@ -22,18 +23,32 @@ class VideoCallPage extends Component {
             axios.get('/api/user/me', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } })
         ]).then(([roomRes, meRes]) => {
             this.setState({ isLoading: false });
-            const { data: { username } } = meRes;
+            const { data: { username, fullname } } = meRes;
             const { data: { users, type } } = roomRes;
 
+            const socket = new socketIOClient(socketPath);
+
             window.onunload = () => {
-                socketGetter.getInstance().emit('thisUserQuitsVideoCall', {from: username});
+                socket.emit('thisUserQuitsVideoCall', { from: username, fullnameFrom: fullname, roomId });
+                socket.disconnect();
             }
 
-            const counterpart = type === 'DUAL' ? (users[0].username !== meRes.username ? users[0] : users[1]) : null;
+            socket.on('aUserDeclinesVideoCall', data => {
+                if (data.roomId === roomId) {
+                    alert(`${data.fullnameFrom} declines video call!`);
+                }
+            });
+
+            socket.on('aUserQuitsVideoCall', data => {
+                if (data.roomId === roomId) {
+                    alert(`${data.fullnameFrom} quits video call!`);
+                }
+            })
+
+            const counterpart = type === 'DUAL' ? (users[0].username !== username ? users[0] : users[1]) : null;
 
             if (init === 'true') {
-                socketGetter.getInstance().emit('thisUserMakesVideoCall', { roomId, from: username, counterpart, users }, data => {
-                    console.log('data', data);
+                socket.emit('thisUserMakesVideoCall', { roomId, from: username, counterpart, users, fullnameFrom: fullname }, data => {
                     if (data === 'YOU_ARE_CALLING') return this.setState({ error: 'You are in other video call room' });
 
                     if (data === 'USER_IS_CALLING') return this.setState({ error: 'This is user is in other video call room.' });
@@ -41,6 +56,7 @@ class VideoCallPage extends Component {
                     this.initiateWebRTC(roomId);
                 });
             } else {
+                socket.emit('thisUserJoinsVideoCall', { from: username });
                 this.initiateWebRTC(roomId);
             }
         }).catch(e => {
@@ -50,7 +66,6 @@ class VideoCallPage extends Component {
     }
 
     initiateWebRTC = (roomId) => {
-        console.log('init', roomId);
         const webrtc = new SimpleWebRTC({
             localVideoEl: 'localVideo',
             remoteVideosEl: 'remoteVideos',
@@ -66,9 +81,9 @@ class VideoCallPage extends Component {
         if (this.state.error) return this.state.error;
         if (this.state.isLoading) return 'Loading';
         return (
-            <div>
+            <div className="videocall-page">
                 <video id="localVideo"></video>
-                <div id="remoteVideos" style={{ height: 500 }}></div>
+                <div id="remoteVideos"></div>
             </div>
         );
     }

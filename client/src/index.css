@@ -1,5 +1,12 @@
+@import url(https://fonts.googleapis.com/css?family=Courgette|Inconsolata);
+
 * {
 	box-sizing: border-box;
+}
+
+html {
+	margin: 0;
+	padding: 0;
 }
 
 body {

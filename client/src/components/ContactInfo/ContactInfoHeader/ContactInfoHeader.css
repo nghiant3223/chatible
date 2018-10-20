@@ -1,6 +1,6 @@
 .contact-info__header {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 175px auto;
     grid-column-gap: 10px;
     padding: 10px 15px;
 }
@@ -15,9 +15,9 @@
 .contact-info__header__mid__title {
     font-size: 0.9em;
     margin-bottom: 5px;
-    width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
+    color:rgb(42,83,96);
 }
 
 .contact-info__header__mid__status {

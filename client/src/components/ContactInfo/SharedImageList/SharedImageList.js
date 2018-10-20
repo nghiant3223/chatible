@@ -5,11 +5,12 @@ import Spinner from '../../UIs/Spinner/Spinner';
 
 import './SharedImageList.css';
 
+
 const SharedImageList = ({ images, isFetchingMoreImages }) => (
     <Dropdown title="Shared images">
         <div className="contact-info__main__images">
             {images.map(image => (
-                <div key={image._id}>   <div  style={{backgroundImage: `url(http://localhost:5000/uploads/${image.hashedName})`}}>
+                <div key={image._id}>   <div  style={{backgroundImage: `url(/uploads/${image.hashedName})`}}>
                 </div></div>
              
             ))}

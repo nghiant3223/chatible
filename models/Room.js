@@ -25,7 +25,7 @@ const roomSchema = new Schema({
     }, 
     colorTheme: {
         type: String,
-        default: 'blue'
+        default: '#2196F3'
     }
 });
 

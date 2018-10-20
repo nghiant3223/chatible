@@ -1,0 +1,32 @@
+* {
+    box-sizing: border-box;
+}
+
+.videocall-page {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: black;
+}
+
+
+#remoteVideos {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#remoteVideos > video {
+    height: 100%;
+    width: 75%;
+}
+
+#localVideo {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;  
+    height: 100px;
+}

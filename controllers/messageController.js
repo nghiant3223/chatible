@@ -8,7 +8,6 @@ const saveMessage = async (req, res) => {
     const { content, type } = req.body;
     const { username } = req;
     
-    console.log('save');
     try {
         let room = await Room.findById(roomId);
         if (!room) return res.status(404).send('Room not found.');

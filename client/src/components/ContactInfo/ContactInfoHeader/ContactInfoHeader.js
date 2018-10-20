@@ -18,7 +18,7 @@ class ContactInfoHeader extends Component {
         
                 <div className="contact-info__header__mid">
                     <div className="contact-info__header__mid__title">
-                        {(this.props.activeContact.counterpart && this.props.activeContact.counterpart.fullname) || this.props.activeContact.roomId}
+                        {(this.props.activeContact.counterpart && this.props.activeContact.counterpart.fullname) || this.props.activeContact.users.filter(username => username !== this.props.thisUser.username).join(', ')}
                     </div>
         
                     <div className="contact-info__header__mid__status">
@@ -26,7 +26,7 @@ class ContactInfoHeader extends Component {
                     </div>
                 </div>
         
-                {this.props.activeContact.type === 'DUAL' && (
+
                     <div className="contact-info__header__right">
                         <a href={"/videocall?init=true&roomId="+this.props.activeContact.roomId} target="_blank">
                             <div>
@@ -35,7 +35,7 @@ class ContactInfoHeader extends Component {
                             </div>
                         </a>
                     </div>      
-                )}
+   
 
             </div>
         )
@@ -58,6 +58,6 @@ class ContactInfoHeader extends Component {
     }
 }
 
-const mapStateToProps = ({ activeContact }) => ({ activeContact });
+const mapStateToProps = ({ activeContact, thisUser }) => ({ activeContact, thisUser });
 
 export default connect(mapStateToProps)(ContactInfoHeader);

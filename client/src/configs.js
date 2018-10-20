@@ -1,16 +1,17 @@
 export const colorThemes = [
-    '#512DA8',
-    '#009688',
-    '#388E3C',
-    '#FF5722',
-    '#03A9F4',
-    '#6200EE',
-    '#C51162',
+    '#03DAC6',
+    '#B00020',
+    '#FF0266',
+    '#FFDE03',
+    '#2196F3',
+    '#E65100',
+    '#212121',
     '#00695C',
-    '#E91E63',
+    '#304FFE',
     '#4A148C'];
 
 // export const socketPath = 'https://frozen-ocean-90679.herokuapp.com/';
+// TOCHANGE
 export const socketPath = 'http://localhost:5000/';
 
 export const emojiMap =  {
@@ -44,7 +45,7 @@ export const emojiMap =  {
     }, 
     "😏": {
         code: "1f60f",
-        shortcut: ";/"
+        shortcut: ":/"
     },
     "😶": {
         code: "1f636",

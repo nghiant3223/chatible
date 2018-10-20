@@ -6,8 +6,7 @@ import ContactList from '../../components/ContactList/ContactList';
 import Chatbox from '../../components/Chatbox/Chatbox';
 import ContactInfo from '../../components/ContactInfo/ContactInfo';
 import Spinner from '../../components/UIs/Spinner/Spinner';
-import StandardModal from '../../components/UIs/StandardModal/StandardModal';
-import Notification from '../../components/Notification/Notification';
+import Notification from '../../components/VideoCallNotification/VideoCallNotification';
 
 import socketGetter from '../../socket';
 import * as actions from '../../actions/index';

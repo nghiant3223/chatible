@@ -13,7 +13,7 @@ const LHSMessageContainer = (props) => (
             value => (
                 <div className="lhs-message-container">
                     <div className="lhs-message-avatar">
-                        <img src={value.counterpartAvatarUrl} alt="Avatar" />
+                        <img src={'/avatars/' + props.messages[0].from + '.png'} alt="Avatar" />
                     </div>
                     <div className="lhs-message-container__messages">
                         {props.messages.map((message, i) => <LHSMessage {...message} key={props.id + "." + i} />)}

@@ -11,7 +11,7 @@ const SharedFileList = ({ files }) => (
             {files.map(file => (
                 <li key={file._id}>
                     <i></i>
-                    <a href={"uploads/" + file.hashedName} download>{file.originalName}</a>
+                    <a href={"/uploads/" + file.hashedName} download>{file.originalName}</a>
                 </li>
             ))}
         </ul>

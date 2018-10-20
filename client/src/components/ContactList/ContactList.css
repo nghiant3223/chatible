@@ -7,15 +7,6 @@
     margin: 5px auto;
 }
 
-.contact-list::-webkit-scrollbar {
-    width: 5px;
-}
-
-.contact-list:hover::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 30px;
-}
-
 .contact-list {
     overflow-y: scroll;
     overflow-x: hidden;
