@@ -142,7 +142,7 @@ class MessageContainer extends PureComponent {
                 
                 {this.props.LHSTyping.map(username => <Typing username={username} key={username}/>)}
 
-                <Seen peopleSeen={this.state.peopleSeen} thisUser={this.props.thisUser}/>
+                {this.props.messages.legnth > 0 && <Seen peopleSeen={this.state.peopleSeen} thisUser={this.props.thisUser} />}
             </Fragment>
         );
     }
