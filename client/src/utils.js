@@ -595,6 +595,7 @@ export const renderUserMessageContent = ({ content, type, from, colorTheme, righ
         }
         
         default:
+            console.log('type', type, 'content', content);
             if ((/^[\s]*$/).test(content.replace(splitByEmojiReg, ''))) {
                 return (
                     <div className={`${side}hs-message-item__content ${side}hs-message-item__content--icon no-background-message`}>

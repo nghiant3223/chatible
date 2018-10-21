@@ -90,7 +90,7 @@ class RHSMessage extends Component {
     renderMessageItem(value) {
         if (this.state.error) return <div />
 
-        if (this.state.isLoading || ((this.props.type === 'file' || this.props.type === 'image') && this.state.content === undefined)) return <Spinner style={{ width: '15px', height: '15px' }} />;
+        if (this.props.isNew && this.state.isLoading || ((this.props.type === 'file' || this.props.type === 'image') && this.state.content === undefined)) return <Spinner style={{ width: '15px', height: '15px' }} />;
         
         return (
             <Fragment>
