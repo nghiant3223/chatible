@@ -10,7 +10,7 @@ export const colorThemes = [
     '#304FFE',
     '#4A148C'];
 
-export const socketPath = 'https://frozen-ocean-90679.herokuapp.com/';
+export const socketPath = 'https://chatible-cn1.herokuapp.com/';
 // TOCHANGE
 // export const socketPath = 'http://localhost:5000/';
 
