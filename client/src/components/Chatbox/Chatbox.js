@@ -33,7 +33,7 @@ class Chatbox extends PureComponent {
         if (!roomId) return;
 
         try {
-            const messagesRes = await axios.get('/api/message/' + roomId + '?count=50', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+            const messagesRes = await axios.get('/api/message/' + roomId + '?count=500', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
             const messages = messagesRes.data;
             for (let i = 0; i < messages.length; i++) {
                 messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date

@@ -6,8 +6,6 @@ import './AvailableContactList.css';
 
 const availableContactList = ({ searchValue, contactList }) => {
     const searchList = contactList.map(contact => contact.counterpart ? contact.counterpart.fullname : contact.roomId);
-    console.log('...',searchList);
-    console.log('searchList', searchList);
     if (searchValue === '') {
         return (
             <div className="contact-list__all">
