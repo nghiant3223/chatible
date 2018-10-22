@@ -186,6 +186,12 @@ class Chatbox extends PureComponent {
     fileInputChangedHandler = (e) => {
         e.persist();
         const file = e.target.files[0];
+ 
+        if (!(/[.][a-zA-Z]+$/i).test(file.name)) {
+            alert('File type is not supported');
+            return;
+        }
+
         const isImage = (/[.](gif|jpg|jpeg|tiff|png|ico|gif)$/i).test(file.name);
 
         this.setState(prevState => ({

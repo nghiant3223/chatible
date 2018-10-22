@@ -118,7 +118,7 @@ class RecentContact extends Component {
 
     render() {
         let className = "recent-contact";
-        if (this.state.isNew) className = className + " recent-contact--new";
+        if (this.state.isNew && this.props.lastMessage && this.props.lastMessage.from !== this.thisUser.username) className = className + " recent-contact--new";
         if (this.props.activeContact.roomId === this.props.roomId) className += " recent-contact--active";
         return (
             <div className={className} onClick={() => this.props.setActiveContact(this.props.roomId)} >
