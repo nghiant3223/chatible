@@ -94,7 +94,7 @@ class RHSMessage extends Component {
         
         return (
             <Fragment>
-                {renderUserMessageContent({ type: this.props.type, from: this.props.from, colorTheme: value.colorTheme, content: this.state.content, right: true })}
+                {renderUserMessageContent({ type: this.props.type, from: this.props.from, colorTheme: value.colorTheme, content: !this.props.isNew ? this.props.content : this.state.content, right: true })}
                 <div className="rhs-message-item__time">
                     <span>{moment(this.props.time).format('LT')}</span>
                 </div>
