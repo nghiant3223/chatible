@@ -104,6 +104,8 @@ const recentContactReducer = (state = initialState, action) => {
             
         case 'ADD_CONTACT': {
             const { roomInfo } = action.payload;
+            let existingRoom = state.find(room => room.roomId === roomInfo.roomId);
+            if (existingRoom) return state;
             return [roomInfo, ...state];
         }
             

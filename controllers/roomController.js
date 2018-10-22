@@ -99,6 +99,8 @@ const deleteRoom = async (req, res) => {
     
     if (!room) return res.status(404).send('Room not found');
 
+    console.log('rôm');
+
     Promise.all(room.users.reduce((promiseArray, username) => promiseArray = promiseArray.concat(User.findOneAndUpdate({ username }, { $pull: { rooms: roomId } })), []))
         .then(() => {
             room.remove();

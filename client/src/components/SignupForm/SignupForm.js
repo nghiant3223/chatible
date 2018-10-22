@@ -7,7 +7,10 @@ import upload from '../../assets/images/upload.png';
 
 class SignupForm extends Component {
     state = {
-        spinnerVisible: false
+        spinnerVisible: false,
+        fullname: '',
+        username: '',
+        password: ''
     }
 
     fullnameChangedHandler = (e) => {
@@ -38,7 +41,7 @@ class SignupForm extends Component {
             this.setState({ spinnerVisible: false });
             this.props.history.push('/login');
         } catch (e) {
-            console.log(e);
+            alert(e.response.data);
             this.setState({ spinnerVisible: false });
         }
     }
