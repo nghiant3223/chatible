@@ -123,5 +123,10 @@ module.exports = (server) => {
             room.set({ messages });
             room.save();
         });
+
+        socket.on('thisUserEdits', data => {
+            Room.findByIdAndUpdate(data.roomId, { $set: { sharedEditorContent: data.content } }, function() { console.log('insert')});
+            socket.broadcast.to(data.roomId).emit('aUserEdits', data);
+        });
     });
 }

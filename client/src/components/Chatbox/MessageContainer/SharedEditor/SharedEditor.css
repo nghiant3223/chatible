@@ -1,0 +1,12 @@
+.shared-editor{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    max-width: 100%;
+    z-index: 10000;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-size: 0.9em;
+    transform: tran
+}

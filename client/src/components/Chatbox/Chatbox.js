@@ -24,7 +24,8 @@ class Chatbox extends PureComponent {
         isLoading: false,
         messages: [],
         isFetchingMore: false,
-        shouldScroll: false
+        shouldScroll: false,
+        sharedEditorContent: ''
     }
 
     componentDidMount = async () => {
@@ -32,16 +33,18 @@ class Chatbox extends PureComponent {
 
         if (!roomId) return;
 
-        try {
-            const messagesRes = await axios.get('/api/message/' + roomId + '?count=35', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+        Promise.all([
+            axios.get('/api/message/' + roomId + '?count=35', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } }),
+            axios.get('/api/room/info/' + roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } })
+        ]).then(([messagesRes, roomInfoRes]) => {
             const messages = messagesRes.data;
             for (let i = 0; i < messages.length; i++) {
                 messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
             }
-            this.setState({ messages });
-        } catch (e) {
+            this.setState({ messages, sharedEditorContent: roomInfoRes.data.sharedEditorContent });
+        }).catch(e => {
             console.log(e);
-        }
+        });
 
         const socket = socketGetter.getInstance();
 
@@ -238,7 +241,8 @@ class Chatbox extends PureComponent {
                             isFetchingMore={this.state.isFetchingMore}
                             roomId={this.props.roomId}
                             thisUser={this.props.thisUser}
-                            messagesRenderMethod={seperateDualRoomMessage}/>
+                            messagesRenderMethod={seperateDualRoomMessage}
+                            sharedEditorContent={this.state.sharedEditorContent}/>
                     ) : (
                             <MessageContainer
                             LHSTyping={this.state.LHSTyping}
@@ -247,7 +251,8 @@ class Chatbox extends PureComponent {
                             isFetchingMore={this.state.isFetchingMore}
                             roomId={this.props.roomId}
                             thisUser={this.props.thisUser}
-                            messagesRenderMethod={seperateGroupRoomMessage}/>
+                            messagesRenderMethod={seperateGroupRoomMessage}
+                            sharedEditorContent={this.state.sharedEditorContent}/>
                     )}
 
                     <div className="chatbox__inputs">
@@ -294,7 +299,8 @@ const mapStateToProps = ({ activeContact, thisUser }) => ({
     thisUser,
     colorTheme: activeContact.colorTheme,
     counterpartAvatarUrl: activeContact.counterpart ? activeContact.counterpart.avatarUrl : null,
-    type: activeContact.type
+    type: activeContact.type,
+    sharedEditorContent: activeContact.sharedEditorContent
 });
 
 const mapDispatchToProps = dispatch => ({
