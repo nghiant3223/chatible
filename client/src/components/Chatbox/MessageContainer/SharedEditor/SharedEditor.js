@@ -27,6 +27,7 @@ class SharedEditor extends Component {
         if (this.state.content !== prevState.content) {
             this.setState({ caretPosition: prevState.caretPosition });
         }
+        this.sharedEditor.selectionStart = this.state.caretPosition;
     }
     
 
