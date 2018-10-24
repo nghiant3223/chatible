@@ -6,6 +6,7 @@ import NewContact from './NewContact/NewContact';
 import MessageContainer from './MessageContainer/MessageContainer';
 import EmojiPanel from './EmojiPanel/EmojiPanel';
 import StickerPanel from './StickerPanel/StickerPanel';
+import SharedEditor from './SharedEditor/SharedEditor';
 
 import ChatboxContext from '../../contexts/ChatboxContext';
 import socketGetter from '../../socket';
@@ -145,8 +146,11 @@ class Chatbox extends PureComponent {
     moreMessagesFetchedHandler = async () => {
         this.setState({ isFetchingMore: true });
         const messagesRes = await axios.get('/api/message/' + this.props.roomId + '?count=' + (this.state.messages.length + 10), { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
-        
+
         const messages = messagesRes.data;
+
+        if (messages.length === this.state.messages) return;
+
         for (let i = 0; i < messages.length; i++) {
             messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
         }
@@ -231,7 +235,8 @@ class Chatbox extends PureComponent {
         return (
             <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme || 'cyan', counterpartAvatarUrl: this.props.counterpartAvatarUrl }}>
                 <div className="chatbox">
-                    
+                    <SharedEditor roomId={this.props.roomId} content={this.state.sharedEditorContent} />
+
                     {this.props.type === 'DUAL' ? (
                         <MessageContainer
                             LHSTyping={this.state.LHSTyping}
@@ -241,8 +246,7 @@ class Chatbox extends PureComponent {
                             isFetchingMore={this.state.isFetchingMore}
                             roomId={this.props.roomId}
                             thisUser={this.props.thisUser}
-                            messagesRenderMethod={seperateDualRoomMessage}
-                            sharedEditorContent={this.state.sharedEditorContent}/>
+                            messagesRenderMethod={seperateDualRoomMessage}/>
                     ) : (
                             <MessageContainer
                             LHSTyping={this.state.LHSTyping}
@@ -251,8 +255,7 @@ class Chatbox extends PureComponent {
                             isFetchingMore={this.state.isFetchingMore}
                             roomId={this.props.roomId}
                             thisUser={this.props.thisUser}
-                            messagesRenderMethod={seperateGroupRoomMessage}
-                            sharedEditorContent={this.state.sharedEditorContent}/>
+                            messagesRenderMethod={seperateGroupRoomMessage}/>
                     )}
 
                     <div className="chatbox__inputs">

@@ -50,7 +50,6 @@ module.exports = (server) => {
 
             User.findOne({ username }).then(user => {
                 const { rooms } = user;
-                console.log('error');
                 rooms.forEach(room => socket.leave(room._id));
             });
 

@@ -12,7 +12,7 @@ export const colorThemes = [
 
 export const socketPath = 'https://chatible-cn1.herokuapp.com/';
 // TOCHANGE
-//export const socketPath = 'http://localhost:5000/';
+// export const socketPath = 'http://localhost:5000/';
 
 export const emojiMap =  {
     "🙂": {
