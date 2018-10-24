@@ -123,7 +123,7 @@ class RecentContact extends Component {
         return (
             <div className={className} onClick={() => this.props.setActiveContact(this.props.roomId)} >
                 <div className="recent-contact__left">
-                    <img src={(this.props.counterpart && this.props.counterpart.avatarUrl) || '/avatars/default.png'} alt="Avatar" />
+                    <img src={(this.props.counterpart && this.props.counterpart.avatarUrl) || '/avatars/default.png'} alt="Avatar" onError={e => {e.target.onerror = null; e.target.src='/avatars/default.png'}}/>
                 </div>
 
                 {this.renderLastMessage()}

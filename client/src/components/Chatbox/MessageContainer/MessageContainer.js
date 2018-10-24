@@ -4,7 +4,6 @@ import axios from 'axios';
 import Typing from '../../UIs/Typing/Typing';
 import Spinner from '../../UIs/Spinner/Spinner';
 import Seen from '../../UIs/Seen/Seen';
-import SharedEditor from './SharedEditor/SharedEditor';
 
 
 import socketGetter from '../../../socket';
@@ -121,7 +120,6 @@ class MessageContainer extends PureComponent {
                 ref={el => this.messageContainer = el}
                 onScroll={this.messageContainerScrolledHandler}
                 onClick={this.messageContainerClickedHandler}>
-                <SharedEditor roomId={this.props.roomId} content={this.props.sharedEditorContent}/>
                 {this.renderContent()}
             </div>
         );
