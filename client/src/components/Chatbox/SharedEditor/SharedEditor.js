@@ -39,7 +39,6 @@ class SharedEditor extends Component {
     render() {
         return (
             <Fragment>
-<<<<<<< HEAD
                 <div className="share-editor--toggle" onClick={() => this.setState(prevState => ({ isVisible: !prevState.isVisible }))}></div>
                 
                 <textarea ref={el => this.sharedEditor = el}
@@ -48,16 +47,6 @@ class SharedEditor extends Component {
                     onChange={this.sharedEditorChangedHandler}
                     value={this.state.content}
                     onChange={this.sharedEditorChangedHandler}></textarea>
-=======
-                <div className="share-editor--toggle" onClick={() => this.setState(prevState => ({isVisible: !prevState.isVisible}))}></div>
-                
-                <textarea ref={el => this.sharedEditor = el}
-                    style={this.state.isVisible ? {width: '100%', height: '25%', minHeight: '15px'} : {width: '15px', height: '15px'}}
-                    className={`shared-editor shared-editor--${this.state.isVisible ? 'open' : 'close'}` }
-                onChange={this.sharedEditorChangedHandler}
-                value={this.state.content}
-                onChange={this.sharedEditorChangedHandler}></textarea>
->>>>>>> 5f848efce32a6a6f225fffe20140554cc45a699a
             </Fragment>
         );
     }
