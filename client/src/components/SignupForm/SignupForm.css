@@ -12,6 +12,7 @@
     width: 175px;
     height: 175px;
     z-index: 100;
+    cursor: pointer;
 }
 
 .login-form__form__avatar {
