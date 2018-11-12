@@ -16,6 +16,10 @@
     background: #f1f1f1;
 }
 
+.recent-contact:active {
+    background: #dfdfdf;
+}
+
 .recent-contact__left {
     height: 50px;
 }

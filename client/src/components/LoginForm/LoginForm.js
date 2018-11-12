@@ -8,7 +8,9 @@ import './LoginForm.css';
 
 class LoginForm extends Component {
     state = {
-        spinnerVisible: false
+        spinnerVisible: false,
+        username: '',
+        password: ''
     }
 
     usernameChangedHandler = (e) => {
@@ -30,7 +32,7 @@ class LoginForm extends Component {
             localStorage.setItem("x-access-token", res.data);
             this.props.history.replace('/');
         } catch (e) {
-            console.log(e);
+            alert(e.response.data);
             this.setState({ spinnerVisible: false });
         }
         

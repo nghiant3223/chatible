@@ -118,12 +118,12 @@ class RecentContact extends Component {
 
     render() {
         let className = "recent-contact";
-        if (this.state.isNew) className = className + " recent-contact--new";
+        if (this.state.isNew && this.props.lastMessage && this.props.lastMessage.from !== this.props.thisUser.username) className = className + " recent-contact--new";
         if (this.props.activeContact.roomId === this.props.roomId) className += " recent-contact--active";
         return (
             <div className={className} onClick={() => this.props.setActiveContact(this.props.roomId)} >
                 <div className="recent-contact__left">
-                    <img src={(this.props.counterpart && this.props.counterpart.avatarUrl) || '/avatars/default.png'} alt="Avatar" />
+                    <img src={(this.props.counterpart && this.props.counterpart.avatarUrl) || '/avatars/default.png'} alt="Avatar" onError={e => {e.target.onerror = null; e.target.src='/avatars/default.png'}}/>
                 </div>
 
                 {this.renderLastMessage()}

@@ -6,6 +6,7 @@ import NewContact from './NewContact/NewContact';
 import MessageContainer from './MessageContainer/MessageContainer';
 import EmojiPanel from './EmojiPanel/EmojiPanel';
 import StickerPanel from './StickerPanel/StickerPanel';
+import SharedEditor from './SharedEditor/SharedEditor';
 
 import ChatboxContext from '../../contexts/ChatboxContext';
 import socketGetter from '../../socket';
@@ -24,7 +25,8 @@ class Chatbox extends PureComponent {
         isLoading: false,
         messages: [],
         isFetchingMore: false,
-        shouldScroll: false
+        shouldScroll: false,
+        sharedEditorContent: ''
     }
 
     componentDidMount = async () => {
@@ -32,16 +34,18 @@ class Chatbox extends PureComponent {
 
         if (!roomId) return;
 
-        try {
-            const messagesRes = await axios.get('/api/message/' + roomId + '?count=500', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
+        Promise.all([
+            axios.get('/api/message/' + roomId + '?count=35', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } }),
+            axios.get('/api/room/info/' + roomId, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } })
+        ]).then(([messagesRes, roomInfoRes]) => {
             const messages = messagesRes.data;
             for (let i = 0; i < messages.length; i++) {
                 messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
             }
-            this.setState({ messages });
-        } catch (e) {
+            this.setState({ messages, sharedEditorContent: roomInfoRes.data.sharedEditorContent });
+        }).catch(e => {
             console.log(e);
-        }
+        });
 
         const socket = socketGetter.getInstance();
 
@@ -142,8 +146,11 @@ class Chatbox extends PureComponent {
     moreMessagesFetchedHandler = async () => {
         this.setState({ isFetchingMore: true });
         const messagesRes = await axios.get('/api/message/' + this.props.roomId + '?count=' + (this.state.messages.length + 10), { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
-        
+
         const messages = messagesRes.data;
+
+        if (messages.length === this.state.messages) return;
+
         for (let i = 0; i < messages.length; i++) {
             messages[i].time = (new Date(messages[i].time)).getTime(); // convert string to real Date
         }
@@ -186,6 +193,12 @@ class Chatbox extends PureComponent {
     fileInputChangedHandler = (e) => {
         e.persist();
         const file = e.target.files[0];
+ 
+        if (!(/[.][a-zA-Z]+$/i).test(file.name)) {
+            alert('File type is not supported');
+            return;
+        }
+
         const isImage = (/[.](gif|jpg|jpeg|tiff|png|ico|gif)$/i).test(file.name);
 
         this.setState(prevState => ({
@@ -222,7 +235,8 @@ class Chatbox extends PureComponent {
         return (
             <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme || 'cyan', counterpartAvatarUrl: this.props.counterpartAvatarUrl }}>
                 <div className="chatbox">
-                    
+                    <SharedEditor roomId={this.props.roomId} content={this.state.sharedEditorContent} />
+
                     {this.props.type === 'DUAL' ? (
                         <MessageContainer
                             LHSTyping={this.state.LHSTyping}
@@ -288,7 +302,8 @@ const mapStateToProps = ({ activeContact, thisUser }) => ({
     thisUser,
     colorTheme: activeContact.colorTheme,
     counterpartAvatarUrl: activeContact.counterpart ? activeContact.counterpart.avatarUrl : null,
-    type: activeContact.type
+    type: activeContact.type,
+    sharedEditorContent: activeContact.sharedEditorContent
 });
 
 const mapDispatchToProps = dispatch => ({

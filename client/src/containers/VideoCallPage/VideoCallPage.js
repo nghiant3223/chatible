@@ -53,26 +53,29 @@ class VideoCallPage extends Component {
 
                     if (data === 'USER_IS_CALLING') return this.setState({ error: 'This is user is in other video call room.' });
 
-                    this.initiateWebRTC(roomId);
+                    const webrtc = new SimpleWebRTC({
+                        localVideoEl: 'localVideo',
+                        remoteVideosEl: 'remoteVideos',
+                        autoRequestMedia: true
+                    });
+                    webrtc.on('readyToCall', function () {
+                        webrtc.joinRoom(roomId);
+                    });
                 });
             } else {
                 socket.emit('thisUserJoinsVideoCall', { from: username });
-                this.initiateWebRTC(roomId);
+                const webrtc = new SimpleWebRTC({
+                    localVideoEl: 'localVideo',
+                    remoteVideosEl: 'remoteVideos',
+                    autoRequestMedia: true
+                });
+                webrtc.on('readyToCall', function () {
+                    webrtc.joinRoom(roomId);
+                });
             }
         }).catch(e => {
             console.log(e);
             this.setState({ error: e.toString(), isLoading: false });
-        });
-    }
-
-    initiateWebRTC = (roomId) => {
-        const webrtc = new SimpleWebRTC({
-            localVideoEl: 'localVideo',
-            remoteVideosEl: 'remoteVideos',
-            autoRequestMedia: true
-        });
-        webrtc.on('readyToCall', function () {
-            webrtc.joinRoom(roomId);
         });
     }
 

@@ -24,7 +24,8 @@ const getRecentRooms = async (req, res) => {
                     colorTheme: room.colorTheme,
                     type: room.type,
                     files: room.files,
-                    images: room.images
+                    images: room.images,
+                    sharedEditorContent: room.sharedEditorContent
                 });
             } else {
                 const counterpart = await User.findOne({ username: room.users[0] !== username ? room.users[0] : room.users[1] }, { password: 0, _id: 0, __v: 0 });
@@ -35,7 +36,8 @@ const getRecentRooms = async (req, res) => {
                     colorTheme: room.colorTheme,
                     type: room.type,
                     files: room.files,
-                    images: room.images
+                    images: room.images,
+                    sharedEditorContent: room.sharedEditorContent
                 });
             }
         } catch (e) {
@@ -98,6 +100,8 @@ const deleteRoom = async (req, res) => {
     const room = await Room.findById(roomId);
     
     if (!room) return res.status(404).send('Room not found');
+
+    console.log('rôm');
 
     Promise.all(room.users.reduce((promiseArray, username) => promiseArray = promiseArray.concat(User.findOneAndUpdate({ username }, { $pull: { rooms: roomId } })), []))
         .then(() => {

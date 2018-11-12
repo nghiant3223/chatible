@@ -5,6 +5,7 @@ import Typing from '../../UIs/Typing/Typing';
 import Spinner from '../../UIs/Spinner/Spinner';
 import Seen from '../../UIs/Seen/Seen';
 
+
 import socketGetter from '../../../socket';
 
 import './MessageContainer.css';
@@ -142,7 +143,7 @@ class MessageContainer extends PureComponent {
                 
                 {this.props.LHSTyping.map(username => <Typing username={username} key={username}/>)}
 
-                {this.props.messages.legnth > 0 && <Seen peopleSeen={this.state.peopleSeen} thisUser={this.props.thisUser} />}
+                {this.props.messages.length > 0 && <Seen peopleSeen={this.state.peopleSeen} thisUser={this.props.thisUser} />}
             </Fragment>
         );
     }

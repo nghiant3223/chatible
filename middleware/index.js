@@ -21,9 +21,13 @@ const verifyToken = (req, res, next) => {
 
 const checkUserInRoom = async (req, res, next) => {
     const { roomId } = req.params;
-    const user = await User.findOne({ username: req.username });
-    if (user.rooms.indexOf(roomId) === -1) return res.status(403).send('User is not in this room');
-    else next();
+    try {
+        const user = await User.findOne({ username: req.username });
+        if (user.rooms.indexOf(roomId) === -1) return res.status(403).send('User is not in this room.');
+        else next();
+    } catch (e) {
+        res.status(404).send('User not found.');
+    }
 }
 
 module.exports = { verifyToken, checkUserInRoom };
