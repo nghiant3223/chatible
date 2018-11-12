@@ -108,7 +108,7 @@ class NewContact extends Component {
         }
 
         if (this.state.toAddList.length < 2) {
-            if (this.props.recentContacts.map(contact => contact.counterpart && contact.counterpart.username).indexOf(this.state.toAddList[0].username) !== -1) {
+            if (this.props.recentContacts.map(contact => contact.partner && contact.partner.username).indexOf(this.state.toAddList[0].username) !== -1) {
                 return this.setState({ modalVisible: true, modalMessage: 'Contact already exists' });
             }
             return this.props.createRoom([...this.state.toAddList.map(user => user.username), this.props.thisUser.username], this.props.thisUser);
@@ -163,7 +163,7 @@ class NewContact extends Component {
 const mapStateToProps = ({ recentContacts, thisUser, allUsers }) => ({ recentContacts, thisUser, allUsers });
 
 const mapDispatchToProps = dispatch => ({
-    createRoom: (users, counterpart) => dispatch(actions.createContactAndSetActive(users, counterpart))
+    createRoom: (users, partner) => dispatch(actions.createContactAndSetActive(users, partner))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewContact);

@@ -19,7 +19,10 @@ const userSchema = new Schema({
         type: Date,
         default: () => new Date().toISOString()
     },
-    rooms: [String],
+    rooms: {
+        type: [String],
+        default: []
+    },
     lastActiveContact: {
         type: String,
         default: null

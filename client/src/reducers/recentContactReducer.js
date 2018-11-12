@@ -14,8 +14,8 @@ const recentContactReducer = (state = initialState, action) => {
             const contacts = state ? [...state] : [];
 
             for (let i = 0; i < contacts.length; i++) {
-                if (contacts[i].counterpart && contacts[i].counterpart.username === username) {
-                    contacts[i].counterpart.lastLogin = lastLogin;
+                if (contacts[i].partner && contacts[i].partner.username === username) {
+                    contacts[i].partner.lastLogin = lastLogin;
                     break;
                 }
             }
@@ -28,8 +28,8 @@ const recentContactReducer = (state = initialState, action) => {
             const contacts = [...state];
 
             for (let i = 0; i < contacts.length; i++) {
-                if (contacts[i].counterpart && contacts[i].counterpart.username === username) {
-                    contacts[i].counterpart.lastLogout = lastLogout;
+                if (contacts[i].partner && contacts[i].partner.username === username) {
+                    contacts[i].partner.lastLogout = lastLogout;
                     break;
                 }
             }

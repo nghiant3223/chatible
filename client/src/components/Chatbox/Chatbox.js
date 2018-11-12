@@ -233,7 +233,7 @@ class Chatbox extends PureComponent {
     render() {  
         if (!this.props.roomId) return <NewContact />
         return (
-            <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme || 'cyan', counterpartAvatarUrl: this.props.counterpartAvatarUrl }}>
+            <ChatboxContext.Provider value={{ colorTheme: this.props.colorTheme || 'cyan', partnerAvatarUrl: this.props.partnerAvatarUrl }}>
                 <div className="chatbox">
                     <SharedEditor roomId={this.props.roomId} content={this.state.sharedEditorContent} />
 
@@ -301,7 +301,7 @@ const mapStateToProps = ({ activeContact, thisUser }) => ({
     roomId: activeContact.roomId,
     thisUser,
     colorTheme: activeContact.colorTheme,
-    counterpartAvatarUrl: activeContact.counterpart ? activeContact.counterpart.avatarUrl : null,
+    partnerAvatarUrl: activeContact.partner ? activeContact.partner.avatarUrl : null,
     type: activeContact.type,
     sharedEditorContent: activeContact.sharedEditorContent
 });

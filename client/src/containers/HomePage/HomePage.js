@@ -27,11 +27,11 @@ class HomePage extends Component {
        
         socket.on('aUserGoesOnline', ({ username, lastLogin }) => {
             console.log('goes online');
-            this.props.updateCounterpartLastLogin(username, lastLogin);
+            this.props.updatepartnerLastLogin(username, lastLogin);
         });
 
         socket.on('aUserGoesOffline', ({ username, lastLogout }) => {
-            this.props.updateCounterpartLastLogout(username, lastLogout);
+            this.props.updatepartnerLastLogout(username, lastLogout);
         });
 
         socket.on('aUserCreatesRoom', ({ roomInfo }) => {
@@ -65,8 +65,8 @@ class HomePage extends Component {
 
 const mapDispatchToProps = dispatch => ({
     fetchInitialData: history => dispatch(actions.fetchUserAndRecentContact(history)),
-    updateCounterpartLastLogin: (username, lastLogin) => dispatch(actions.updateContactStatusOnline(username, lastLogin)),
-    updateCounterpartLastLogout: (username, lastLogout) => dispatch(actions.updateContactStatusOffline(username, lastLogout)),
+    updatepartnerLastLogin: (username, lastLogin) => dispatch(actions.updateContactStatusOnline(username, lastLogin)),
+    updatepartnerLastLogout: (username, lastLogout) => dispatch(actions.updateContactStatusOffline(username, lastLogout)),
     addContact: roomInfo => dispatch(actions.addContact(roomInfo))
 });
 

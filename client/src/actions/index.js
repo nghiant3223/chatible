@@ -130,7 +130,7 @@ export const newContact = () => ({
     type: 'NEW_CONTACT'
 });
 
-export const createContactAndSetActive = (users, counterpart) => {
+export const createContactAndSetActive = (users, partner) => {
     return async dispatch => {
         const roomIdRes = await axios.post('/api/room', { type: users.length == 2 ? 'DUAL' : 'GROUP', users }, { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
         const contactRes = await axios.get('/api/room', { headers: { 'x-access-token': localStorage.getItem('x-access-token') } });
@@ -139,7 +139,7 @@ export const createContactAndSetActive = (users, counterpart) => {
         const roomInfo = contactRes.data.find(contact => contact.roomId === roomIdRes.data);
         dispatch(setActiveContact(roomInfo.roomId));
         console.log('roomInfo', roomInfo);
-        socketGetter.getInstance().emit('thisUserCreatesRoom', { users, roomInfo: { ...roomInfo, counterpart, isNew: true } });
+        socketGetter.getInstance().emit('thisUserCreatesRoom', { users, roomInfo: { ...roomInfo, partner, isNew: true } });
         // isNew to make recentContactActive bold.
     }
 }

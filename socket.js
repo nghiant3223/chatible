@@ -58,10 +58,10 @@ module.exports = (server) => {
 
 
         socket.on('thisUserMakesVideoCall', (data, cb) => {
-            console.log('A user makes video call.', data.counterpart, data.from, inVideoCallUser);
+            console.log('A user makes video call.', data.partner, data.from, inVideoCallUser);
 
             if (inVideoCallUser.indexOf(data.from) !== -1) return cb('YOU_ARE_CALLING');
-            if (inVideoCallUser.indexOf(data.counterpart) !== -1) return cb('USER_IS_CALLING');
+            if (inVideoCallUser.indexOf(data.partner) !== -1) return cb('USER_IS_CALLING');
 
             inVideoCallUser.push(data.from);
             cb('OK');

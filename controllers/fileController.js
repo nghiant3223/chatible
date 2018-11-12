@@ -1,83 +1,84 @@
-const { Room } = require('../models/Room');
-const { File } = require('../models/File');
-const { Image } = require('../models/Image');
-const fs = require('fs');
-const path = require('path');
+const { userService, fileService, roomService, messageService} = require('../services/index');
 
-const saveRoomFile = async (req, res) => {
+const saveFile = async (req, res) => {
     const { roomId } = req.params;
     const { originalName, hashedName, username, fileExt } = req;
+    
     try {
-        const now = new Date();
-        if (['jpg', 'png', 'svg', 'jpeg', 'ico', 'gif', 'bmp', 'tif'].indexOf(fileExt.toLowerCase()) === -1) {
-            const file = new File({ originalName, hashedName, uploader: username });
-            await Room.updateOne({ _id: roomId }, {
-                $push: {
-                    files: {
-                        $each: [file],
-                        $sort: { time: -1 }
-                    }
-                }
-            });
-            return res.status(200).send(file);
-        } else {
-            const image = new Image({ originalName, hashedName, uploader: username });
-            await Room.updateOne({ _id: roomId }, {
-                $push: {
-                    images: {
-                        $each: [image],
-                        $sort: { time: -1 }
-                    }
-                }
-            });
-            return res.status(200).send(image);
-        }
+        const instance = await fileService.createFile(roomId, fileExt, { originalName, hashedName, uploader: username });
+        res.status(200).json({ message: 'Create file/image successfully.', data: instance });
     } catch (e) {
         console.log(e);
-        res.status(500).send('Internal server error.');
+        res.status(500).json({ message: 'Internal server error.' });
     }
 }
 
 const getRoomFiles = async (req, res) => {
     const { roomId } = req.params;
     const { count } = req.query;
-    let room = await Room.findById(roomId);
-    if (room) {
-        if (room.files.length < count) return res.status(200).send(room.files);
-        else return res.status(200).send(room.files.slice(room.files.length - count));
-    } else return res.status(404).send('Room not found.');
+
+    try {
+        const roomFilesServiceRes = await roomService.getFiles(roomId, count);
+        if (roomFilesServiceRes === false) res.status(404).json({ message: 'Room not found.' });
+        else res.status(200).json({ data: roomFilesServiceRes });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
 }
 
 const getRoomImages = async (req, res) => {
     const { roomId } = req.params;
     const { count } = req.query;
-    let room = await Room.findById(roomId);
-    if (room) {
-        if (room.files.length < count) return res.status(200).send(room.images);
-        else return res.status(200).send(room.images.slice(room.files.length - count));
-    } else return res.status(404).send('Room not found');
+
+    try {
+        const roomImagesServiceRes = await roomService.getImages(roomId, count);
+        if (roomImagesServiceRes === false) res.status(404).json({ message: 'Room not found.' });
+        else res.status(200).json({ data: roomImagesServiceRes });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
 }
 
 const deleteRoomFiles = async (req, res) => {
     const { roomId } = req.params;
     const room = await Room.findById(roomId);
 
+    if (!room) res.status(404).json({message: 'Room not found.'})
+
     try {
-        room.files.forEach(file => {
-            fs.unlinkSync(path.resolve(global.rootDirName + '/public/uploads/' + file.hashedName));
-        });
-        room.images.forEach(image => {
-            fs.unlinkSync(path.resolve(global.rootDirName + '/public/uploads/' + image.hashedName));
-        });
-        room.set({
-            files: [],
-            images: []
-        });
+        room.files.forEach(file => fileService.deleteFile(file.hashedName));
+        room.set({files: []});
         room.save();
-        res.status(200).send('Delete file success')
+        res.status(200).json({ message: 'Delete room files successfully.' })
     } catch (e) {
-        res.status(500).send('Internal server error ' + e);
+        console.log(e);
+        res.status(500).json({ message: 'Internal server error.' });
     }
 }
 
-module.exports = { saveRoomFile, getRoomFiles, getRoomImages, deleteRoomFiles };
+const deleteRoomImages = async (req, res) => {
+    const { roomId } = req.params;
+    const room = await Room.findById(roomId);
+
+    if (!room) res.status(404).json({message: 'Room not found.'})
+
+    try {
+        room.images.forEach(file => fileService.deleteFile(file.hashedName));
+        room.set({images: []});
+        room.save();
+        res.status(200).json({ message: 'Delete room images successfully.' })
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+}
+
+module.exports = {
+    saveFile,
+    getRoomFiles,
+    getRoomImages,
+    deleteRoomFiles,
+    deleteRoomImages
+};

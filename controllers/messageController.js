@@ -1,7 +1,4 @@
-const { User } = require('../models/User');
-const { Message } = require('../models/Message');
-const { Room } = require('../models/Room');
-
+const { roomService, messageService, userService } = require('../services/index');
 
 const saveMessage = async (req, res) => {
     const { roomId } = req.params;
@@ -9,46 +6,41 @@ const saveMessage = async (req, res) => {
     const { username } = req;
     
     try {
-        let room = await Room.findById(roomId);
-        if (!room) return res.status(404).send('Room not found.');
-        else await room.update({
-            $push: {
-                messages: { $each: [{ from: username, content, type }] }
-            }
-        });
+        let room = await roomService.getRoomById(roomId);
+        if (!room) return res.status(404).json({ message: 'Room not found.' });
+        else await roomService.appendMessage(roomId, messageService.createMessage({ content, type, author: username }));
 
-        Promise.all(room.users.reduce((promiseArray, username) =>
-            promiseArray.concat(User.updateOne({ username }, { $pull: { rooms: room._id } })
-                .then(_ => User.updateOne({ username }, { $addToSet: { rooms: room._id } }))
-            )), []).then(_ => res.status(200).send('Save message successfully.')).catch(e => {
-                console.log(e);
-                res.status(500).send('Internal server error')
-            });
+        await Promise.all(room.users.reduce((promiseArray, username) =>
+            promiseArray.concat(userService.updateRecentRoom(username, roomId))), []);
+        res.status(200).json({ message: 'Save message successfully.' });
     } catch (e) {
         console.log(e);
-        res.status(500).send('Internal server error.');
+        res.status(500).json({ message: 'Internal server error.' });
     }
 }
 
 const getMessages = async (req, res) => {
     const { roomId } = req.params;
     const { count } = req.query;
-    let room = await Room.findById(roomId);
-    if (room) {
-        if (count === undefined || room.messages.length < count) return res.status(200).send(room.messages);
-        else return res.status(200).send(room.messages.slice(room.messages.length - count));
+
+    try {
+        const roomFilesServiceRes = await roomService.getFiles(roomId, count);
+        if (roomFilesServiceRes === false) res.status(404).json({ message: 'Room not found.' });
+        else res.status(200).json({ data: roomFilesServiceRes });
+    } catch (e) {
+        console.log(e);
+        res.status(500).json({ message: 'Internal server error.' });
     }
-    else return res.status(404).send('Room not found.');
 }
 
 const deleteMessages = async (req, res) => {
     const { roomId } = req.params;
     try {
-        await Room.findByIdAndUpdate(roomId, { $set: { messages: [] } });
-        return res.status(200).send('Delete room messages successfully.');
+        await roomService.deleteRoomMessages(roomId);
+        return res.status(200).json({ message: 'Delete room messages successfully.' });
     } catch (e) {
         console.log(e);
-        return res.status(500).send('Internal server error.');
+        return res.status(500).json({ message: 'Internal server error.' });
     }
 }
 module.exports = { getMessages, saveMessage, deleteMessages };

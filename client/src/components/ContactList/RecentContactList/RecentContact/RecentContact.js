@@ -79,7 +79,7 @@ class RecentContact extends Component {
         if (!this.props.lastMessage) return (
             <Fragment>
                 <div className="recent-contact__mid">
-                    <div className="recent-contact__mid__title">{(this.props.counterpart && this.props.counterpart.fullname) || this.props.users.filter(username => username !== this.props.thisUser.username).join(', ')}</div>
+                    <div className="recent-contact__mid__title">{(this.props.partner && this.props.partner.fullname) || this.props.users.filter(username => username !== this.props.thisUser.username).join(', ')}</div>
                     <div className="recent-contact__mid__content">Chatible: Let wave each other</div>
                 </div>
                 <div className="recent-contact__right"></div>
@@ -92,7 +92,7 @@ class RecentContact extends Component {
             return (
                 <Fragment>
                     <div className="recent-contact__mid">
-                        <div className="recent-contact__mid__title">{(this.props.counterpart && this.props.counterpart.fullname) || this.props.users.filter(username => username !== this.props.thisUser.username).join(', ')}</div>
+                        <div className="recent-contact__mid__title">{(this.props.partner && this.props.partner.fullname) || this.props.users.filter(username => username !== this.props.thisUser.username).join(', ')}</div>
                         <div className="recent-contact__mid__content">{renderRecentContactMessageContent({ content, type, from, thisUser })}</div>
                     </div>
                     <div className="recent-contact__right">
@@ -123,7 +123,7 @@ class RecentContact extends Component {
         return (
             <div className={className} onClick={() => this.props.setActiveContact(this.props.roomId)} >
                 <div className="recent-contact__left">
-                    <img src={(this.props.counterpart && this.props.counterpart.avatarUrl) || '/avatars/default.png'} alt="Avatar" onError={e => {e.target.onerror = null; e.target.src='/avatars/default.png'}}/>
+                    <img src={(this.props.partner && this.props.partner.avatarUrl) || '/avatars/default.png'} alt="Avatar" onError={e => {e.target.onerror = null; e.target.src='/avatars/default.png'}}/>
                 </div>
 
                 {this.renderLastMessage()}

@@ -45,10 +45,10 @@ class VideoCallPage extends Component {
                 }
             })
 
-            const counterpart = type === 'DUAL' ? (users[0].username !== username ? users[0] : users[1]) : null;
+            const partner = type === 'DUAL' ? (users[0].username !== username ? users[0] : users[1]) : null;
 
             if (init === 'true') {
-                socket.emit('thisUserMakesVideoCall', { roomId, from: username, counterpart, users, fullnameFrom: fullname }, data => {
+                socket.emit('thisUserMakesVideoCall', { roomId, from: username, partner, users, fullnameFrom: fullname }, data => {
                     if (data === 'YOU_ARE_CALLING') return this.setState({ error: 'You are in other video call room' });
 
                     if (data === 'USER_IS_CALLING') return this.setState({ error: 'This is user is in other video call room.' });

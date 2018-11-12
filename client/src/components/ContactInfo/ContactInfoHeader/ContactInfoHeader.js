@@ -13,12 +13,12 @@ class ContactInfoHeader extends Component {
             <div className="contact-info__header">
                 
                 <div className="contact-info__header__left">
-                    <img src={this.props.activeContact.counterpart ? this.props.activeContact.counterpart.avatarUrl : '/avatars/default.png'} alt="Avatar" />
+                    <img src={this.props.activeContact.partner ? this.props.activeContact.partner.avatarUrl : '/avatars/default.png'} alt="Avatar" />
                 </div>
         
                 <div className="contact-info__header__mid">
                     <div className="contact-info__header__mid__title">
-                        {(this.props.activeContact.counterpart && this.props.activeContact.counterpart.fullname) || this.props.activeContact.users.filter(username => username !== this.props.thisUser.username).join(', ')}
+                        {(this.props.activeContact.partner && this.props.activeContact.partner.fullname) || this.props.activeContact.users.filter(username => username !== this.props.thisUser.username).join(', ')}
                     </div>
         
                     <div className="contact-info__header__mid__status">
@@ -42,11 +42,11 @@ class ContactInfoHeader extends Component {
     }
 
     renderStatus() {
-        const { counterpart } = this.props.activeContact;
-        if (!counterpart) return null;
+        const { partner } = this.props.activeContact;
+        if (!partner) return null;
 
-        const { lastLogin } = counterpart;
-        const { lastLogout } = counterpart;
+        const { lastLogin } = partner;
+        const { lastLogout } = partner;
 
         if (new Date(lastLogin) > new Date(lastLogout)) return 'Active now';
         
