@@ -8,7 +8,7 @@
     "npm": "5.5.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha \"tests/**/*.js\" --timeout 2000 --exit",
     "start": "node app.js",
     "dev": "nodemon app.js",
     "client": "npm run start --prefix client",
@@ -27,5 +27,9 @@
     "morgan": "^1.9.1",
     "multer": "^1.4.0",
     "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }
