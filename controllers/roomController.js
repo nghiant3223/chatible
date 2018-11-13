@@ -1,5 +1,6 @@
 const { roomService, messageService, userService } = require('../services/index');
 
+
 const getRecentRooms = async (req, res) => {
     const { username } = req;
 
@@ -56,20 +57,26 @@ const createRoom = async (req, res) => {
             res.status(200).json({ message: 'Create room successfully.', data: createRoomServiceRes });
         }
     } catch (e) {
+        console.log(e);
         res.status(500).json({ message: 'Internal server error.' });
     }
 }
 
-const changeColorTheme = async (req, res) => {
+const updateRoom = async (req, res) => {
     const { roomId } = req.params;
     const { colorTheme } = req.body;
-    try {
-        await roomService.updateRoom(roomId, { colorTheme });
-        res.status(200).json({ message: "Change room's color theme successfully." });
-    } catch (e) {
-        res.status(404).json({ message: 'Room not found.' });
+
+    // Update color theme.
+    if (colorTheme) {
+        try {
+            await roomService.updateRoom(roomId, { colorTheme });
+            res.status(200).json({ message: "Change room's color theme successfully." });
+        } catch (e) {
+            res.status(404).json({ message: 'Room not found.' });
+        }
     }
 }
+
 
 const deleteRoom = async (req, res) => {
     const { roomId } = req.params;
@@ -86,4 +93,11 @@ const deleteRoom = async (req, res) => {
 
 }
 
-module.exports = { getRecentRooms, createRoom, getRoomInfo, changeColorTheme, deleteRoom};
+
+module.exports = {
+    getRecentRooms,
+    createRoom,
+    getRoomInfo,
+    updateRoom,
+    deleteRoom
+};

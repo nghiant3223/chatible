@@ -2,9 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
-const apiRouter = require('./routers/apiRouter/index');
 const path = require('path');
 const http = require('http');
+
+const apiRouter = require('./routers/apiRouter/index');
 const socketIO = require('./socket');
 const { mongoDbURL } = require('./configs/keys');
 
@@ -12,9 +13,9 @@ const app = express();
 const server = http.createServer(app);
 
 const port = process.env.PORT || 5000;
-
 global.rootDirName = path.resolve(__dirname);
 
+mongoose.set('useCreateIndex', true);
 mongoose.connect(mongoDbURL, {
             useNewUrlParser: true
         }, (err) => {

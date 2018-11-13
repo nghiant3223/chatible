@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../../controllers/userController');
+const { userController } = require('../../controllers/index');
 const { verifyToken, checkUserInRoom } = require('../../middleware/index');
 
 
@@ -8,8 +8,9 @@ router.get('/', userController.getAllUsers);
 
 router.get('/me', verifyToken, userController.getMe);
 
-router.get('/:username', userController.getUserByUsername);
+router.get('/:username', userController.getSpecificUser);
 
-router.post('/activeroom/:roomId', verifyToken, checkUserInRoom, userController.updateLastActiveContact)
+router.patch('/:roomId', verifyToken, checkUserInRoom, userController.updateUser);
+
 
 module.exports = router;

@@ -4,14 +4,17 @@ const Schema = mongoose.Schema;
 let messageSchema = new Schema({
     author: String,
     content: String,
-    time: {
+    createdAt: {
         type: Date,
         default: () => new Date().toISOString()
     },
     peopleSeen: {
         type: [{
-            username: String,
-            time: {
+            username: {
+                type: String,
+                require: true
+            },
+            seenAt: {
                 type: Date,
                 default: () => new Date().toISOString()
             }

@@ -1,5 +1,5 @@
 const { Room } = require('../models/Room');
-
+const { User } = require('../models/User');
 
 /**
  * Append message to a room.
@@ -12,7 +12,6 @@ function appendMessage(roomId, message) {
     return Room.updateOne({ _id: roomId }, { $push: { messages: message } });
 }
 
-
 /**
  * Get room information by room id.
  * @param {ObjectId} roomId id of the room.
@@ -24,7 +23,6 @@ function getRoomById(roomId, projection) {
     return Room.findById(roomId).select(projection);
 }
 
-
 /**
  * Delete room's messages.
  * @param {ObjectId} roomId id of the room
@@ -34,10 +32,9 @@ function getRoomById(roomId, projection) {
 function deleteRoomMessages(roomId) {
     return getRoomById(roomId).then(room => {
         room.messages = [];
-        room.save()
+        room.save();
     });
 }
-
 
 /**
  * Create new room.
@@ -56,7 +53,6 @@ async function createRoom(users) {
     return newRoom;
 }
 
-
 /**
  * Update room's information.
  * @param {String} roomId id of room to be updated.
@@ -67,7 +63,6 @@ async function createRoom(users) {
 function updateRoom(roomId, updateInfo) {
     return Room.findByIdAndUpdate(roomId, { $set: updateInfo }, { new: true });
 }
-
 
 /**
  * Delete room.
@@ -94,8 +89,6 @@ async function deleteRoom(roomId) {
  * @return {Array | Boolean} return array of room's files if room exists, else `false`.
  */
 async function getFiles(roomId, count) {
-    const { roomId } = req.params;
-    const { count } = req.query;
     let room = await Room.findById(roomId);
     if (room) {
         if (room.files.length < count) return room.files;
@@ -112,8 +105,6 @@ async function getFiles(roomId, count) {
  * @return {Array | Boolean} return array of room's images if room exists, else `false`.
  */
 async function getImages(roomId, count) {
-    const { roomId } = req.params;
-    const { count } = req.query;
     let room = await Room.findById(roomId);
     if (room) {
         if (room.images.length < count) return room.images;
@@ -130,14 +121,13 @@ async function getImages(roomId, count) {
  * @return {Array | Boolean} return array of room's messages if room exists, else `false`.
  */
 async function getMessages(roomId, count) {
-    const { roomId } = req.params;
-    const { count } = req.query;
     let room = await Room.findById(roomId);
     if (room) {
-        if (room.messages.length < count) return room.messages;
+        if (count === undefined || room.messages.length < count) return room.messages;
         else return room.messages.slice(room.messages.length - count);
     } else return false;
 }
+
 
 module.exports = {
     appendMessage,

@@ -46,6 +46,7 @@ function updateRecentRoom(username, roomId) {
         .then(_ => User.updateOne({ username }, { $addToSet: { rooms: roomId } }));
 }
 
+
 module.exports = {
     updateUser,
     getUserByUsername,

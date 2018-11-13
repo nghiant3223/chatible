@@ -1,5 +1,6 @@
 const { roomService, messageService, userService } = require('../services/index');
 
+
 const saveMessage = async (req, res) => {
     const { roomId } = req.params;
     const { content, type } = req.body;
@@ -24,7 +25,7 @@ const getMessages = async (req, res) => {
     const { count } = req.query;
 
     try {
-        const roomFilesServiceRes = await roomService.getFiles(roomId, count);
+        const roomFilesServiceRes = await roomService.getMessages(roomId, count);
         if (roomFilesServiceRes === false) res.status(404).json({ message: 'Room not found.' });
         else res.status(200).json({ data: roomFilesServiceRes });
     } catch (e) {
@@ -43,4 +44,10 @@ const deleteMessages = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error.' });
     }
 }
-module.exports = { getMessages, saveMessage, deleteMessages };
+
+
+module.exports = {
+    getMessages,
+    saveMessage,
+    deleteMessages
+};

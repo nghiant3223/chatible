@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const messageController = require('../../controllers/messageController');
+const { messageController } = require('../../controllers/index');
 const { verifyToken, checkUserInRoom } = require('../../middleware/index');
 
 

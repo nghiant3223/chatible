@@ -1,38 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const path = require('path');
-const crypto = require('crypto');
 
 const { verifyToken, checkUserInRoom } = require('../../middleware');
-const { saveRoomFile, getRoomFiles, getRoomImages, deleteRoomFiles} = require('../../controllers/fileController');
+const { uploadFile } = require('../../middleware/index');
+const { fileController } = require('../../controllers');
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/uploads/')
-    },
-    filename: function (req, file, cb) {
-        const extReg = /(.*)[.](.*)$/;
-        const ext = extReg.exec(file.originalname)[2];
+router.post('/:roomId', verifyToken, checkUserInRoom, uploadFile.single('file'), fileController.saveFile);
 
-        const { roomId } = req.params;
-        const uploader = req.username;
-        const hashedFilename = crypto.createHash('sha256').update(uploader + roomId + (new Date().getTime())).digest('hex');
-        req.originalName = file.originalname;
-        req.hashedName = hashedFilename + '.' + ext;
-        req.fileExt = ext;
-        cb(null, hashedFilename + '.' + ext);
-    }
-});
+router.get('/:roomId/file', verifyToken, checkUserInRoom, fileController.getRoomFiles);
 
-const upload = multer({ storage: storage })
+router.get('/:roomId/image', verifyToken, checkUserInRoom, fileController.getRoomImages);
 
-router.post('/:roomId', verifyToken, checkUserInRoom, upload.single('file'), saveRoomFile);
+router.delete('/:roomId/file', verifyToken, checkUserInRoom, fileController.deleteRoomFiles);
 
-router.get('/:roomId', verifyToken, checkUserInRoom, getRoomFiles);
-
-router.get('/image/:roomId', verifyToken, checkUserInRoom, getRoomImages);
-
-router.delete('/:roomId', verifyToken, checkUserInRoom, deleteRoomFiles);
+router.delete('/:roomId/image', verifyToken, checkUserInRoom, fileController.deleteRoomImages);
 
 module.exports = router;

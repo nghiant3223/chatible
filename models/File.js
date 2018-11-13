@@ -2,13 +2,22 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const fileSchema = new Schema({
-    originalName: String,
-    hashedName: String,
-    time: {
+    originalName: {
+        type: String,
+        required: true
+    },
+    hashedName: {
+        type: String,
+        required: true
+    },
+    createdAt: {
         type: Date,
         default: () => new Date().toISOString()
     },
-    uploader: String
+    uploader: {
+        type: String,
+        required: true
+    }
 });
 
 const File = mongoose.model('file', fileSchema);

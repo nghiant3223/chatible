@@ -25,9 +25,14 @@ async function createFile(roomId, fileExt, fileInfo) {
     return instance;
 }
 
+/**
+ * Delete file.
+ * @param {String} hashedName file's hashed name.
+ */
 function deleteFile(hashedName) {
     fs.unlinkSync(path.resolve(global.rootDirName + '/public/uploads/' + hashedName));
 }
+
 
 module.exports = {
     createFile,

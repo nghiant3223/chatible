@@ -12,6 +12,7 @@ function createMessage(messageInfo) {
     return message;
 }
 
+
 module.exports = {
     createMessage
 };

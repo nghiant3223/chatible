@@ -4,9 +4,22 @@ const Schema = mongoose.Schema;
 const { roomSchema } = require('./Room');
 
 const userSchema = new Schema({
-    username: String,
-    fullname: String,
-    password: String,
+    username: {
+        type: String,
+        required: true,
+        trim: true,
+        index: true,
+        unique: true
+    },
+    fullname: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
     avatarUrl: {
         type: String,
         default: '/avatars/default.png'
